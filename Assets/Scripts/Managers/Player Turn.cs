@@ -284,7 +284,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         StartCoroutine(SelectCard());
     }
     
-    private bool DrawCard()
+    public bool DrawCard()
     {
         if (_hand.Count >= _maxHandSize) return false;
         BasicCard card = GetCardFromDeck();

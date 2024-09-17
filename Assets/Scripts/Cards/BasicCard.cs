@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(menuName = "Cards/Basic Card")]
 public class BasicCard : ScriptableObject
@@ -15,6 +16,7 @@ public class BasicCard : ScriptableObject
     [SerializeField] int _bleed = 0;
     [SerializeField] int _defense = 0;
     [SerializeField] int _heal = 0;
+    [FormerlySerializedAs("draw")] [SerializeField] int _draw = 0;
     [SerializeField] bool _singleEnemyTarget = true;
     [SerializeField] TargetTypeEnum _targetType = TargetTypeEnum.BODY_PART;
     [SerializeField] private Person.BodyPartEnum _preSelectedTarget;
@@ -176,6 +178,12 @@ public class BasicCard : ScriptableObject
 
     public void PlayAbility(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
     {
+        PlayerTurn playerTurn = PlayerTurn.Instance;
+        for (int i = 0; i < _draw; i++)
+        {
+            if (!playerTurn.DrawCard()) break;
+        }
+        
         foreach (var part in attacking_parts)
             user.RemoveBlock(part);
     }

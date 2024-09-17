@@ -20,6 +20,7 @@ MonoBehaviour:
   _bleed: 0
   _defense: 0
   _heal: 0
+  _draw: 0
   _singleEnemyTarget: 1
   _targetType: 3
   _preSelectedTarget: 0
