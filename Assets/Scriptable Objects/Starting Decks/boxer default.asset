@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a80eaeb090cc714cae2ac02ce0a5c0f, type: 3}
+  m_Name: boxer default
+  m_EditorClassIdentifier: 
+  Cards:
+  - {fileID: 11400000, guid: fc240933df98d554cbb01467597c1794, type: 2}
+  - {fileID: 11400000, guid: fc240933df98d554cbb01467597c1794, type: 2}
+  - {fileID: 11400000, guid: fc240933df98d554cbb01467597c1794, type: 2}
+  - {fileID: 11400000, guid: 81c4786ae25e40346921039997e30636, type: 2}
+  - {fileID: 11400000, guid: 81c4786ae25e40346921039997e30636, type: 2}
+  - {fileID: 11400000, guid: 81c4786ae25e40346921039997e30636, type: 2}
+  - {fileID: 11400000, guid: 0263e2a05f235d3448e452d4a4f3cbcf, type: 2}
+  - {fileID: 11400000, guid: bab537fce546113469f677b60e1a1492, type: 2}
+  - {fileID: 11400000, guid: d71b915d3388c884d9e52fb4e01c6812, type: 2}
+  - {fileID: 11400000, guid: 3946f5165aab6e24293ab268314d816c, type: 2}
