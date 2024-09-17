@@ -18,8 +18,8 @@ public class BasicCard : ScriptableObject
     [SerializeField] int _heal = 0;
     [FormerlySerializedAs("draw")] [SerializeField] int _draw = 0;
     [SerializeField] bool _singleEnemyTarget = true;
-    [SerializeField] TargetTypeEnum _targetType = TargetTypeEnum.BODY_PART;
-    [SerializeField] private Person.BodyPartEnum _preSelectedTarget;
+    [SerializeField] protected TargetTypeEnum _targetType = TargetTypeEnum.BODY_PART;
+    [SerializeField] protected Person.BodyPartEnum _preSelectedTarget;
     [SerializeField] AttackerTypeEnum[] _attackerType;
     
         
@@ -153,7 +153,7 @@ public class BasicCard : ScriptableObject
         _displayDescription = ReplaceFirstOccurrence(_displayDescription, "heal", _heal.ToString());
     }
 
-    public void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
+    public virtual void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
         Person.BodyPartEnum affected_part)
     {
         Attack(user, attacking_parts, target, affected_part);
