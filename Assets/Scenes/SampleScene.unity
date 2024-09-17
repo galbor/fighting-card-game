@@ -1477,12 +1477,12 @@ MonoBehaviour:
   _selectEnemy2: 50
   _selectEnemy3: 51
   _selectEnemy4: 52
-  _selectRightArm: 101
-  _selectLeftArm: 113
-  _selectRightLeg: 100
-  _selectLeftLeg: 97
-  _selectHead: 119
-  _selectTorso: 115
+  _selectRightArm: 111
+  _selectLeftArm: 117
+  _selectRightLeg: 108
+  _selectLeftLeg: 106
+  _selectHead: 105
+  _selectTorso: 107
 --- !u!114 &1611676119
 MonoBehaviour:
   m_ObjectHideFlags: 0
