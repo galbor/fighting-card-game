@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -146,7 +147,14 @@ public class BasicCard : ScriptableObject
     
     public void UpdateDescription()
     {
-        _displayDescription = _description;
+        string[] descriptionarray = _description.Split("\\n");
+        StringBuilder descriptionbuilder = new StringBuilder();
+        foreach (var str in descriptionarray)
+        {
+            descriptionbuilder.Append(str);
+            descriptionbuilder.Append('\n');
+        }
+        _displayDescription = descriptionbuilder.ToString();
         _displayDescription = ReplaceFirstOccurrence(_displayDescription, "damage", _damage.ToString());
         _displayDescription = ReplaceFirstOccurrence(_displayDescription, "bleed", _bleed.ToString());
         _displayDescription = ReplaceFirstOccurrence(_displayDescription, "defense", _defense.ToString());
