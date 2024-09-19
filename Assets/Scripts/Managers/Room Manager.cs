@@ -12,7 +12,7 @@ public class RoomManager : Singleton<RoomManager>
     [SerializeField] private float _spacing;
     private Enemy[] _enemies;
 
-    private BasicCard _prize;
+    private BasicAttackCard _prize;
 
     void Start ()
     {

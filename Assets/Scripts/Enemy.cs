@@ -18,7 +18,7 @@ public class Enemy : ScriptableObject
     
     private Person _person;
     private int _lastAttack = -1;
-    private BasicCard _attack;
+    private BasicAttackCard _attack;
     
     public int MaxHealth { get => _maxHealth; }
     
@@ -36,7 +36,7 @@ public class Enemy : ScriptableObject
     public void Init()
     {
         _person = Resources.Load<Person>(_personPrefab);
-        _attack = ScriptableObject.CreateInstance<BasicCard>();
+        _attack = ScriptableObject.CreateInstance<BasicAttackCard>();
     }
 
     public void Attack()

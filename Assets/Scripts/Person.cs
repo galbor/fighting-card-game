@@ -118,9 +118,9 @@ public class Person : MonoBehaviour
         }
     }
     
-    public void HighlightBodyParts(BasicCard.TargetTypeEnum targetType)
+    public void HighlightBodyParts(BasicAttackCard.TargetTypeEnum targetType)
     {
-        if (targetType == BasicCard.TargetTypeEnum.PRE_SELECTED)
+        if (targetType == BasicAttackCard.TargetTypeEnum.PRE_SELECTED)
         {
             foreach (BodyPartEnum bodyPartEnum in Enum.GetValues(typeof(BodyPartEnum)))
             {
@@ -133,7 +133,7 @@ public class Person : MonoBehaviour
 
         Dictionary<Person.BodyPartEnum, KeyCode> dict = EventManagerScript.Instance._BodyPartKeyCodes;
 
-        if (targetType == BasicCard.TargetTypeEnum.BODY_PART)
+        if (targetType == BasicAttackCard.TargetTypeEnum.BODY_PART)
         {
             foreach (BodyPartEnum bodyPartEnum in Enum.GetValues(typeof(BodyPartEnum)))
             {
@@ -144,7 +144,7 @@ public class Person : MonoBehaviour
             return;
         }
         
-        if (targetType == BasicCard.TargetTypeEnum.UPPER_BODY)
+        if (targetType == BasicAttackCard.TargetTypeEnum.UPPER_BODY)
         {
             foreach (BodyPartEnum bodyPartEnum in Enum.GetValues(typeof(BodyPartEnum)))
             {

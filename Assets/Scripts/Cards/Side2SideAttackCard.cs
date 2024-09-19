@@ -7,7 +7,7 @@ using UnityEngine;
 /**
  * Like a basic card, but if the affected part is X side then the attacking part is also X side
  */
-public class Side2SideCard : BasicCard
+public class Side2SideAttackCard : BasicAttackCard
 {
     public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
         Person.BodyPartEnum affected_part)
@@ -28,7 +28,8 @@ public class Side2SideCard : BasicCard
             }
         }
         
-        Attack(user, attacking_parts, target, affected_part);
-        PlayAbility(user, attacking_parts, target, affected_part);
+        base.Play(user, attacking_parts, target, affected_part);
+        // Attack(user, attacking_parts, target, affected_part);
+        // PlayAbility(user, attacking_parts, target, affected_part);
     }
 }
