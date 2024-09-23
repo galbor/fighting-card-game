@@ -5,5 +5,5 @@ using UnityEngine;
 [CreateAssetMenu]
 public class StartingDeckScriptableObject : ScriptableObject
 {
-    [SerializeField] public BasicAttackCard[] Cards;
+    [SerializeField] public BasicCard[] Cards;
 }

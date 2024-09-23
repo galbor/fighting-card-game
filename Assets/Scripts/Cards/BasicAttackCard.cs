@@ -11,8 +11,6 @@ public class BasicAttackCard : BasicCard
 {
     [SerializeField] int _damage = 0;
     [SerializeField] int _bleed = 0;
-    [SerializeField] int _defense = 0;
-    [SerializeField] int _heal = 0;
     
     private int _damageAdder = 0;
     private int _bleedAdder = 0;
@@ -54,16 +52,6 @@ public class BasicAttackCard : BasicCard
         public float DamageMultiplier;
         
     }
-
-    private string ReplaceFirstOccurrence(string source, string find, string replace)
-    {
-        find = "{" + find + "}";
-        int place = source.IndexOf(find, StringComparison.Ordinal);
-        if (place == -1)
-            return source;
-        string result = source.Remove(place, find.Length).Insert(place, replace);
-        return result;
-    }
     
     
     public override void UpdateDescription()
@@ -71,8 +59,6 @@ public class BasicAttackCard : BasicCard
         base.UpdateDescription();
         _displayDescription = ReplaceFirstOccurrence(_displayDescription, "damage", _damage.ToString());
         _displayDescription = ReplaceFirstOccurrence(_displayDescription, "bleed", _bleed.ToString());
-        _displayDescription = ReplaceFirstOccurrence(_displayDescription, "defense", _defense.ToString());
-        _displayDescription = ReplaceFirstOccurrence(_displayDescription, "heal", _heal.ToString());
     }
 
     public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,

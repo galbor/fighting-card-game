@@ -68,7 +68,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     
     public Person Player {get => _player; }
 
-    public void Init(int defaultEnergy, int maxHandSize, int basicHandSize, List<BasicAttackCard> deck)
+    public void Init(int defaultEnergy, int maxHandSize, int basicHandSize, List<BasicCard> deck)
     {
         _defaultEnergy = defaultEnergy;
         _maxHandSize = maxHandSize;
@@ -347,7 +347,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     //shuffle discard pile into draw pile
     private void ShuffleDiscardPile()
     {
-        BasicAttackCard[] tmp_array = new BasicAttackCard[_discardPile.Count];
+        BasicCard[] tmp_array = new BasicCard[_discardPile.Count];
         _discardPile.CopyTo(tmp_array, 0);
         _discardPile.Clear();
         //Fisher-Yates shuffle

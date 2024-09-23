@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Cards/Basic Card")]
 public class BasicCard : ScriptableObject
 {
     [SerializeField] private string _name = "";
@@ -15,6 +17,8 @@ public class BasicCard : ScriptableObject
     [SerializeField] protected TargetTypeEnum _targetType = TargetTypeEnum.BODY_PART;
     [SerializeField] protected Person.BodyPartEnum _preSelectedTarget;
     [SerializeField] AttackerTypeEnum[] _attackerType;
+
+    [SerializeField] private BasicCard[] _cardsToPlay;
     
     
     public TargetTypeEnum TargetType { get => _targetType; }
@@ -103,6 +107,7 @@ public class BasicCard : ScriptableObject
         Person.BodyPartEnum affected_part)
     {
         PlayAbility(user, attacking_parts, target, affected_part);
+        _cardsToPlay.All(card => { card.Play(user, attacking_parts, target, affected_part); return true; });
     }
     
     public void PlayAbility(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
@@ -112,5 +117,16 @@ public class BasicCard : ScriptableObject
         {
             if (!playerTurn.DrawCard()) break;
         }
+    }
+    
+    
+    protected string ReplaceFirstOccurrence(string source, string find, string replace)
+    {
+        find = "{" + find + "}";
+        int place = source.IndexOf(find, StringComparison.Ordinal);
+        if (place == -1)
+            return source;
+        string result = source.Remove(place, find.Length).Insert(place, replace);
+        return result;
     }
 }

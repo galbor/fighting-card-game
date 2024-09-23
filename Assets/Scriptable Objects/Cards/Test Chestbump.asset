@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26190f1568af44819fbca338a7d59701, type: 3}
+  m_Name: Test Chestbump
+  m_EditorClassIdentifier: 
+  _name: Chest Bump
+  _description: 
+  _image: {fileID: 0}
+  _cost: 0
+  _draw: 0
+  _singleEnemyTarget: 1
+  _targetType: 1
+  _preSelectedTarget: 0
+  _attackerType: 07000000
+  _cardsToPlay:
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
+  - {fileID: 11400000, guid: 43fae0d19111cfa4594f787b1ddd92a7, type: 2}
