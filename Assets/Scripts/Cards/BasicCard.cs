@@ -69,8 +69,12 @@ public class BasicCard : ScriptableObject
                 throw new ArgumentOutOfRangeException();
         }
     }
-    
-    
+
+    private void Awake()
+    {
+        if (_cardsToPlay == null) _cardsToPlay = Array.Empty<BasicCard>();
+    }
+
     protected string _displayDescription;
     
     public string DisplayDescription
@@ -88,19 +92,6 @@ public class BasicCard : ScriptableObject
     public int Cost
     {
         get => _cost;
-    }
-    
-    
-    public virtual void UpdateDescription()
-    {
-        string[] descriptionarray = _description.Split("\\n");
-        StringBuilder descriptionbuilder = new StringBuilder();
-        foreach (var str in descriptionarray)
-        {
-            descriptionbuilder.Append(str);
-            descriptionbuilder.Append('\n');
-        }
-        _displayDescription = descriptionbuilder.ToString();
     }
 
     public virtual void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
@@ -128,5 +119,17 @@ public class BasicCard : ScriptableObject
             return source;
         string result = source.Remove(place, find.Length).Insert(place, replace);
         return result;
+    }
+    
+    public virtual void UpdateDescription()
+    {
+        string[] descriptionarray = _description.Split("\\n");
+        StringBuilder descriptionbuilder = new StringBuilder();
+        foreach (var str in descriptionarray)
+        {
+            descriptionbuilder.Append(str);
+            descriptionbuilder.Append('\n');
+        }
+        _displayDescription = descriptionbuilder.ToString();
     }
 }

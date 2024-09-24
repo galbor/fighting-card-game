@@ -8,12 +8,14 @@ public class HealthBar : MonoBehaviour
 {
     private Slider _slider;
     private Text _healthText;
+    private Text _blockText;
     private Image _image;
     
     private int _maxHealth = 100;
     private int _currentHealth = 100;
     private int _defense = 0;
     private int _bleed = 0;
+    private int _invincibility = 0;
 
     public int Health
     {
@@ -26,12 +28,19 @@ public class HealthBar : MonoBehaviour
         get => _maxHealth;
         set => SetMaxHealth(value);
     }
+
+    public int Invincibility
+    {
+        get => _invincibility;
+        set => _invincibility = Math.Max(value, 0);
+    }
     
     void Awake()
     {
         _slider = GetComponent<Slider>();
-        _healthText = GetComponentInChildren<Text>();
-        _image = transform.GetChild(0).GetComponent<Image>();
+        _image = transform.GetChild(2).GetComponent<Image>();
+        _healthText = transform.GetChild(3).GetComponent<Text>();
+        _blockText = transform.GetChild(4).GetComponentInChildren<Text>();
         _slider.maxValue = _maxHealth;
         SetHealth(_maxHealth);
     }
@@ -74,6 +83,8 @@ public class HealthBar : MonoBehaviour
     public void SetDefense(int defense)
     {
         _defense = defense;
+        _blockText.text = _defense.ToString();
+        _blockText.transform.parent.gameObject.SetActive(defense != 0);
     }
     
     /**
@@ -127,6 +138,11 @@ public class HealthBar : MonoBehaviour
      */
     public bool RemoveHealth(int damage)
     {
+        if (Invincibility > 0)
+        {
+            Invincibility -= 1;
+            return true;
+        }
         damage = ReduceDefense(damage);
         return SetHealth(_currentHealth - damage);
     }

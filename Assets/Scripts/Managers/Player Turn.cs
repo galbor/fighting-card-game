@@ -161,40 +161,44 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     IEnumerator SelectAttackerTypes()
     {
-        BasicAttackCard.AttackerTypeEnum[] attackerTypes = _hand[_selectedCard].AttackerType;
+        BasicCard.AttackerTypeEnum[] attackerTypes = _hand[_selectedCard].AttackerType;
         _selectedAttackerBodyParts = new List<Person.BodyPartEnum>();
 
         int i = 0;
         while (_selectedAttackerBodyParts.Count < attackerTypes.Length)
         {
-            if (BasicAttackCard.GetBodyPart(attackerTypes[i]) == Person.BodyPartEnum.NONE)
+            if (BasicCard.GetBodyPart(attackerTypes[i]) == Person.BodyPartEnum.NONE)
             {
+                Player.HighlightBodyParts(BasicCard.TargetTypeEnum.SIDE);
                 while (true)
                 {
-                    if (Input.GetKeyDown(_selectRightArm))
+                    var pressedSide = Person.GetSide(GetPressedBodyPart());
+                    if (pressedSide == Person.SideEnum.RIGHT)
                     {
-                        if (attackerTypes[i] == BasicAttackCard.AttackerTypeEnum.ARM) _selectedAttackerBodyParts.Add(Person.BodyPartEnum.RIGHT_ARM);
+                        if (attackerTypes[i] == BasicCard.AttackerTypeEnum.ARM) _selectedAttackerBodyParts.Add(Person.BodyPartEnum.RIGHT_ARM);
                         else _selectedAttackerBodyParts.Add(Person.BodyPartEnum.RIGHT_LEG);
                         break;
                     }
-                    else if (Input.GetKeyDown(_selectLeftArm))
+                    if (pressedSide == Person.SideEnum.LEFT)
                     {
-                        if (attackerTypes[i] == BasicAttackCard.AttackerTypeEnum.ARM)
+                        if (attackerTypes[i] == BasicCard.AttackerTypeEnum.ARM)
                             _selectedAttackerBodyParts.Add(Person.BodyPartEnum.LEFT_ARM);
                         else _selectedAttackerBodyParts.Add(Person.BodyPartEnum.LEFT_LEG);
                         break;
                     }
-                    else yield return null;
+                    yield return null;
                 }
             }
             else
             {
-                _selectedAttackerBodyParts.Add(BasicAttackCard.GetBodyPart(attackerTypes[i]));
+                _selectedAttackerBodyParts.Add(BasicCard.GetBodyPart(attackerTypes[i]));
             }
             
             i++;
         }
 
+        
+        Player.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
         StartCoroutine(SelectAffectedPart());
     }
 
@@ -253,7 +257,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void StartTurn()
     {
         Energy = _defaultEnergy;
-        Player.SetBlockDefault();
+        Player.SetProtectionDefault();
         DrawHand();
         ResetAction();
     }
@@ -269,7 +273,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     {
         foreach (Enemy enemy in _enemies)
         {
-            enemy.Person.SetBlockDefault();
+            enemy.Person.SetProtectionDefault();
             enemy.Attack();
         }
     }

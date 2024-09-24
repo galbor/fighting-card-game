@@ -24,7 +24,8 @@ public class Person : MonoBehaviour
         LEFT,
         RIGHT,
         TORSO,
-        HEAD
+        HEAD,
+        NONE
     }
     
     /**
@@ -44,6 +45,8 @@ public class Person : MonoBehaviour
             case BodyPartEnum.RIGHT_ARM:
             case BodyPartEnum.RIGHT_LEG:
                 return SideEnum.RIGHT;
+            case BodyPartEnum.NONE:
+                return SideEnum.NONE;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -82,11 +85,11 @@ public class Person : MonoBehaviour
     [SerializeField] private TextCarrier[] _bodyPartTextCarriers;
 
     [SerializeField]
-    private Dictionary<BodyPartEnum, BodyPartEnum> _defaultBlocks = new Dictionary<BodyPartEnum, BodyPartEnum>() {
+    private Dictionary<BodyPartEnum, BodyPartEnum> _defaultProtections = new Dictionary<BodyPartEnum, BodyPartEnum>() {
         { BodyPartEnum.LEFT_ARM , BodyPartEnum.HEAD},
         { BodyPartEnum.RIGHT_ARM ,BodyPartEnum.HEAD} };
 
-    private Dictionary<BodyPartEnum, BodyPartEnum> _curBlocks;
+    private Dictionary<BodyPartEnum, BodyPartEnum> _curProtections;
     private BodyPart[] _bodyParts;
     private int _maxHealth = 100;
     // private bool _initiated = false;
@@ -104,7 +107,7 @@ public class Person : MonoBehaviour
                 (int)(HealthValues[bodyPart] * _maxHealth), _bodyPartTextCarriers[(int)bodyPart]);
         }
         
-        SetBlockDefault();
+        SetProtectionDefault();
     }
 
     public void SetMaxHealth(int maxHealth)
@@ -163,22 +166,15 @@ public class Person : MonoBehaviour
     
     public void TakeDamage(BodyPartEnum bodyPart, int damage)
     {
-        if (_curBlocks.Values.Contains(bodyPart))
+        if (_curProtections.Values.Contains(bodyPart))
         {
-            foreach (var blocker in _curBlocks.Keys)
-            {
-                if (_curBlocks[blocker] == bodyPart)
-                {
-                    bodyPart = blocker;
-                    break;
-                }
-            }
+            bodyPart = _curProtections.First(pair => pair.Value == bodyPart).Key;
         }
 
         //RemoveHealth returns true if health > 0
         if (!_bodyParts[(int)bodyPart]._HealthBar.RemoveHealth(damage))
         {
-            RemoveBlock(bodyPart);
+            RemoveProtection(bodyPart);
         }
         if (!IsAlive()) Die();
     }
@@ -219,46 +215,47 @@ public class Person : MonoBehaviour
         return;
     }
     
-    public void SetBlock(BodyPartEnum blocker, BodyPartEnum blockee)
+    //
+    public void SetProtection(BodyPartEnum guard, BodyPartEnum protectedPart)
     {
-        _curBlocks[blocker] = blockee;
-        DisplayBlock(blocker, blockee);
+        _curProtections[guard] = protectedPart;
+        DisplayProtection(guard, protectedPart);
     }
 
-    public void RemoveBlock(BodyPartEnum blocker)
+    public void RemoveProtection(BodyPartEnum guard)
     {
-        _curBlocks.Remove(blocker);
-        DisplayBlock(blocker, BodyPartEnum.NONE);
+        _curProtections.Remove(guard);
+        DisplayProtection(guard, BodyPartEnum.NONE);
     }
 
-    public void SetBlockDefault()
+    public void SetProtectionDefault()
     {
-        _curBlocks = new Dictionary<BodyPartEnum, BodyPartEnum>(_defaultBlocks);
+        _curProtections = new Dictionary<BodyPartEnum, BodyPartEnum>(_defaultProtections);
         
-        BodyPartEnum blockee;
+        BodyPartEnum protectedPart;
         foreach (BodyPartEnum bodypart in BodyPartEnum.GetValues(typeof(BodyPartEnum)))
         {
-            if (_curBlocks.ContainsKey(bodypart))
+            if (_curProtections.ContainsKey(bodypart))
             {
-                blockee = _curBlocks[bodypart];
+                protectedPart = _curProtections[bodypart];
                 if (_bodyParts[(int)bodypart]._HealthBar.Health <= 0)
                 {
-                    RemoveBlock(bodypart);
-                    blockee = BodyPartEnum.NONE;
+                    RemoveProtection(bodypart);
+                    protectedPart = BodyPartEnum.NONE;
                 }
             }
-            else blockee =  BodyPartEnum.NONE;
-            DisplayBlock(bodypart, blockee);
+            else protectedPart =  BodyPartEnum.NONE;
+            DisplayProtection(bodypart, protectedPart);
         }
     }
 
-    private void DisplayBlock(BodyPartEnum blocker, BodyPartEnum blockee)
+    private void DisplayProtection(BodyPartEnum guard, BodyPartEnum protectedPart)
     {
-        if (blocker == BodyPartEnum.NONE) return;
+        if (guard == BodyPartEnum.NONE) return;
         
-        Sprite image = blockee == BodyPartEnum.NONE ? null : _bodyParts[(int)blockee]._sprite;
+        Sprite image = protectedPart == BodyPartEnum.NONE ? null : _bodyParts[(int)protectedPart]._sprite;
         
-        _bodyParts[(int)blocker]._HealthBar.SetBlockImage(image);
+        _bodyParts[(int)guard]._HealthBar.SetBlockImage(image);
     }
     
     public int MaxHealth => _maxHealth;

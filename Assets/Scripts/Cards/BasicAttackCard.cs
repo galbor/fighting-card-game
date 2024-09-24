@@ -79,7 +79,7 @@ public class BasicAttackCard : BasicCard
         }
         foreach (var attacking_part in attacking_parts)
             {
-                user.RemoveBlock(attacking_part);
+                user.RemoveProtection(attacking_part);
                 
                 target.TakeDamage(affected_part, user.GetAttackDamage(attacking_part, _damage));
                 target.Bleed(affected_part, user.GetAttackBleed(attacking_part, _bleed));
