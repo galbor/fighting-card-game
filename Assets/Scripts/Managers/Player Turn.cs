@@ -283,7 +283,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     {
         StopAllCoroutines();
         
-        _enemies.All(enemy => {enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED); return true; });
+        _enemies.ToList().ForEach(enemy => enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED));
         Player.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
         
         StartCoroutine(SelectCard());

@@ -20,10 +20,9 @@ public class BasicDefenseCard : BasicCard
 
     private void Block(Person user, List<Person.BodyPartEnum> attacking_parts, Person.BodyPartEnum affected_part)
     {
-        attacking_parts.All(x => {
-            user.Defend(x, _block);
-            if (affected_part != Person.BodyPartEnum.NONE) user.SetProtection(x, affected_part);
-            return true;});
+        attacking_parts.ForEach(x => user.Defend(x, _block));
+        if (affected_part != Person.BodyPartEnum.NONE)
+            attacking_parts.ForEach(x => user.SetProtection(x, affected_part));
     }
 
     public override void UpdateDescription()

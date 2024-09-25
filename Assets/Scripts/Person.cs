@@ -123,7 +123,7 @@ public class Person : MonoBehaviour
     
     public void HighlightBodyParts(BasicCard.TargetTypeEnum targetType)
     {
-        IEnumerable<BodyPartEnum> partsLst = Enum.GetValues(typeof(BodyPartEnum)).OfType<BodyPartEnum>();
+        var partsLst = Enum.GetValues(typeof(BodyPartEnum)).OfType<BodyPartEnum>();
         Dictionary<BodyPartEnum, KeyCode> dict = EventManagerScript.Instance._BodyPartKeyCodes;
         Func<BodyPartEnum, String> func = (x => dict[x].ToString());
 
@@ -141,15 +141,11 @@ public class Person : MonoBehaviour
                     part != BodyPartEnum.LEFT_LEG && part != BodyPartEnum.RIGHT_LEG && part != BodyPartEnum.NONE);
                 break;
             default: //case SIDE
-                partsLst = new List<BodyPartEnum>() { BodyPartEnum.RIGHT_ARM, BodyPartEnum.LEFT_ARM };
+                partsLst = new List<BodyPartEnum> { BodyPartEnum.RIGHT_ARM, BodyPartEnum.LEFT_ARM };
                 break;
         }
 
-        partsLst.All(part =>
-        {
-            _bodyParts[(int)part]._letterDisplay.Text = func(part);
-            return true;
-        });
+        partsLst.ToList().ForEach(part => _bodyParts[(int)part]._letterDisplay.Text = func(part));
     }
     
     public void TakeDamage(BodyPartEnum bodyPart, int damage)

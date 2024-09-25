@@ -18,7 +18,7 @@ public class BasicCard : ScriptableObject
     [SerializeField] protected Person.BodyPartEnum _preSelectedTarget;
     [SerializeField] AttackerTypeEnum[] _attackerType;
 
-    [SerializeField] private BasicCard[] _cardsToPlay;
+    [SerializeField] private List<BasicCard> _cardsToPlay;
     
     
     public TargetTypeEnum TargetType { get => _targetType; }
@@ -72,7 +72,7 @@ public class BasicCard : ScriptableObject
 
     private void Awake()
     {
-        if (_cardsToPlay == null) _cardsToPlay = Array.Empty<BasicCard>();
+        if (_cardsToPlay == null) _cardsToPlay = new List<BasicCard>();
     }
 
     protected string _displayDescription;
@@ -98,7 +98,7 @@ public class BasicCard : ScriptableObject
         Person.BodyPartEnum affected_part)
     {
         PlayAbility(user, attacking_parts, target, affected_part);
-        _cardsToPlay.All(card => { card.Play(user, attacking_parts, target, affected_part); return true; });
+        _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_part));
     }
     
     public void PlayAbility(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
