@@ -63,7 +63,7 @@ namespace DefaultNamespace
 
         protected override void ChangeScale(float mult)
         {
-            base.ChangeScale(mult);
+            // base.ChangeScale(mult);
             FontSize *= mult;
         }
     }

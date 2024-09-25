@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -281,20 +282,26 @@ public class PlayerTurn : Singleton<PlayerTurn>
     private void ResetAction()
     {
         StopAllCoroutines();
-        foreach (Enemy enemy in _enemies)
-        {
-            enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED);
-        }
+        
+        _enemies.All(enemy => {enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED); return true; });
+        Player.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+        
         StartCoroutine(SelectCard());
     }
     
     public bool DrawCard()
     {
+        if (!DrawCardNoDisplay()) return false;
+        _handDisplayManager.SetHand(_hand);
+        return true;
+    }
+
+    private bool DrawCardNoDisplay()
+    {
         if (_hand.Count >= _maxHandSize) return false;
         BasicCard card = GetCardFromDeck();
         if (card == null) return false;
         _hand.Add(card);
-        _handDisplayManager.SetHand(_hand);
         return true;
     }
 
@@ -305,8 +312,9 @@ public class PlayerTurn : Singleton<PlayerTurn>
     {
         for (int i = 0; i < _basicHandSize; i++)
         {
-            if (!DrawCard()) return i;
+            if (!DrawCardNoDisplay()) return i;
         }
+        _handDisplayManager.SetHand(_hand);
 
         return _basicHandSize;
     }
@@ -326,11 +334,16 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     private bool DiscardCard(int index)
     {
+        if (!DiscardCardNoDisplay(index)) return false;
+        _handDisplayManager.SetHand(_hand);
+        return true;
+    }
+
+    private bool DiscardCardNoDisplay(int index)
+    {
         if (_hand[index] == null) return false;
         _discardPile.Enqueue(_hand[index]);
         _hand.RemoveAt(index);
-        _handDisplayManager.SetHand(_hand);
-
         return true;
     }
 
@@ -342,8 +355,9 @@ public class PlayerTurn : Singleton<PlayerTurn>
         int res = 0;
         for (int i = _hand.Count-1; i >=0; i--)
         {
-            if (DiscardCard(i)) res++;
+            if (DiscardCardNoDisplay(i)) res++;
         }
+        _handDisplayManager.SetHand(_hand);
 
         return res;
     }
@@ -386,8 +400,8 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     private void SetBodyPartKeyCodes()
     {
-        if (EventManagerScript.Instance._BodyPartKeyCodes == null)
-            EventManagerScript.Instance._BodyPartKeyCodes = new Dictionary<Person.BodyPartEnum, KeyCode>();
+        EventManagerScript.Instance._BodyPartKeyCodes ??= new Dictionary<Person.BodyPartEnum, KeyCode>(); //if null then equals
+        
         Dictionary<Person.BodyPartEnum, KeyCode> dict = EventManagerScript.Instance._BodyPartKeyCodes;
         dict[Person.BodyPartEnum.HEAD] = _selectHead;
         dict[Person.BodyPartEnum.TORSO] = _selectTorso;

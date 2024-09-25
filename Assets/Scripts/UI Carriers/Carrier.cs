@@ -20,9 +20,13 @@ public class Carrier : MonoBehaviour
     public float Distance
     {
         get => _distance.magnitude;
-        set => _distance = _distance.normalized * value;
+        set
+        {
+            _distance = _distance.normalized * value; 
+            MoveHealthBar();
+        }
     }
-    
+
     public void SetDisplay(RectTransform display)
     {
         _carriedSubject = display;
@@ -79,11 +83,12 @@ public class Carrier : MonoBehaviour
             // _carriedSubject.localScale = transform.localScale;
             ChangeScale(_scale.y / _prevScale.y);
             _prevScale = _scale;
+            MoveHealthBar();
         }
 
     }
 
-    private void MoveHealthBar()
+    public void MoveHealthBar()
     {
         if (!_healthBarNull)
             _carriedSubject.position = _camera.WorldToScreenPoint(transform.position + _distance);

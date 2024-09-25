@@ -18,16 +18,16 @@ public class CardDisplay : MonoBehaviour
     [SerializeField] private TextCarrier _descriptionText;
     [SerializeField] private float _margins;
 
-    private Vector3 _prevScale = Vector3.zero;
-    private Vector3 _scale;
+    private Vector3 _prevExtends = Vector3.zero;
+    private Vector3 _extends;
 
     private void Update()
     {
-        _scale = transform.localScale;
-        if (_prevScale != _scale)
+        _extends = _cardSprite.bounds.extents;
+        if (_prevExtends != _extends)
         {
             SetScale();
-            _prevScale = _scale;
+            _prevExtends = _extends; //setScale also does this, but I think this code makes more sense if I do it here too
         }
     }
 
@@ -44,6 +44,7 @@ public class CardDisplay : MonoBehaviour
         _nameText.Text = card.Name;
         _descriptionText.Text = card.DisplayDescription;
         _energyText.Text = card.Cost.ToString();
+        SetScale();
         EnergyCostColor();
     }
     
@@ -63,6 +64,8 @@ public class CardDisplay : MonoBehaviour
      */
     private void SetWidth(TextCarrier textCarrier)
     {
+        textCarrier.SetAligntment(TextAlignmentOptions.Top);
+        
         textCarrier.SetWidth(_camera.WorldToScreenPoint(new Vector3(_cardSprite.bounds.extents.x - _margins, 0,0 )).x - _camera.WorldToScreenPoint(Vector3.zero).x);
     }
     
@@ -75,8 +78,9 @@ public class CardDisplay : MonoBehaviour
 
     private void SetScale()
     {
-        SetWidth(_nameText);
         SetHeight(_nameText);
+        SetWidth(_nameText);
         SetWidth(_descriptionText);
+        _prevExtends = _extends;
     }
 }

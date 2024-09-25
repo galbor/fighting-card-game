@@ -20,7 +20,7 @@ public class HandDisplayManager : MonoBehaviour
     void Awake()
     {
         _defaultY = _cardDisplays[0].transform.position.y;
-        _middleX = (_cardDisplays[0].transform.position.x + _cardDisplays[_cardDisplays.Length - 1].transform.position.x) / 2;
+        _middleX = (_cardDisplays[0].transform.position.x + _cardDisplays[^1].transform.position.x) / 2; //^1 is -1 index like python
         _spacing = _cardDisplays[1].transform.position.x - _cardDisplays[0].transform.position.x;
         _defaultScale = _cardDisplays[0].transform.localScale;
     }

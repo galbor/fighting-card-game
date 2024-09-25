@@ -121,47 +121,35 @@ public class Person : MonoBehaviour
         }
     }
     
-    public void HighlightBodyParts(BasicAttackCard.TargetTypeEnum targetType)
+    public void HighlightBodyParts(BasicCard.TargetTypeEnum targetType)
     {
-        if (targetType == BasicAttackCard.TargetTypeEnum.PRE_SELECTED)
-        {
-            foreach (BodyPartEnum bodyPartEnum in Enum.GetValues(typeof(BodyPartEnum)))
-            {
-                if (bodyPartEnum == BodyPartEnum.NONE) continue;
-                _bodyParts[(int)bodyPartEnum]._letterDisplay.Text = "";
-            }
+        IEnumerable<BodyPartEnum> partsLst = Enum.GetValues(typeof(BodyPartEnum)).OfType<BodyPartEnum>();
+        Dictionary<BodyPartEnum, KeyCode> dict = EventManagerScript.Instance._BodyPartKeyCodes;
+        Func<BodyPartEnum, String> func = (x => dict[x].ToString());
 
-            return;
+        switch (targetType)
+        {
+            case BasicCard.TargetTypeEnum.PRE_SELECTED:
+                partsLst = partsLst.Where(part => part != BodyPartEnum.NONE);
+                func = (x => "");
+                break;
+            case BasicCard.TargetTypeEnum.BODY_PART:
+                partsLst = partsLst.Where(part => part != BodyPartEnum.NONE);
+                break;
+            case BasicCard.TargetTypeEnum.UPPER_BODY:
+                partsLst = partsLst.Where(part =>
+                    part != BodyPartEnum.LEFT_LEG && part != BodyPartEnum.RIGHT_LEG && part != BodyPartEnum.NONE);
+                break;
+            default: //case SIDE
+                partsLst = new List<BodyPartEnum>() { BodyPartEnum.RIGHT_ARM, BodyPartEnum.LEFT_ARM };
+                break;
         }
 
-        Dictionary<Person.BodyPartEnum, KeyCode> dict = EventManagerScript.Instance._BodyPartKeyCodes;
-
-        if (targetType == BasicAttackCard.TargetTypeEnum.BODY_PART)
+        partsLst.All(part =>
         {
-            foreach (BodyPartEnum bodyPartEnum in Enum.GetValues(typeof(BodyPartEnum)))
-            {
-                if (bodyPartEnum == BodyPartEnum.NONE) continue;
-                _bodyParts[(int)bodyPartEnum]._letterDisplay.Text = dict[bodyPartEnum].ToString();
-            }
-
-            return;
-        }
-        
-        if (targetType == BasicAttackCard.TargetTypeEnum.UPPER_BODY)
-        {
-            foreach (BodyPartEnum bodyPartEnum in Enum.GetValues(typeof(BodyPartEnum)))
-            {
-                if (bodyPartEnum == BodyPartEnum.NONE || bodyPartEnum == BodyPartEnum.RIGHT_LEG || bodyPartEnum == BodyPartEnum.LEFT_LEG) continue;
-                _bodyParts[(int)bodyPartEnum]._letterDisplay.Text = dict[bodyPartEnum].ToString();
-            }
-
-            return;
-        }
-        
-        // targetType == BasicCard.TargetTypeEnum.SIDE
-        _bodyParts[(int)BodyPartEnum.LEFT_ARM]._letterDisplay.Text = dict[BodyPartEnum.LEFT_ARM].ToString();
-        _bodyParts[(int)BodyPartEnum.RIGHT_ARM]._letterDisplay.Text = dict[BodyPartEnum.RIGHT_ARM].ToString();
-        return;
+            _bodyParts[(int)part]._letterDisplay.Text = func(part);
+            return true;
+        });
     }
     
     public void TakeDamage(BodyPartEnum bodyPart, int damage)
