@@ -196,10 +196,10 @@ public class Person : MonoBehaviour
     private void Die()
     {
         RoomManager.Instance.KillEnemy(this);
-        Destroy(gameObject);
+        Destroy(gameObject); //perhaps undefined behavior for player death?
     }
     
-    //
+    //guard protects protectedPart
     public void SetProtection(BodyPartEnum guard, BodyPartEnum protectedPart)
     {
         _curProtections[guard] = protectedPart;

@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 [CreateAssetMenu(menuName = "Enemy")]
 public class Enemy : ScriptableObject
 {
-    [SerializeField] private string _personPrefab;
+    [SerializeField] private GameObject _personPrefab;
     [SerializeField] private int _maxHealth;
     [SerializeField] private string _name;
     
@@ -33,9 +33,11 @@ public class Enemy : ScriptableObject
     }
     public string Name { get => _name; }
     
-    public void Init()
+    public void Init(Transform personParent)
     {
-        _person = Resources.Load<Person>(_personPrefab);
+        // _person = Resources.Load<Person>(_personPrefab);
+        _person = Instantiate(_personPrefab, personParent).GetComponent<Person>();
+        _person.SetMaxHealth(MaxHealth);
         _attack = ScriptableObject.CreateInstance<BasicAttackCard>();
     }
 

@@ -22,13 +22,15 @@ public class RoomManager : Singleton<RoomManager>
     
     public void SetRoom(Room room)
     {
-        _enemies = room.Enemies;
+        _enemies = new Enemy[_room.Enemies.Length];
         for (int i = 0; i < _enemies.Length; i++)
         {
-            _enemies[i].Init();
-            Person enemy = Instantiate(_enemies[i].Person, _enemyParent);
-            enemy.SetMaxHealth(_enemies[i].MaxHealth);
-            _enemies[i].Person = enemy;
+            _enemies[i] = Instantiate(_room.Enemies[i]);
+            _enemies[i].Init(_enemyParent);
+            // Person enemy = Instantiate(_enemies[i].Person, _enemyParent);
+            // Person enemy = _enemies[i].Person;
+            // enemy.SetMaxHealth(_enemies[i].MaxHealth);
+            // _enemies[i].Person = enemy;
         }
         
         PlaceEnemies();

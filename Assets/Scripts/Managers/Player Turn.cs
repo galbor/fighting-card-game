@@ -382,7 +382,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     }
 
     //TODO get enemies from somewhere
-    public Enemy[] GetEnemies()
+    private Enemy[] GetEnemies()
     {
         return GetEnemies(RoomManager.Instance);
     }
