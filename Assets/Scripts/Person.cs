@@ -195,8 +195,8 @@ public class Person : MonoBehaviour
 
     private void Die()
     {
-        //TODO
-        return;
+        RoomManager.Instance.KillEnemy(this);
+        Destroy(gameObject);
     }
     
     //

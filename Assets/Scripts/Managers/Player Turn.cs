@@ -382,9 +382,14 @@ public class PlayerTurn : Singleton<PlayerTurn>
     }
 
     //TODO get enemies from somewhere
-    private Enemy[] GetEnemies()
+    public Enemy[] GetEnemies()
     {
-        return _enemies = RoomManager.Instance.Enemies;
+        return GetEnemies(RoomManager.Instance);
+    }
+
+    public Enemy[] GetEnemies(RoomManager roomManager)
+    {
+        return _enemies = roomManager.Enemies;
     }
 
     private Person.BodyPartEnum GetPressedBodyPart()

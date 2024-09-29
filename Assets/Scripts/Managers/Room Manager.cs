@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -28,9 +29,29 @@ public class RoomManager : Singleton<RoomManager>
             Person enemy = Instantiate(_enemies[i].Person, _enemyParent);
             enemy.SetMaxHealth(_enemies[i].MaxHealth);
             _enemies[i].Person = enemy;
-            enemy.gameObject.GetComponentInChildren<EnemyNumber>().SetNumber(i+1);
-            enemy.transform.position = new Vector3(_center.x + (i - (float)(_enemies.Length-1)/2) * _spacing, _center.y, 0);
         }
+        
+        PlaceEnemies();
+    }
+
+    private void PlaceEnemies()
+    {
+        for (int i = 0; i < _enemies.Length; i++){
+            _enemies[i].Person.transform.position = new Vector3(_center.x + (i - (float)(_enemies.Length-1)/2) * _spacing, _center.y, 0);
+            _enemies[i].Person.gameObject.GetComponentInChildren<EnemyNumber>().SetNumber(i+1);
+        }
+    }
+
+    private void KillEnemy(int index)
+    {
+        KillEnemy(_enemies[index].Person);
+    }
+
+    public void KillEnemy(Person person)
+    {
+        _enemies = _enemies.Where(enemy => enemy.Person != person).ToArray();
+        PlayerTurn.Instance.GetEnemies(this);    
+        PlaceEnemies();
     }
 
     public Enemy[] Enemies => _enemies;
