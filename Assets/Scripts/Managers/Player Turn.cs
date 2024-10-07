@@ -77,15 +77,21 @@ public class PlayerTurn : Singleton<PlayerTurn>
         _hand = new List<BasicCard>();
         _drawPile = new Queue<BasicCard>();
         _discardPile = new Queue<BasicCard>();
-        
+
         foreach (var Card in deck)
         {
             _discardPile.Enqueue(Card);
         }
-        ShuffleDiscardPile();
 
         SetBodyPartKeyCodes();
-        
+
+        StartRound();
+    }
+
+    private void StartRound()
+    {
+        ShuffleDiscardPile();
+
         GetEnemies();
         StartTurn();
     }
@@ -310,13 +316,14 @@ public class PlayerTurn : Singleton<PlayerTurn>
      */
     private int DrawHand()
     {
-        for (int i = 0; i < _basicHandSize; i++)
+        int handSize;
+        for (handSize = 0; handSize < _basicHandSize; handSize++)
         {
-            if (!DrawCardNoDisplay()) return i;
+            if (!DrawCardNoDisplay()) break;
         }
         _handDisplayManager.SetHand(_hand);
 
-        return _basicHandSize;
+        return handSize;
     }
 
     private BasicCard GetCardFromDeck()
@@ -380,9 +387,8 @@ public class PlayerTurn : Singleton<PlayerTurn>
             _drawPile.Enqueue(tmp_array[i]);
         }
     }
-
-    //TODO get enemies from somewhere
-    private Enemy[] GetEnemies()
+    
+    public Enemy[] GetEnemies()
     {
         return GetEnemies(RoomManager.Instance);
     }
