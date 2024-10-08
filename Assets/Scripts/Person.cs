@@ -233,6 +233,15 @@ public class Person : MonoBehaviour
         }
     }
 
+    public void RemoveAllDefense()
+    {
+        foreach (BodyPartEnum bodyPart in BodyPartEnum.GetValues(typeof(BodyPartEnum)))
+        {
+            if (bodyPart == BodyPartEnum.NONE) continue;
+            _bodyParts[(int)bodyPart]._HealthBar.SetDefense(0);
+        }
+    }
+
     private void DisplayProtection(BodyPartEnum guard, BodyPartEnum protectedPart)
     {
         if (guard == BodyPartEnum.NONE) return;

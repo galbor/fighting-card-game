@@ -9,7 +9,6 @@ using UnityEngine.Serialization;
 public class PlayerTurn : Singleton<PlayerTurn>
 {
     [SerializeField] private Person _player;
-    [SerializeField] private HandDisplayManager _handDisplayManager;
     [SerializeField] private TextCarrier _energyText;
     
     [SerializeField] private KeyCode _endTurnKey = KeyCode.Return;
@@ -53,6 +52,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     
     private List<BasicCard> _hand;
 
+    private List<BasicCard> _deck;
     private Queue<BasicCard> _drawPile;
     private Queue<BasicCard> _discardPile;
 
@@ -63,34 +63,40 @@ public class PlayerTurn : Singleton<PlayerTurn>
         {
             _energy = value;
             _energyText.Text = _energy.ToString();
-            _handDisplayManager.SetEnergyCostColors();
+            HandDisplayManager.Instance.SetEnergyCostColors();
         }
     }
     
-    public Person Player {get => _player; }
+    public Person PlayerPerson {get => _player; }
 
-    public void Init(int defaultEnergy, int maxHandSize, int basicHandSize, List<BasicCard> deck)
+    public void Init(int defaultEnergy, int maxHandSize, int basicHandSize)
     {
         _defaultEnergy = defaultEnergy;
         _maxHandSize = maxHandSize;
         _basicHandSize = basicHandSize;
+        GetDeck();
         _hand = new List<BasicCard>();
         _drawPile = new Queue<BasicCard>();
-        _discardPile = new Queue<BasicCard>();
-
-        foreach (var Card in deck)
-        {
-            _discardPile.Enqueue(Card);
-        }
+        
 
         SetBodyPartKeyCodes();
 
         StartRound();
     }
 
-    private void StartRound()
+    public void StartRound()
     {
+        DiscardHand();
+        _drawPile = new Queue<BasicCard>();
+        _discardPile = new Queue<BasicCard>();
+
+        foreach (var card in _deck)
+        {
+            _discardPile.Enqueue(card);
+        }
         ShuffleDiscardPile();
+        
+        PlayerPerson.RemoveAllDefense();
 
         GetEnemies();
         StartTurn();
@@ -111,7 +117,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     //TODO display buttons
     IEnumerator SelectCard()
     {
-        _handDisplayManager.DisplayHand();
+        HandDisplayManager.Instance.DisplayHand();
         int index = -1;
         while (true)
         {
@@ -135,7 +141,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
                 break;
             }
         }
-        _handDisplayManager.ChooseCard(index);
+        HandDisplayManager.Instance.ChooseCard(index);
 
         StartCoroutine(SelectEnemy());
     }
@@ -176,7 +182,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         {
             if (BasicCard.GetBodyPart(attackerTypes[i]) == Person.BodyPartEnum.NONE)
             {
-                Player.HighlightBodyParts(BasicCard.TargetTypeEnum.SIDE);
+                PlayerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.SIDE);
                 while (true)
                 {
                     var pressedSide = Person.GetSide(GetPressedBodyPart());
@@ -205,7 +211,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         }
 
         
-        Player.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+        PlayerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
         StartCoroutine(SelectAffectedPart());
     }
 
@@ -264,7 +270,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void StartTurn()
     {
         Energy = _defaultEnergy;
-        Player.SetProtectionDefault();
+        PlayerPerson.SetProtectionDefault();
         DrawHand();
         ResetAction();
     }
@@ -285,12 +291,17 @@ public class PlayerTurn : Singleton<PlayerTurn>
         }
     }
 
-    private void ResetAction()
+    public void StopAction()
     {
         StopAllCoroutines();
         
         _enemies.ToList().ForEach(enemy => enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED));
-        Player.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+        PlayerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+    }
+    
+    private void ResetAction()
+    {
+        StopAction();
         
         StartCoroutine(SelectCard());
     }
@@ -298,7 +309,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public bool DrawCard()
     {
         if (!DrawCardNoDisplay()) return false;
-        _handDisplayManager.SetHand(_hand);
+        HandDisplayManager.Instance.SetHand(_hand);
         return true;
     }
 
@@ -321,7 +332,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         {
             if (!DrawCardNoDisplay()) break;
         }
-        _handDisplayManager.SetHand(_hand);
+        HandDisplayManager.Instance.SetHand(_hand);
 
         return handSize;
     }
@@ -342,7 +353,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     private bool DiscardCard(int index)
     {
         if (!DiscardCardNoDisplay(index)) return false;
-        _handDisplayManager.SetHand(_hand);
+        HandDisplayManager.Instance.SetHand(_hand);
         return true;
     }
 
@@ -364,7 +375,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         {
             if (DiscardCardNoDisplay(i)) res++;
         }
-        _handDisplayManager.SetHand(_hand);
+        HandDisplayManager.Instance.SetHand(_hand);
 
         return res;
     }
@@ -375,12 +386,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         BasicCard[] tmp_array = new BasicCard[_discardPile.Count];
         _discardPile.CopyTo(tmp_array, 0);
         _discardPile.Clear();
-        //Fisher-Yates shuffle
-        for (int i = 0; i < tmp_array.Length-1; i++)
-        {
-            int j = Random.Range(i, tmp_array.Length-1);
-            (tmp_array[i], tmp_array[j]) = (tmp_array[j], tmp_array[i]);
-        }
+        utils.ShuffleArrayInPlace(tmp_array);
         
         for (int i = 0; i<tmp_array.Length; i++)
         {
@@ -420,5 +426,14 @@ public class PlayerTurn : Singleton<PlayerTurn>
         dict[Person.BodyPartEnum.RIGHT_ARM] = _selectRightArm;
         dict[Person.BodyPartEnum.LEFT_LEG] = _selectLeftLeg;
         dict[Person.BodyPartEnum.RIGHT_LEG] = _selectRightLeg;
+    }
+
+    
+    //Copies deck from Player
+    public void GetDeck()
+    {
+        var deck = Player.Instance.Deck;
+        _deck = new List<BasicCard>();
+        deck.ForEach(x => _deck.Add(x));
     }
 }

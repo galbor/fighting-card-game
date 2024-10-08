@@ -12,7 +12,7 @@ namespace DefaultNamespace
         [SerializeField] private int _fontSize = 0;
         private TMP_Text _textMeshPro;
         private Transform _parent;
-        void Awake()
+        new void Awake()
         {
             _parent = EventManagerScript.Instance._TextParent;
             if (_carriedSubject == null)

@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class HandDisplayManager : MonoBehaviour
+public class HandDisplayManager : Singleton<HandDisplayManager>
 {
     [SerializeField] private CardDisplay[] _cardDisplays;
     [SerializeField] private Vector2 _ChosenCardLocation;
@@ -27,6 +28,11 @@ public class HandDisplayManager : MonoBehaviour
     
     public void SetHand(List<BasicCard> cards)
     {
+        SetHand(cards, new Vector2(_middleX, _defaultY), 1f);
+    }
+
+    private void SetHand(List<BasicCard> cards, Vector2 middle, float scale)
+    {
         _currentHandSize = Math.Min(cards.Count, _cardDisplays.Length);
         for (int i = 0; i < _currentHandSize; i++)
         {
@@ -38,24 +44,40 @@ public class HandDisplayManager : MonoBehaviour
             _cardDisplays[i].gameObject.SetActive(false);
         }
 
-        DisplayHand();
+        DisplayHand(_currentHandSize, middle, scale);
     }
 
     public void DisplayHand()
     {
-        float middle = ((float)_currentHandSize-1) / 2;
-        for (int i = 0; i < _currentHandSize; i++)
+        DisplayHand(_currentHandSize, new Vector2(_middleX, _defaultY), 1f);
+    }
+
+    public void DisplayHand(int amt, Vector2 middleVector, float scale)
+    {
+        float middle = ((float)amt-1) / 2;
+        for (int i = 0; i < amt; i++)
         {
-            _cardDisplays[i].transform.position = new Vector2(_middleX + _spacing * (i - middle), _defaultY);
-            _cardDisplays[i].transform.localScale = _defaultScale;
+            _cardDisplays[i].transform.position = new Vector2(middleVector.x + _spacing * scale * (i - middle), middleVector.y);
+            _cardDisplays[i].transform.localScale = _defaultScale * scale;
         }
         SetActiveNumbers(true);
+    }
+
+    //for card drafting
+    public void DisplayCardsMiddle(List<BasicCard> cards)
+    {
+        SetHand(cards, _ChosenCardLocation, _ChosenCardSize);
+    }
+
+    public void HideHand()
+    {
+        _cardDisplays.ToList().ForEach(x => x.gameObject.SetActive(false));
     }
     
     public void ChooseCard(int index)
     {
         _cardDisplays[index].transform.position = _ChosenCardLocation;
-        _cardDisplays[index].transform.localScale *= _ChosenCardSize;
+        _cardDisplays[index].transform.localScale = _defaultScale * _ChosenCardSize;
         SetActiveNumbers(false);
     }
 

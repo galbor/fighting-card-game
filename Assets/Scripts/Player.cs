@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -15,10 +16,15 @@ namespace DefaultNamespace
         private List<BasicCard> _deck;
         //private List<relic> _relics
 
+        public List<BasicCard> Deck
+        {
+            get => _deck;
+        }
+        
         private void Start()
         {
             _playerTurn = PlayerTurn.Instance;
-            _player = _playerTurn.Player;
+            _player = _playerTurn.PlayerPerson;
             // _player.Init();
             InitDeck();
             InitPlayerTurn();
@@ -35,12 +41,18 @@ namespace DefaultNamespace
 
         private void InitPlayerTurn()
         {
-            _playerTurn.Init(_defaultEnergy, _maxHandSize, _basicHandSize, _deck);
+            _playerTurn.Init(_defaultEnergy, _maxHandSize, _basicHandSize);
         }
         
         public Person Person
         {
             get => _player;
+        }
+        
+        public void AddToDeck(BasicCard card)
+        {
+            _deck.Add(card);
+            PlayerTurn.Instance.GetDeck();
         }
     }
 }
