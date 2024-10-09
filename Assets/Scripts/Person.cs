@@ -190,7 +190,7 @@ public class Person : MonoBehaviour
 
     public bool IsAlive()
     {
-        return _bodyParts[(int)BodyPartEnum.HEAD]._HealthBar.Health > 0;
+        return _bodyParts[(int)BodyPartEnum.HEAD]._HealthBar.Health > 0 && _bodyParts[(int)BodyPartEnum.TORSO]._HealthBar.Health > 0;
     }
 
     private void Die()
