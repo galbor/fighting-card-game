@@ -59,13 +59,13 @@ public class RoomManager : Singleton<RoomManager>
         PlayerTurn.Instance.GetEnemies(this);    
         PlaceEnemies();
         
-        if (_enemies.Length == 0)
-        {
-            RoomWin();
-        }
+        // if (_enemies.Length == 0)
+        // {
+        //     RoomWin();
+        // }
     }
 
-    private void RoomWin()
+    public void RoomWin()
     {
         CardDraftManager.Instance.StartCardDraft();
     }

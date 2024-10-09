@@ -264,6 +264,10 @@ public class PlayerTurn : Singleton<PlayerTurn>
         Energy -= _hand[index].Cost;
         _hand[index].Play(_player, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
         DiscardCard(index);
+        
+        if (RoomManager.Instance.Enemies.Length == 0)
+            RoomManager.Instance.RoomWin();
+        
         return true;
     }
 

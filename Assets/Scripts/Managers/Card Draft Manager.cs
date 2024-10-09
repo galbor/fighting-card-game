@@ -31,7 +31,7 @@ namespace DefaultNamespace.Managers
         IEnumerator CardDraft(List<BasicCard> chosenCards)
         {
             int selectedCard = -1;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
             
             DisplayChoice(chosenCards);
             
