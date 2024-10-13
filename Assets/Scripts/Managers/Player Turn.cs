@@ -114,7 +114,6 @@ public class PlayerTurn : Singleton<PlayerTurn>
         }
     }
 
-    //TODO display buttons
     IEnumerator SelectCard()
     {
         HandDisplayManager.Instance.DisplayHand();

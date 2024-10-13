@@ -19,9 +19,9 @@ namespace DefaultNamespace
             {
                 GameObject textPrefab = Instantiate(Resources.Load<GameObject>(TEXTPREFAB), _parent);
                 _carriedSubject = textPrefab.GetComponent<RectTransform>();
-                _textMeshPro = textPrefab.GetComponent<TMP_Text>();
-                Text = _text;
             }
+            _textMeshPro = _carriedSubject.GetComponent<TMP_Text>();
+            Text = _text;
             if (_fontSize != 0)
             {
                 _textMeshPro.fontSize = _fontSize;

@@ -50,6 +50,7 @@ public class CardDisplay : MonoBehaviour
     
     public void EnergyCostColor()
     {
+        //TODO not access Instance too much?
         _energyText.Color = PlayerTurn.Instance.Energy < _card.Cost ? Color.red : Color.white;
     }
 

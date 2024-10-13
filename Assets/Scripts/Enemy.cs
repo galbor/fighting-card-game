@@ -22,8 +22,6 @@ public class Enemy : ScriptableObject
     
     public int MaxHealth { get => _maxHealth; }
     
-    //TODO attack pattern
-    
     public Person Person {
         get
         {

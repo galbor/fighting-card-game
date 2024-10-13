@@ -31,7 +31,6 @@ namespace DefaultNamespace.Managers
         IEnumerator CardDraft(List<BasicCard> chosenCards)
         {
             int selectedCard = -1;
-            yield return new WaitForSeconds(0.1f);
             
             DisplayChoice(chosenCards);
             
@@ -63,7 +62,7 @@ namespace DefaultNamespace.Managers
 
         private void HideChoice()
         {
-            HandDisplayManager.Instance.HideHand();
+            HandDisplayManager.Instance.HideMiscCards();
             _darkBackground.SetActive(false);
         }
     }
