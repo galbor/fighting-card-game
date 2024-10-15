@@ -8,6 +8,8 @@ using UnityEngine.Events;
 
 public class HandDisplayManager : Singleton<HandDisplayManager>
 {
+    private String CARDDISPLAYPREFABNAME = "CardDisplay";
+    
     // [SerializeField] private CardDisplay[] _cardDisplays;
     [SerializeField] private Transform _cardDisplayParent;
     [SerializeField] private Vector2 _ChosenCardLocation;
@@ -34,8 +36,8 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         }
 
         _miscCardDisplays = new List<CardDisplay>();
-        _cardDisplayPool = new Pool<CardDisplay>(_handCardDisplays[0], _cardDisplayParent);
-        
+
+        _cardDisplayPool = new Pool<CardDisplay>(Resources.Load<CardDisplay>(CARDDISPLAYPREFABNAME), _cardDisplayParent);
         _defaultY = _handCardDisplays[0].transform.position.y;
         _middleX = (_handCardDisplays[0].transform.position.x + _handCardDisplays[^1].transform.position.x) / 2; //^1 is -1 index like python
         _spacing = _handCardDisplays[1].transform.position.x - _handCardDisplays[0].transform.position.x;
@@ -70,6 +72,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         for (int i = 0; i < amt; i++)
         {
             cardDisplays[i].SetCard(cards[i]);
+            cardDisplays[i].SetCardNumber(i+1);
             cardDisplays[i].gameObject.SetActive(true);
         }
 

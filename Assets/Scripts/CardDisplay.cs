@@ -59,6 +59,11 @@ public class CardDisplay : MonoBehaviour
         _numberText.SetActiveDisplay(active);
     }
 
+    public void SetCardNumber(int num)
+    {
+        _numberText.Text = num.ToString();
+    }
+
     /**
      * sets the width of the text to be smaller than the width of the sprite renderer
      * 
