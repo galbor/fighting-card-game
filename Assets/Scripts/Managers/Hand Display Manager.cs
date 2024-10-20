@@ -8,9 +8,6 @@ using UnityEngine.Events;
 
 public class HandDisplayManager : Singleton<HandDisplayManager>
 {
-    private String CARDDISPLAYPREFABNAME = "CardDisplay";
-    
-    // [SerializeField] private CardDisplay[] _cardDisplays;
     [SerializeField] private Transform _cardDisplayParent;
     [SerializeField] private Vector2 _ChosenCardLocation;
     [SerializeField] private float _ChosenCardSize = 1.5f;
@@ -37,11 +34,12 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
 
         _miscCardDisplays = new List<CardDisplay>();
 
-        _cardDisplayPool = new Pool<CardDisplay>(Resources.Load<CardDisplay>(CARDDISPLAYPREFABNAME), _cardDisplayParent);
+        _cardDisplayPool = new Pool<CardDisplay>(Instantiate(_handCardDisplays[0]), _cardDisplayParent);
         _defaultY = _handCardDisplays[0].transform.position.y;
         _middleX = (_handCardDisplays[0].transform.position.x + _handCardDisplays[^1].transform.position.x) / 2; //^1 is -1 index like python
         _spacing = _handCardDisplays[1].transform.position.x - _handCardDisplays[0].transform.position.x;
         _defaultScale = _handCardDisplays[0].transform.localScale;
+        _ChosenCardLocation = Camera.main.WorldToScreenPoint(_ChosenCardLocation);
     }
     
     public void SetHand(List<BasicCard> cards)

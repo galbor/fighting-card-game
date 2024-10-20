@@ -16,8 +16,6 @@ namespace DefaultNamespace.Managers
         [SerializeField] private KeyCode _selectCard3 = KeyCode.Alpha3;
         [SerializeField] private KeyCode _selectSkip = KeyCode.Alpha0;
 
-        [SerializeField] private CardDisplay[] _cardDisplays;
-
         public void StartCardDraft()
         {
             HandDisplayManager.Instance.HideHand();
