@@ -54,14 +54,17 @@ namespace DefaultNamespace.Managers
 
         private void DisplayChoice(List<BasicCard> chosenCards)
         {
-            HandDisplayManager.Instance.DisplayCardsMiddle(chosenCards);
             _darkBackground.SetActive(true);
+            PlayerTurn.Instance.Energy = 10;
+            PlayerTurn.Instance.ShowEnergy(false);
+            HandDisplayManager.Instance.DisplayCardsMiddle(chosenCards);
         }
 
         private void HideChoice()
         {
             HandDisplayManager.Instance.HideMiscCards();
             _darkBackground.SetActive(false);
+            PlayerTurn.Instance.ShowEnergy(true);
         }
     }
 }

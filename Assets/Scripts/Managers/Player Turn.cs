@@ -59,7 +59,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public int Energy
     {
         get => _energy;
-        private set
+        set //used to be private
         {
             _energy = value;
             _energyText.Text = _energy.ToString();
@@ -438,5 +438,10 @@ public class PlayerTurn : Singleton<PlayerTurn>
         var deck = Player.Instance.Deck;
         _deck = new List<BasicCard>();
         deck.ForEach(x => _deck.Add(x));
+    }
+
+    public void ShowEnergy(bool active)
+    {
+        _energyText.gameObject.SetActive(active);
     }
 }
