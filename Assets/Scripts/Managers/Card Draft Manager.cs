@@ -10,6 +10,8 @@ namespace DefaultNamespace.Managers
         [SerializeField] private BasicCard[] _possibleCards;
 
         [SerializeField] private GameObject _darkBackground;
+
+        [SerializeField] private GameObject _skipText;
         
         [SerializeField] private KeyCode _selectCard1 = KeyCode.Alpha1;
         [SerializeField] private KeyCode _selectCard2 = KeyCode.Alpha2;
@@ -54,8 +56,9 @@ namespace DefaultNamespace.Managers
 
         private void DisplayChoice(List<BasicCard> chosenCards)
         {
-            _darkBackground.SetActive(true);
-            PlayerTurn.Instance.Energy = 10;
+            _darkBackground.SetActive(true); //TODO combine dark background and skip-text?
+            _skipText.SetActive(true);
+            PlayerTurn.Instance.Energy = 10; //assumes all cards have a price <= 10
             PlayerTurn.Instance.ShowEnergy(false);
             HandDisplayManager.Instance.DisplayCardsMiddle(chosenCards);
         }
@@ -64,6 +67,7 @@ namespace DefaultNamespace.Managers
         {
             HandDisplayManager.Instance.HideMiscCards();
             _darkBackground.SetActive(false);
+            _skipText.SetActive(false);
             PlayerTurn.Instance.ShowEnergy(true);
         }
     }
