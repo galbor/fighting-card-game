@@ -17,6 +17,11 @@ public class RoomManager : Singleton<RoomManager>
 
     private BasicAttackCard _prize;
 
+    protected RoomManager()
+    {
+        
+    }
+    
     void Start ()
     {
         SetNextRoom();

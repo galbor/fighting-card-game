@@ -17,8 +17,8 @@ public class EventManagerScript : Singleton<EventManagerScript>
 
     private Dictionary <string, FloatEvent> eventDictionary;
 
-    [FormerlySerializedAs("_UIParent")] [SerializeField] public Transform _TextParent;
-    [FormerlySerializedAs("_HealthParent")] [SerializeField] public Transform _HealthBarParent;
+    [SerializeField] public Transform _TextParent;
+    [SerializeField] public Transform _HealthBarParent;
 
     public Dictionary<Person.BodyPartEnum, KeyCode> _BodyPartKeyCodes;
 	

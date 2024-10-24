@@ -41,7 +41,7 @@ namespace DefaultNamespace
 
         private void InitPlayerTurn()
         {
-            _playerTurn.Init(_defaultEnergy, _maxHandSize, _basicHandSize);
+            _playerTurn.SetParameters(_defaultEnergy, _maxHandSize, _basicHandSize);
         }
         
         public Person Person

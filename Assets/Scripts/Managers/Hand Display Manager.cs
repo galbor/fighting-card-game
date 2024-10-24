@@ -23,8 +23,13 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
     private float _spacing;
     private Vector3 _defaultScale;
 
+    protected HandDisplayManager()
+    {
+        Init();
+    }
+
     // Start is called before the first frame update
-    void Awake()
+    void Init()
     {
         _handCardDisplays = new List<CardDisplay>();
         foreach (Transform child in _cardDisplayParent)

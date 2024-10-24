@@ -56,6 +56,21 @@ public class PlayerTurn : Singleton<PlayerTurn>
     private Queue<BasicCard> _drawPile;
     private Queue<BasicCard> _discardPile;
 
+    protected PlayerTurn()
+    {
+        Init();
+    }
+
+    private void Init()
+    {
+        GetDeck();
+        _hand = new List<BasicCard>();
+        _drawPile = new Queue<BasicCard>();
+        
+
+        SetBodyPartKeyCodes();
+    }
+    
     public int Energy
     {
         get => _energy;
@@ -69,17 +84,11 @@ public class PlayerTurn : Singleton<PlayerTurn>
     
     public Person PlayerPerson {get => _player; }
 
-    public void Init(int defaultEnergy, int maxHandSize, int basicHandSize)
+    public void SetParameters(int defaultEnergy, int maxHandSize, int basicHandSize)
     {
         _defaultEnergy = defaultEnergy;
         _maxHandSize = maxHandSize;
         _basicHandSize = basicHandSize;
-        GetDeck();
-        _hand = new List<BasicCard>();
-        _drawPile = new Queue<BasicCard>();
-        
-
-        SetBodyPartKeyCodes();
 
         StartRound();
     }
