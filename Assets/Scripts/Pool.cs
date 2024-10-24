@@ -7,11 +7,14 @@ public class Pool<T> where T:MonoBehaviour
     private T _template;
     private Transform _parent;
 
-    public Pool(T template, Transform parent)
+    public Pool(T template)
     {
         _pool = new Stack<T>();
+        
+        ReturnToPool(template);
+        
         _template = template;
-        _parent = parent;
+        _parent = template.transform.parent;
     }
     
     public void ReturnToPool(T obj)

@@ -26,6 +26,8 @@ public class EventManagerScript : Singleton<EventManagerScript>
     public const string EVENT__PLAYER_DEATH = "event_die";
     public const string EVENT__START_TURN = "event_startTurn";
     public const string EVENT__END_TURN = "event_endTurn";
+    public const string EVENT__START_COMBAT = "event_startCombat";
+    public const string EVENT__END_COMBAT = "event_endCombat";
 
     private Dictionary <string, FloatEvent> eventDictionary;
 

@@ -22,9 +22,9 @@ public class RoomManager : Singleton<RoomManager>
         
     }
     
-    void Start ()
+    void Awake ()
     {
-        SetNextRoom();
+        // SetNextRoom();
     }
 
     public void SetNextRoom()
@@ -41,6 +41,8 @@ public class RoomManager : Singleton<RoomManager>
             _enemies[i] = Instantiate(_rooms[roomIndex].Enemies[i]);
             _enemies[i].Init(_enemyParent);
         }
+        
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__START_COMBAT, null);
         
         PlaceEnemies();
     }
@@ -77,6 +79,8 @@ public class RoomManager : Singleton<RoomManager>
 
     public void RoomWin()
     {
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__END_COMBAT, null);
+        
         CardDraftManager.Instance.StartCardDraft();
     }
 

@@ -25,11 +25,9 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
 
     protected HandDisplayManager()
     {
-        Init();
     }
 
-    // Start is called before the first frame update
-    void Init()
+    private void Awake()
     {
         _handCardDisplays = new List<CardDisplay>();
         foreach (Transform child in _cardDisplayParent)
@@ -39,7 +37,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
 
         _miscCardDisplays = new List<CardDisplay>();
 
-        _cardDisplayPool = new Pool<CardDisplay>(Instantiate(_handCardDisplays[0]), _cardDisplayParent);
+        _cardDisplayPool = new Pool<CardDisplay>(Instantiate(_handCardDisplays[0], _cardDisplayParent));
         _defaultY = _handCardDisplays[0].transform.position.y;
         _middleX = (_handCardDisplays[0].transform.position.x + _handCardDisplays[^1].transform.position.x) / 2; //^1 is -1 index like python
         _spacing = _handCardDisplays[1].transform.position.x - _handCardDisplays[0].transform.position.x;
@@ -49,6 +47,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
     
     public void SetHand(List<BasicCard> cards)
     {
+        _cardDisplayParent.gameObject.SetActive(true);
         SetDisplay(cards,_handCardDisplays, new Vector2(_middleX, _defaultY), 1f);
     }
 

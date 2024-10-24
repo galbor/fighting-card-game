@@ -11,7 +11,6 @@ namespace DefaultNamespace
         [SerializeField] private int _maxHandSize = 10;
         [SerializeField] private int _basicHandSize = 5;
         [SerializeField] private StartingDeckScriptableObject _startingDeck;
-        private PlayerTurn _playerTurn;
         private Person _player;
         private List<BasicCard> _deck;
         //private List<relic> _relics
@@ -23,19 +22,14 @@ namespace DefaultNamespace
         
         private void Awake()
         {
-            Init();
-        }
-
-        private void Init()
-        {
-            _playerTurn = PlayerTurn.Instance;
-            _player = _playerTurn.PlayerPerson;
-            // _player.Init();
+            _player = PlayerTurn.Instance.PlayerPerson;
             InitDeck();
             InitPlayerTurn();
         }
 
-        protected Player() { }
+        protected Player()
+        {
+        }
 
         private void InitDeck()
         {
@@ -48,7 +42,8 @@ namespace DefaultNamespace
 
         private void InitPlayerTurn()
         {
-            _playerTurn.SetParameters(_defaultEnergy, _maxHandSize, _basicHandSize);
+            PlayerTurn.Instance.GetDeck();
+            PlayerTurn.Instance.SetParameters(_defaultEnergy, _maxHandSize, _basicHandSize);
         }
         
         public Person Person

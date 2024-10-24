@@ -60,12 +60,11 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     protected PlayerTurn()
     {
-        Init();
     }
 
-    private void Init()
+    private void Awake()
     {
-        GetDeck();
+        // GetDeck();
         _hand = new List<BasicCard>();
         _drawPile = new Queue<BasicCard>();
         
@@ -92,7 +91,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         _maxHandSize = maxHandSize;
         _basicHandSize = basicHandSize;
 
-        StartRound();
+        // StartRound();
     }
 
     public void StartRound()
@@ -272,7 +271,10 @@ public class PlayerTurn : Singleton<PlayerTurn>
         if (_hand[index].Cost > Energy)
             return false;
         Energy -= _hand[index].Cost;
+        
         _hand[index].Play(_player, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAY_CARD, this);
+        
         DiscardCard(index);
         
         if (RoomManager.Instance.Enemies.Length == 0)
