@@ -194,7 +194,10 @@ public class Person : MonoBehaviour
 
     private void Die()
     {
-        RoomManager.Instance.KillEnemy(this);
+        if (RoomManager.Instance.KillEnemy(this))
+            EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__KILL_ENEMY, this);
+        else 
+            EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAYER_DEATH, null);
         Destroy(gameObject); //perhaps undefined behavior for player death?
     }
     

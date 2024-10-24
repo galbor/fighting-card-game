@@ -58,12 +58,17 @@ public class RoomManager : Singleton<RoomManager>
         KillEnemy(_enemies[index].Person);
     }
 
-    public void KillEnemy(Person person)
+    public bool KillEnemy(Person person)
     {
+        int enemyAmt = _enemies.Length;
         _enemies = _enemies.Where(enemy => enemy.Person != person).ToArray();
+        if (enemyAmt == _enemies.Length) return false;
+        
         PlayerTurn.Instance.GetEnemies(this);    
         PlaceEnemies();
-        
+
+        return true;
+
         // if (_enemies.Length == 0)
         // {
         //     RoomWin();

@@ -285,12 +285,17 @@ public class PlayerTurn : Singleton<PlayerTurn>
     {
         Energy = _defaultEnergy;
         PlayerPerson.SetProtectionDefault();
+        
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__START_TURN, null);
+        
         DrawHand();
         ResetAction();
     }
     
     public void EndTurn()
     {
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__END_TURN, null);
+        
         DiscardHand();
         EnemiesAttack();
         StartTurn();
@@ -333,6 +338,9 @@ public class PlayerTurn : Singleton<PlayerTurn>
         BasicCard card = GetCardFromDeck();
         if (card == null) return false;
         _hand.Add(card);
+        
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__DRAW_CARD, card);
+        
         return true;
     }
 
@@ -374,8 +382,12 @@ public class PlayerTurn : Singleton<PlayerTurn>
     private bool DiscardCardNoDisplay(int index)
     {
         if (_hand[index] == null) return false;
+        
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__DISCARD_CARD, _hand[index]);
+        
         _discardPile.Enqueue(_hand[index]);
         _hand.RemoveAt(index);
+        
         return true;
     }
 

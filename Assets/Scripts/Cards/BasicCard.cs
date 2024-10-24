@@ -97,6 +97,8 @@ public class BasicCard : ScriptableObject
     public virtual void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
         Person.BodyPartEnum affected_part)
     {
+        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAY_CARD, this);
+        
         PlayAbility(user, attacking_parts, target, affected_part);
         _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_part));
     }

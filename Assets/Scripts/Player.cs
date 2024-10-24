@@ -21,7 +21,12 @@ namespace DefaultNamespace
             get => _deck;
         }
         
-        private void Start()
+        private void Awake()
+        {
+            Init();
+        }
+
+        private void Init()
         {
             _playerTurn = PlayerTurn.Instance;
             _player = _playerTurn.PlayerPerson;
@@ -29,6 +34,8 @@ namespace DefaultNamespace
             InitDeck();
             InitPlayerTurn();
         }
+
+        protected Player() { }
 
         private void InitDeck()
         {
