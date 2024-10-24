@@ -19,8 +19,6 @@ public class EventManagerScript : Singleton<EventManagerScript>
 
     [SerializeField] public Transform _TextParent;
     [SerializeField] public Transform _HealthBarParent;
-
-    public Dictionary<Person.BodyPartEnum, KeyCode> _BodyPartKeyCodes;
 	
 	private void Init ()
 	{

@@ -123,25 +123,24 @@ public class Person : MonoBehaviour
     
     public void HighlightBodyParts(BasicCard.TargetTypeEnum targetType)
     {
-        var partsLst = Enum.GetValues(typeof(BodyPartEnum)).OfType<BodyPartEnum>();
-        Dictionary<BodyPartEnum, KeyCode> dict = EventManagerScript.Instance._BodyPartKeyCodes;
+        var partsLst = Enum.GetValues(typeof(BodyPartEnum)).OfType<BodyPartEnum>()
+                                    .Where(part => part != BodyPartEnum.NONE);
+        Dictionary<BodyPartEnum, KeyCode> dict = PlayerTurn.Instance._BodyPartKeyCodes;
         Func<BodyPartEnum, String> func = (x => dict[x].ToString());
 
         switch (targetType)
         {
             case BasicCard.TargetTypeEnum.PRE_SELECTED:
-                partsLst = partsLst.Where(part => part != BodyPartEnum.NONE);
                 func = (x => "");
                 break;
-            case BasicCard.TargetTypeEnum.BODY_PART:
-                partsLst = partsLst.Where(part => part != BodyPartEnum.NONE);
+            case BasicCard.TargetTypeEnum.SIDE:
+                partsLst = new List<BodyPartEnum> { BodyPartEnum.RIGHT_ARM, BodyPartEnum.LEFT_ARM };
                 break;
             case BasicCard.TargetTypeEnum.UPPER_BODY:
                 partsLst = partsLst.Where(part =>
-                    part != BodyPartEnum.LEFT_LEG && part != BodyPartEnum.RIGHT_LEG && part != BodyPartEnum.NONE);
+                    part != BodyPartEnum.LEFT_LEG && part != BodyPartEnum.RIGHT_LEG);
                 break;
-            default: //case SIDE
-                partsLst = new List<BodyPartEnum> { BodyPartEnum.RIGHT_ARM, BodyPartEnum.LEFT_ARM };
+            default: //case BODY_PART
                 break;
         }
 

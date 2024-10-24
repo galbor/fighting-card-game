@@ -55,6 +55,8 @@ public class PlayerTurn : Singleton<PlayerTurn>
     private List<BasicCard> _deck;
     private Queue<BasicCard> _drawPile;
     private Queue<BasicCard> _discardPile;
+    
+    public Dictionary<Person.BodyPartEnum, KeyCode> _BodyPartKeyCodes;
 
     protected PlayerTurn()
     {
@@ -429,15 +431,15 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     private void SetBodyPartKeyCodes()
     {
-        EventManagerScript.Instance._BodyPartKeyCodes ??= new Dictionary<Person.BodyPartEnum, KeyCode>(); //if null then equals
-        
-        Dictionary<Person.BodyPartEnum, KeyCode> dict = EventManagerScript.Instance._BodyPartKeyCodes;
-        dict[Person.BodyPartEnum.HEAD] = _selectHead;
-        dict[Person.BodyPartEnum.TORSO] = _selectTorso;
-        dict[Person.BodyPartEnum.LEFT_ARM] = _selectLeftArm;
-        dict[Person.BodyPartEnum.RIGHT_ARM] = _selectRightArm;
-        dict[Person.BodyPartEnum.LEFT_LEG] = _selectLeftLeg;
-        dict[Person.BodyPartEnum.RIGHT_LEG] = _selectRightLeg;
+        _BodyPartKeyCodes = new Dictionary<Person.BodyPartEnum, KeyCode>
+        {
+            {Person.BodyPartEnum.HEAD, _selectHead},
+            {Person.BodyPartEnum.TORSO, _selectTorso},
+            {Person.BodyPartEnum.LEFT_ARM, _selectLeftArm},
+            {Person.BodyPartEnum.RIGHT_ARM, _selectRightArm},
+            {Person.BodyPartEnum.LEFT_LEG, _selectLeftLeg},
+            {Person.BodyPartEnum.RIGHT_LEG, _selectRightLeg}
+        };
     }
 
     
