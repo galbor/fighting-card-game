@@ -6,28 +6,25 @@ namespace DefaultNamespace.Relics
     {
         [SerializeField] private int _cardsBeforeDraw;
 
-        private int _cardCount = 0;
-        void Awake()
+        protected new void Awake()
         {
+            base.Awake();
+            
             EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__PLAY_CARD, OnCardPlay);
             if (_resetEveryTurn)
-                EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_TURN, ResetCount);
+                EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_TURN, ResetCounter);
             if (_resetEveryCombat)
-                EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_COMBAT, ResetCount);
+                EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_COMBAT, ResetCounter);
+
+            _maxCounterValue = _cardsBeforeDraw - 1;
         }
 
         private void OnCardPlay(object obj)
         {
-            _cardCount = (_cardCount + 1) % _cardsBeforeDraw;
-            if (_cardCount == 0)
+            if (IncrementCounter() == 0)
             {
                 Activate();
             }
-        }
-
-        private void ResetCount(object obj)
-        {
-            _cardCount = 0;
         }
 
 
