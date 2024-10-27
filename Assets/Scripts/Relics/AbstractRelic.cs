@@ -20,8 +20,7 @@ namespace DefaultNamespace.Relics
         private TMP_Text _counterText;
         private const float COUNTERTEXTFONTSIZE = 16f;
         private int _counter;
-
-        protected int _maxCounterValue = Int32.MaxValue;
+        protected int _counterCycleLength = Int32.MaxValue;
         protected int Counter
         {
             get => _counter;
@@ -73,7 +72,7 @@ namespace DefaultNamespace.Relics
 
         protected int IncrementCounter(object obj = null)
         {
-            return Counter = (Counter + 1) % (_maxCounterValue + 1);
+            return Counter = (Counter + 1) % _counterCycleLength;
         }
 
         protected void ResetCounter(object obj = null)

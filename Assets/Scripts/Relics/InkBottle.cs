@@ -2,8 +2,12 @@
 
 namespace DefaultNamespace.Relics
 {
+    /**
+     * Draws a card every n cards played.
+     */
     public class InkBottle : AbstractRelic
     {
+        
         [SerializeField] private int _cardsBeforeDraw;
 
         protected new void Awake()
@@ -16,7 +20,7 @@ namespace DefaultNamespace.Relics
             if (_resetEveryCombat)
                 EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_COMBAT, ResetCounter);
 
-            _maxCounterValue = _cardsBeforeDraw - 1;
+            _counterCycleLength = _cardsBeforeDraw;
         }
 
         private void OnCardPlay(object obj)
