@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 namespace DefaultNamespace
 {
-    public static class utils
+    public static class MyUtils
     {
         public static void ShuffleArrayInPlace(object[] arr)
         {
@@ -15,6 +15,16 @@ namespace DefaultNamespace
                 int j = Random.Range(i, arr.Length);
                 (arr[i], arr[j]) = (arr[j], arr[i]);
             }
+        }
+        
+        /**
+         * doesn't change Arr;
+         */
+        public static object[] ShuffledArray(object[] arr)
+        {
+            object[] res = (object[])arr.Clone();
+            ShuffleArrayInPlace(res);
+            return res;
         }
 
         /**

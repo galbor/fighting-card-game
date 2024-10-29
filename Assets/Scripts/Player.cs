@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DefaultNamespace.Relics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace DefaultNamespace
         [SerializeField] private int _maxHandSize = 10;
         [SerializeField] private int _basicHandSize = 5;
         [SerializeField] private StartingDeckScriptableObject _startingDeck;
+        [SerializeField] private AbstractRelic _startingRelic;
         private Person _player;
         private List<BasicCard> _deck;
         //private List<relic> _relics
@@ -55,6 +57,11 @@ namespace DefaultNamespace
         {
             _deck.Add(card);
             PlayerTurn.Instance.GetDeck();
+        }
+
+        public void AddStartingRelic()
+        {
+            RelicManager.Instance.AddRelic(_startingRelic);
         }
     }
 }

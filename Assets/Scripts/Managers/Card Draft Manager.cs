@@ -30,7 +30,7 @@ namespace DefaultNamespace.Managers
 
             //chooses the 3 cards to draft
             List<BasicCard> chosenCards = new List<BasicCard>();
-            utils.ChooseKRandomNumbersOrdered(_possibleCards.Length, 3).ForEach(x => chosenCards.Add(_possibleCards[x]));
+            MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Length, 3).ForEach(x => chosenCards.Add(_possibleCards[x]));
             StartCoroutine(CardDraft(chosenCards));
         }
 

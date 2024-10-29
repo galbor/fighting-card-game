@@ -414,7 +414,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         BasicCard[] tmp_array = new BasicCard[_discardPile.Count];
         _discardPile.CopyTo(tmp_array, 0);
         _discardPile.Clear();
-        utils.ShuffleArrayInPlace(tmp_array);
+        MyUtils.ShuffleArrayInPlace(tmp_array);
         
         for (int i = 0; i<tmp_array.Length; i++)
         {
