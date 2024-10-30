@@ -8,7 +8,6 @@ using UnityEngine.Serialization;
 
 public class PlayerTurn : Singleton<PlayerTurn>
 {
-    [SerializeField] private Person _player;
     [SerializeField] private TextCarrier _energyText;
     
     [SerializeField] private KeyCode _endTurnKey = KeyCode.Return;
@@ -41,6 +40,8 @@ public class PlayerTurn : Singleton<PlayerTurn>
     private int _basicHandSize = 5;
 
     private Enemy[] _enemies;
+
+    private Person _playerPerson;
     
     private int _selectedCard;
     private int _selectedEnemy;
@@ -83,13 +84,13 @@ public class PlayerTurn : Singleton<PlayerTurn>
         }
     }
     
-    public Person PlayerPerson {get => _player; }
 
-    public void SetParameters(int defaultEnergy, int maxHandSize, int basicHandSize)
+    public void SetParameters(int defaultEnergy, int maxHandSize, int basicHandSize, Person playerPerson)
     {
         _defaultEnergy = defaultEnergy;
         _maxHandSize = maxHandSize;
         _basicHandSize = basicHandSize;
+        _playerPerson = playerPerson;
 
         // StartRound();
     }
@@ -106,7 +107,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         }
         ShuffleDiscardPile();
         
-        PlayerPerson.RemoveAllDefense();
+        _playerPerson.RemoveAllDefense();
 
         GetEnemies();
         StartTurn();
@@ -191,7 +192,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         {
             if (BasicCard.GetBodyPart(attackerTypes[i]) == Person.BodyPartEnum.NONE)
             {
-                PlayerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.SIDE);
+                _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.SIDE);
                 while (true)
                 {
                     var pressedSide = Person.GetSide(GetPressedBodyPart());
@@ -220,7 +221,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         }
 
         
-        PlayerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+        _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
         StartCoroutine(SelectAffectedPart());
     }
 
@@ -272,7 +273,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
             return false;
         Energy -= _hand[index].Cost;
         
-        _hand[index].Play(_player, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
+        _hand[index].Play(Player.Instance.Person, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
         EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAY_CARD, this);
         
         DiscardCard(index);
@@ -286,7 +287,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void StartTurn()
     {
         Energy = _defaultEnergy;
-        PlayerPerson.SetProtectionDefault();
+        _playerPerson.SetProtectionDefault();
         
         EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__START_TURN, null);
         
@@ -317,7 +318,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         StopAllCoroutines();
         
         _enemies.ToList().ForEach(enemy => enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED));
-        PlayerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+        _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
     }
     
     private void ResetAction()

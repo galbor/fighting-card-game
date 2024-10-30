@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 public class Person : MonoBehaviour
 {
@@ -65,24 +67,22 @@ public class Person : MonoBehaviour
     private class BodyPart
     {
         public HealthBar _HealthBar;
-        public TextCarrier _letterDisplay;
+        public TMP_Text _letterDisplay;
         public BodyPartEnum _BodyPartEnum;
         public Sprite _sprite;
 
-        public BodyPart(BodyPartEnum part, HealthBar healthBar, int health, TextCarrier letterDisplay)
+        public BodyPart(BodyPartEnum part, HealthBar healthBar, int health, TMP_Text letterDisplay)
         {
             _BodyPartEnum = part;
             _HealthBar = healthBar;
             _HealthBar.SetMaxHealth(health);
             _letterDisplay = letterDisplay;
-            _sprite = _letterDisplay.gameObject.GetComponent<SpriteRenderer>().sprite;
+            _sprite = _letterDisplay.transform.parent //a bodypart's children are the letterdisplay and the healthbar 
+                .gameObject.GetComponent<Image>().sprite;
         }
     }
 
-    [SerializeField] private GameObject _healthBarPrefab;
-    private Transform _healthBarParent;
-    [SerializeField] private Carrier[] _healthBarCarriers;
-    [SerializeField] private TextCarrier[] _bodyPartTextCarriers;
+    [SerializeField] private Body _body;
 
     [SerializeField]
     private Dictionary<BodyPartEnum, BodyPartEnum> _defaultProtections = new Dictionary<BodyPartEnum, BodyPartEnum>() {
@@ -95,16 +95,14 @@ public class Person : MonoBehaviour
     // private bool _initiated = false;
     public void Awake()
     {
-        _healthBarParent = EventManagerScript.Instance._HealthBarParent;
         _bodyParts = new BodyPart[Enum.GetNames(typeof(BodyPartEnum)).Length];
         foreach (BodyPartEnum bodyPart in Enum.GetValues(typeof(BodyPartEnum)))
         {
             if (bodyPart == BodyPartEnum.NONE) continue;
-            GameObject healthBar = Instantiate(_healthBarPrefab, _healthBarParent);
-            HealthBar healthBarScript = healthBar.GetComponent<HealthBar>();
-            _healthBarCarriers[(int)bodyPart].SetDisplay(healthBar.GetComponent<RectTransform>());
-            _bodyParts[(int)bodyPart] = new BodyPart(bodyPart, healthBarScript,
-                (int)(HealthValues[bodyPart] * _maxHealth), _bodyPartTextCarriers[(int)bodyPart]);
+            _bodyParts[(int)bodyPart] = new BodyPart(bodyPart,
+                _body._healthBars[(int)bodyPart],
+                (int)(HealthValues[bodyPart] * _maxHealth),
+                _body._bodyPartTexts[(int)bodyPart]);
         }
         
         SetProtectionDefault();
@@ -144,7 +142,7 @@ public class Person : MonoBehaviour
                 break;
         }
 
-        partsLst.ToList().ForEach(part => _bodyParts[(int)part]._letterDisplay.Text = func(part));
+        partsLst.ToList().ForEach(part => _bodyParts[(int)part]._letterDisplay.text = func(part));
     }
     
     public void TakeDamage(BodyPartEnum bodyPart, int damage)
@@ -254,4 +252,14 @@ public class Person : MonoBehaviour
     }
     
     public int MaxHealth => _maxHealth;
+
+    /**
+     * if number <= 0: sets inactive
+     */
+    public void SetEnemyNumber(int number)
+    {
+        _body._enemyNumber.text = number.ToString();
+        
+        _body._enemyNumber.gameObject.SetActive(number > 0);
+    }
 }

@@ -32,7 +32,6 @@ public class EventManagerScript : Singleton<EventManagerScript>
     private Dictionary <string, FloatEvent> eventDictionary;
 
     [SerializeField] public Transform _TextParent;
-    [SerializeField] public Transform _HealthBarParent;
 
     public struct AttackStruct
     {

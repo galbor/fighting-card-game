@@ -13,6 +13,9 @@ namespace DefaultNamespace
         [SerializeField] private int _basicHandSize = 5;
         [SerializeField] private StartingDeckScriptableObject _startingDeck;
         [SerializeField] private AbstractRelic _startingRelic;
+        [SerializeField] private Person _personPrefab;
+        [SerializeField] private Transform _personParent;
+        [SerializeField] private Vector2 _personPosition;
         private Person _player;
         private List<BasicCard> _deck;
         //private List<relic> _relics
@@ -24,7 +27,9 @@ namespace DefaultNamespace
         
         private void Awake()
         {
-            _player = PlayerTurn.Instance.PlayerPerson;
+            _player = Instantiate(_personPrefab, _personParent);
+            _player.transform.localPosition = _personPosition;
+            _player.SetEnemyNumber(-1); //hides EnemyNumber
             InitDeck();
             InitPlayerTurn();
         }
@@ -45,7 +50,7 @@ namespace DefaultNamespace
         private void InitPlayerTurn()
         {
             PlayerTurn.Instance.GetDeck();
-            PlayerTurn.Instance.SetParameters(_defaultEnergy, _maxHandSize, _basicHandSize);
+            PlayerTurn.Instance.SetParameters(_defaultEnergy, _maxHandSize, _basicHandSize, _player);
         }
         
         public Person Person

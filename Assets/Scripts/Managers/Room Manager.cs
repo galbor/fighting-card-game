@@ -12,6 +12,7 @@ public class RoomManager : Singleton<RoomManager>
     [SerializeField] private Transform _enemyParent;
     [SerializeField] private Vector2 _center;
     [SerializeField] private float _spacing;
+    [SerializeField] private Camera _camera;
     private Enemy[] _enemies;
     private int _roomIndex = -1;
 
@@ -50,8 +51,9 @@ public class RoomManager : Singleton<RoomManager>
     private void PlaceEnemies()
     {
         for (int i = 0; i < _enemies.Length; i++){
-            _enemies[i].Person.transform.position = new Vector3(_center.x + (i - (float)(_enemies.Length-1)/2) * _spacing, _center.y, 0);
-            _enemies[i].Person.gameObject.GetComponentInChildren<EnemyNumber>().SetNumber(i+1);
+            _enemies[i].Person.transform.position = _camera.WorldToScreenPoint(
+                new Vector3(_center.x + (i - (float)(_enemies.Length-1)/2) * _spacing, _center.y, 0));
+            _enemies[i].Person.SetEnemyNumber(i+1);
         }
     }
 

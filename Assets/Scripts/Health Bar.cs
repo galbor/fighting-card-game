@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    private Slider _slider;
-    private Text _healthText;
-    private Text _blockText;
-    private Image _image;
+    [SerializeField] private Slider _slider;
+    [SerializeField] private Text _healthText;
+    [SerializeField] private Text _blockText;
+    [SerializeField] private Image _image;
     
     private int _maxHealth = 100;
     private int _currentHealth = 100;
@@ -37,10 +37,6 @@ public class HealthBar : MonoBehaviour
     
     void Awake()
     {
-        _slider = GetComponent<Slider>();
-        _image = transform.GetChild(2).GetComponent<Image>();
-        _healthText = transform.GetChild(3).GetComponent<Text>();
-        _blockText = transform.GetChild(4).GetComponentInChildren<Text>();
         _slider.maxValue = _maxHealth;
         SetHealth(_maxHealth);
     }
@@ -61,6 +57,7 @@ public class HealthBar : MonoBehaviour
     {
         int change = maxHealth - _maxHealth;
         _maxHealth = maxHealth;
+        
         _slider.maxValue = _maxHealth;
         if (!AddHealth(change)) //if dead
             SetHealth(1);
