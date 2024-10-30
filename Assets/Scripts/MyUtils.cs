@@ -45,5 +45,20 @@ namespace DefaultNamespace
 
             return nums.Take(k).ToList();
         }
+        
+        /**
+         * @param source - string that contains substring {find}
+         * @param replace - a string to replace {find} in source
+         * @return source with {find} replaced with replace
+         */
+        public static string ReplaceFirstOccurrence(string source, string find, string replace)
+        {
+            find = "{" + find + "}";
+            int place = source.IndexOf(find, StringComparison.Ordinal);
+            if (place == -1)
+                return source;
+            string result = source.Remove(place, find.Length).Insert(place, replace);
+            return result;
+        }
     }
 }

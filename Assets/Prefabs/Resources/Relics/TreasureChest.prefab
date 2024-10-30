@@ -91,3 +91,4 @@ MonoBehaviour:
   _resetEveryTurn: 0
   _resetEveryCombat: 0
   _displayCounter: 0
+  _description: After every combat, get a relic.

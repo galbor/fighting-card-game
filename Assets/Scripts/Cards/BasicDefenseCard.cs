@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Cards/Basic Defense Card")]
@@ -28,7 +29,7 @@ public class BasicDefenseCard : BasicCard
     public override void UpdateDescription()
     {
         base.UpdateDescription();
-        _displayDescription = ReplaceFirstOccurrence(_displayDescription, "block", _block.ToString());
-        _displayDescription = ReplaceFirstOccurrence(_displayDescription, "invincibility", _invincibility.ToString());
+        _displayDescription = MyUtils.ReplaceFirstOccurrence(_displayDescription, "block", _block.ToString());
+        _displayDescription = MyUtils.ReplaceFirstOccurrence(_displayDescription, "invincibility", _invincibility.ToString());
     }
 }

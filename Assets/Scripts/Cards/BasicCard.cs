@@ -111,16 +111,6 @@ public class BasicCard : ScriptableObject
     }
     
     
-    protected string ReplaceFirstOccurrence(string source, string find, string replace)
-    {
-        find = "{" + find + "}";
-        int place = source.IndexOf(find, StringComparison.Ordinal);
-        if (place == -1)
-            return source;
-        string result = source.Remove(place, find.Length).Insert(place, replace);
-        return result;
-    }
-    
     public virtual void UpdateDescription()
     {
         string[] descriptionarray = _description.Split("\\n");

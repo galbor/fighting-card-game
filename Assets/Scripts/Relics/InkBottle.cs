@@ -21,6 +21,8 @@ namespace DefaultNamespace.Relics
                 EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_COMBAT, ResetCounter);
 
             _counterCycleLength = _cardsBeforeDraw;
+
+            Description = MyUtils.ReplaceFirstOccurrence(Description, "draw", _cardsBeforeDraw.ToString());
         }
 
         private void OnCardPlay(object obj)
