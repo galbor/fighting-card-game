@@ -484,6 +484,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed52739ec3f6c40419497958757be174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slider: {fileID: 3130746653244493978}
+  _healthText: {fileID: 2053560747003062543}
+  _blockText: {fileID: 8650109991345697499}
+  _image: {fileID: 2935617462552926564}
 --- !u!1 &4385112469307015000
 GameObject:
   m_ObjectHideFlags: 0
