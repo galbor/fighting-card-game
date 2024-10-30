@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _resetEveryTurn: 0
-  _resetEveryCombat: 1
+  _resetEveryCombat: 0
   _displayCounter: 1
+  _description: Draws a card when you play {draw} cards.
   _cardsBeforeDraw: 3
