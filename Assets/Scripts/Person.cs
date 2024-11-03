@@ -77,7 +77,7 @@ public class Person : MonoBehaviour
             _HealthBar = healthBar;
             _HealthBar.SetMaxHealth(health);
             _letterDisplay = letterDisplay;
-            _sprite = _letterDisplay.transform.parent //a bodypart's children are the letterdisplay and the healthbar 
+            _sprite = _letterDisplay.transform.parent.parent //a bodypart's grandchildren are the letterdisplay and the healthbar 
                 .gameObject.GetComponent<Image>().sprite;
         }
     }
