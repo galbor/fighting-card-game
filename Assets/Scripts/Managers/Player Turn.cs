@@ -278,8 +278,8 @@ public class PlayerTurn : Singleton<PlayerTurn>
         
         DiscardCard(index);
         
-        if (RoomManager.Instance.Enemies.Length == 0)
-            RoomManager.Instance.RoomWin();
+        // if (RoomManager.Instance.Enemies.Length == 0)
+        //     RoomManager.Instance.RoomWin();
         
         return true;
     }
@@ -300,6 +300,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__END_TURN, null);
         
         DiscardHand();
+        TakeBleedDamage();
         EnemiesAttack();
         StartTurn();
     }
@@ -469,5 +470,14 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void ShowEnergy(bool active)
     {
         _energyText.gameObject.SetActive(active);
+    }
+
+    /**
+     * both player and all enemies take bleed damage
+     */
+    private void TakeBleedDamage()
+    {
+        Player.Instance.Person.TakeBleedDamage();
+        _enemies.ToList().ForEach(enemy => enemy.Person.TakeBleedDamage());
     }
 }

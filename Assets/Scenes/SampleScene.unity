@@ -2343,6 +2343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rooms:
+  - {fileID: 11400000, guid: b14d9777ad3482b4daed8754566e405f, type: 2}
   - {fileID: 11400000, guid: 31a91f05ff12ba94394b7ad8c045c9f8, type: 2}
   - {fileID: 11400000, guid: 03577b63aaba2904c8be49de3ae4a6cd, type: 2}
   - {fileID: 11400000, guid: 03577b63aaba2904c8be49de3ae4a6cd, type: 2}

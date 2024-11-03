@@ -1,22 +1,54 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using DefaultNamespace;
+using DefaultNamespace.StatusEffects;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
+    private const string BLEEDID = "Bleed";
+    
     [SerializeField] private Slider _slider;
     [SerializeField] private RectTransform _rectTransform;
     [SerializeField] private Text _healthText;
     [SerializeField] private Text _blockText;
     [SerializeField] private Image _image;
     
+    [SerializeField] private float _statusEffectSpacing;
+    [SerializeField] private BodyPartStatusEffect _statusEffectPrefab;
+    [SerializeField] private Transform _statusEffectParent;
+    [SerializeField] private Sprite _bleedImage; //TODO find another way to get this image
+
+    private Pool<BodyPartStatusEffect> _pool;
+    private List<BodyPartStatusEffect> _statusEffects;
+    
     private int _maxHealth = 50;
     private int _currentHealth = 50;
     private int _defense = 0;
-    private int _bleed = 0;
     private int _invincibility = 0;
+    private int _bleed;
+    public int Defense { get => _defense;
+        set => SetDefense(value);
+    }
+    public int Bleed { get => _bleed;
+        private set
+        {
+            int newBleed = Math.Max(value, 0);
+            if (newBleed == 0)
+            {
+                RemoveStatusEffect(BLEEDID);
+            }
+            else
+            {
+                AddStatusEffect(BLEEDID, newBleed-_bleed, _bleedImage);
+            }
+
+            _bleed = newBleed;
+        }
+    }
 
     private float _widthMaxHealthRatio;
     [SerializeField] private float _minimumWidth;
@@ -45,6 +77,8 @@ public class HealthBar : MonoBehaviour
         _slider.maxValue = _maxHealth;
         _widthMaxHealthRatio = _rectTransform.sizeDelta.x / _maxHealth;
         SetHealth(_maxHealth);
+        _pool = new Pool<BodyPartStatusEffect>(Instantiate(_statusEffectPrefab, _statusEffectParent));
+        _statusEffects = new List<BodyPartStatusEffect>();
     }
     
     public void SetBlockImage(Sprite sprite)
@@ -77,8 +111,7 @@ public class HealthBar : MonoBehaviour
     private void SetWidth(int newMaxHealth)
     {
         float newWidth = newMaxHealth * _widthMaxHealthRatio;
-        newWidth = Math.Min(newWidth, _maximumWidth);
-        newWidth = Math.Max(newWidth, _minimumWidth);
+        newWidth = Mathf.Clamp(newWidth, _minimumWidth, _maximumWidth);
         _rectTransform.sizeDelta = new Vector2(newWidth, _rectTransform.sizeDelta.y);
     }
     
@@ -93,10 +126,10 @@ public class HealthBar : MonoBehaviour
         _currentHealth = health;
         _slider.value = _currentHealth;
         _healthText.text = _currentHealth + "/" + _maxHealth;
-        return health > 0;
+        return IsAlive();
     }
 
-    public void SetDefense(int defense)
+    private void SetDefense(int defense)
     {
         _defense = defense;
         _blockText.text = _defense.ToString();
@@ -104,6 +137,7 @@ public class HealthBar : MonoBehaviour
     }
     
     /**
+     * 
      * @return The new damage value
      */
     public int ReduceDefense(int damage)
@@ -117,24 +151,22 @@ public class HealthBar : MonoBehaviour
     }
     
         
-    public void AddDefense(int defense)
+    public void AddDefense(int amt)
     {
-        SetDefense(_defense + defense);
-    }
-
-    public void SetBleed(int bleed)
-    {
-        _bleed = bleed;
+        Defense += amt;
     }
     
-    public void AddBleed(int bleed)
+    public void AddBleed(int amt)
     {
-        SetBleed(_bleed + bleed);
+        Bleed += amt;
     }
     
-    public void RemoveBleed(int bleed)
+    /**
+     * Bleed cannot go below 0
+     */
+    public void RemoveBleed(int amt)
     {
-        SetBleed(_bleed - bleed);
+        Bleed -= amt;
     }
     
     /**
@@ -150,7 +182,7 @@ public class HealthBar : MonoBehaviour
     /**
      * Remove health from the object
      * @param health The health to remove
-     * @return True if the object is still alive, false otherwise
+     * @return True iff the object is still alive
      */
     public bool RemoveHealth(int damage)
     {
@@ -161,5 +193,71 @@ public class HealthBar : MonoBehaviour
         }
         damage = ReduceDefense(damage);
         return SetHealth(_currentHealth - damage);
+    }
+
+    /**
+     * Removes health based on amount of bleed
+     * removes 1 bleed
+     * @return True iff the object is still alive 
+     */
+    public bool TakeBleedDamage()
+    {
+        RemoveHealth(Bleed);
+        RemoveBleed(1);
+        return IsAlive();
+    }
+    
+    public bool IsAlive()
+    {
+        return Health > 0;
+    }
+
+    /**
+     * adds a status effect
+     * if ID already exists, adds amt to the existing one
+     * if the sum with amt is 0, removes the status effect
+     */
+    public void AddStatusEffect(string ID, int amt, Sprite sprite)
+    {
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.ID == ID);
+        if (status != null)
+        {
+            status.Sprite = sprite;
+            status.Number += amt;
+            if (status.Number == 0) RemoveStatusEffect(status);
+            return;
+        }
+
+        status = _pool.GetFromPool();
+        (status.ID, status.Number, status.Sprite) = (ID, amt, sprite);
+        status.transform.position += new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
+        _statusEffects.Add(status);
+    }
+
+    /**
+     * @return true iff status effect existed
+     */
+    public bool RemoveStatusEffect(string ID)
+    {
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.ID == ID);
+        if (status == null) return false;
+        RemoveStatusEffect(status);
+
+        return true;
+    }
+
+    /**
+     * removes status effect
+     * ASSUMES STATUS EFFECT EXISTED
+     */
+    private void RemoveStatusEffect(BodyPartStatusEffect status)
+    {
+        _pool.ReturnToPool(status);
+        _statusEffects.Remove(status);
+        for (int i = 0; i < _statusEffects.Count; i++)
+        {
+            _statusEffects[i].transform.position = 
+                new Vector2(_statusEffectParent.position.x + i * _statusEffectSpacing, 0);
+        }
     }
 }

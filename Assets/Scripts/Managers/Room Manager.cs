@@ -71,12 +71,12 @@ public class RoomManager : Singleton<RoomManager>
         PlayerTurn.Instance.GetEnemies(this);    
         PlaceEnemies();
 
-        return true;
+        if (_enemies.Length == 0)
+        {
+            RoomWin();
+        }
 
-        // if (_enemies.Length == 0)
-        // {
-        //     RoomWin();
-        // }
+        return true;
     }
 
     public void RoomWin()

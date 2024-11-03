@@ -414,6 +414,7 @@ RectTransform:
   - {fileID: 922777850296517808}
   - {fileID: 2690708170350156589}
   - {fileID: 2886241473692855758}
+  - {fileID: 4185589469719055502}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -489,8 +490,47 @@ MonoBehaviour:
   _healthText: {fileID: 2053560747003062543}
   _blockText: {fileID: 8650109991345697499}
   _image: {fileID: 2935617462552926564}
+  _statusEffectSpacing: 50
+  _statusEffectPrefab: {fileID: 8382704537353260125, guid: 814c8a5c82092194c90cf9b5487c49c1, type: 3}
+  _statusEffectParent: {fileID: 4185589469719055502}
+  _bleedImage: {fileID: 21300000, guid: 95f3c291d421946409b1b1ce56381e8b, type: 3}
   _minimumWidth: 100
   _maximumWidth: 500
+--- !u!1 &2612628280184642330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4185589469719055502}
+  m_Layer: 5
+  m_Name: Status Effects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4185589469719055502
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2612628280184642330}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3921058774049118985}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4385112469307015000
 GameObject:
   m_ObjectHideFlags: 0

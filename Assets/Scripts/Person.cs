@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DefaultNamespace;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 public class Person : MonoBehaviour
@@ -75,7 +72,7 @@ public class Person : MonoBehaviour
         {
             _BodyPartEnum = part;
             _HealthBar = healthBar;
-            _HealthBar.SetMaxHealth(health);
+            _HealthBar.MaxHealth = health;
             _letterDisplay = letterDisplay;
             _sprite = _letterDisplay.transform.parent.parent //a bodypart's grandchildren are the letterdisplay and the healthbar 
                 .gameObject.GetComponent<Image>().sprite;
@@ -115,7 +112,7 @@ public class Person : MonoBehaviour
         foreach (BodyPartEnum bodyPart in Enum.GetValues(typeof(BodyPartEnum)))
         {
             if (bodyPart == BodyPartEnum.NONE) continue;
-            _bodyParts[(int)bodyPart]._HealthBar.SetMaxHealth((int)(HealthValues[bodyPart] * _maxHealth));
+            _bodyParts[(int)bodyPart]._HealthBar.MaxHealth = (int)(HealthValues[bodyPart] * _maxHealth);
         }
     }
     
@@ -187,7 +184,7 @@ public class Person : MonoBehaviour
 
     public bool IsAlive()
     {
-        return _bodyParts[(int)BodyPartEnum.HEAD]._HealthBar.Health > 0 && _bodyParts[(int)BodyPartEnum.TORSO]._HealthBar.Health > 0;
+        return _bodyParts[(int)BodyPartEnum.HEAD]._HealthBar.IsAlive() && _bodyParts[(int)BodyPartEnum.TORSO]._HealthBar.IsAlive();
     }
 
     private void Die()
@@ -216,30 +213,25 @@ public class Person : MonoBehaviour
     {
         _curProtections = new Dictionary<BodyPartEnum, BodyPartEnum>(_defaultProtections);
         
-        BodyPartEnum protectedPart;
-        foreach (BodyPartEnum bodypart in BodyPartEnum.GetValues(typeof(BodyPartEnum)))
+        ForEachBodyPart(bodyPart =>
         {
-            if (_curProtections.ContainsKey(bodypart))
+            BodyPartEnum protectedPart;
+            if (_curProtections.TryGetValue(bodyPart, out protectedPart))
             {
-                protectedPart = _curProtections[bodypart];
-                if (_bodyParts[(int)bodypart]._HealthBar.Health <= 0)
+                if (_bodyParts[(int)bodyPart]._HealthBar.Health <= 0)
                 {
-                    RemoveProtection(bodypart);
+                    RemoveProtection(bodyPart);
                     protectedPart = BodyPartEnum.NONE;
                 }
             }
             else protectedPart =  BodyPartEnum.NONE;
-            DisplayProtection(bodypart, protectedPart);
-        }
+            DisplayProtection(bodyPart, protectedPart);
+        });
     }
 
     public void RemoveAllDefense()
     {
-        foreach (BodyPartEnum bodyPart in BodyPartEnum.GetValues(typeof(BodyPartEnum)))
-        {
-            if (bodyPart == BodyPartEnum.NONE) continue;
-            _bodyParts[(int)bodyPart]._HealthBar.SetDefense(0);
-        }
+        ForEachBodyPart(bodyPart => _bodyParts[(int)bodyPart]._HealthBar.Defense = 0);
     }
 
     private void DisplayProtection(BodyPartEnum guard, BodyPartEnum protectedPart)
@@ -261,5 +253,27 @@ public class Person : MonoBehaviour
         _body._enemyNumber.text = number.ToString();
         
         _body._enemyNumber.gameObject.SetActive(number > 0);
+    }
+
+    /**
+     * Makes every body part take Bleed Damage
+     */
+    public void TakeBleedDamage()
+    {
+        ForEachBodyPart(bodyPart => _bodyParts[(int)bodyPart]._HealthBar.TakeBleedDamage());
+
+        if (!IsAlive()) Die();
+    }
+
+    /**
+     * Applies action to all bodyparts that aren't None
+     */
+    private void ForEachBodyPart(Action<BodyPartEnum> action)
+    {
+        foreach (BodyPartEnum bodyPart in BodyPartEnum.GetValues(typeof(BodyPartEnum)))
+        {
+            if (bodyPart == BodyPartEnum.NONE) continue;
+            action(bodyPart);
+        }
     }
 }
