@@ -7,15 +7,20 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Slider _slider;
+    [SerializeField] private RectTransform _rectTransform;
     [SerializeField] private Text _healthText;
     [SerializeField] private Text _blockText;
     [SerializeField] private Image _image;
     
-    private int _maxHealth = 100;
-    private int _currentHealth = 100;
+    private int _maxHealth = 50;
+    private int _currentHealth = 50;
     private int _defense = 0;
     private int _bleed = 0;
     private int _invincibility = 0;
+
+    private float _widthMaxHealthRatio;
+    [SerializeField] private float _minimumWidth;
+    [SerializeField] private float _maximumWidth;
 
     public int Health
     {
@@ -38,6 +43,7 @@ public class HealthBar : MonoBehaviour
     void Awake()
     {
         _slider.maxValue = _maxHealth;
+        _widthMaxHealthRatio = _rectTransform.sizeDelta.x / _maxHealth;
         SetHealth(_maxHealth);
     }
     
@@ -58,9 +64,22 @@ public class HealthBar : MonoBehaviour
         int change = maxHealth - _maxHealth;
         _maxHealth = maxHealth;
         
+        SetWidth(_maxHealth);
+        
         _slider.maxValue = _maxHealth;
         if (!AddHealth(change)) //if dead
             SetHealth(1);
+    }
+
+    /**
+     * Sets the width of the UI health bar
+     */
+    private void SetWidth(int newMaxHealth)
+    {
+        float newWidth = newMaxHealth * _widthMaxHealthRatio;
+        newWidth = Math.Min(newWidth, _maximumWidth);
+        newWidth = Math.Max(newWidth, _minimumWidth);
+        _rectTransform.sizeDelta = new Vector2(newWidth, _rectTransform.sizeDelta.y);
     }
     
     /**
