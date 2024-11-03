@@ -70,8 +70,6 @@ public class BasicAttackCard : BasicCard
     
     public void Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
     {
-        if (_targetType == TargetTypeEnum.PRE_SELECTED)
-            affected_part = _preSelectedTarget;
         if (_targetType == TargetTypeEnum.SIDE && (_preSelectedTarget == Person.BodyPartEnum.LEFT_LEG || _preSelectedTarget == Person.BodyPartEnum.RIGHT_LEG))
         {
             if (affected_part == Person.BodyPartEnum.LEFT_ARM) affected_part = Person.BodyPartEnum.LEFT_LEG;
@@ -85,14 +83,6 @@ public class BasicAttackCard : BasicCard
                 target.Bleed(affected_part, user.GetAttackBleed(attacking_part, _bleed));
             }
     }
-    //
-    // public void Defend(Person player, Person.BodyPartEnum[] targetBodyParts){
-    //     foreach (Person.BodyPartEnum targetBodyPart in targetBodyParts)
-    //     {
-    //         player.Defend(targetBodyPart, _defense);
-    //     }
-    // }
-    //
     // public void Heal(Person player, Person.BodyPartEnum[] targetBodyParts){
     //     foreach (Person.BodyPartEnum targetBodyPart in targetBodyParts)
     //     {

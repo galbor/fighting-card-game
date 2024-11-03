@@ -257,10 +257,11 @@ public class PlayerTurn : Singleton<PlayerTurn>
                     _selectedAffectedBodyPart = selectedBodyPart;
                 }
                 else _selectedAffectedBodyPart = selectedBodyPart;
-                
+
                 break;
             }
         }
+        else _selectedAffectedBodyPart = _hand[_selectedCard].PreSelectedTarget;
         PlayCard(_selectedCard);
         // StartCoroutine(SelectCard());
         ResetAction();

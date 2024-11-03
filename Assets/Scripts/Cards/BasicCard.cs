@@ -22,6 +22,7 @@ public class BasicCard : ScriptableObject
     
     
     public TargetTypeEnum TargetType { get => _targetType; }
+    public Person.BodyPartEnum PreSelectedTarget {get => _preSelectedTarget;}
     public AttackerTypeEnum[] AttackerType { get => _attackerType; }
     public bool SingleEnemyTarget { get => _singleEnemyTarget; }
         
