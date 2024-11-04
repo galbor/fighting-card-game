@@ -14,7 +14,7 @@ namespace DefaultNamespace.Relics
         {
             base.Awake();
             
-            EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__HIT, InflictBleed);
+            EventManager.Instance.StartListening(EventManager.EVENT__HIT, InflictBleed);
             
             Description = MyUtils.ReplaceFirstOccurrence(Description, "bleed", _bleed.ToString());
         }
@@ -24,7 +24,7 @@ namespace DefaultNamespace.Relics
          */
         private void InflictBleed(object obj)
         {
-            var attack = (EventManagerScript.AttackStruct)obj;
+            var attack = (EventManager.AttackStruct)obj;
             if (!attack._playerAttacker || attack._playerPart != _bodyPart) return;
             attack._enemy.Bleed(attack._enemyPart, _bleed);
             

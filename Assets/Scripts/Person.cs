@@ -102,7 +102,7 @@ public class Person : MonoBehaviour
                 _body._bodyPartTexts[(int)bodyPart]);
         });
         
-        EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__REMOVE_HEALTH,
+        EventManager.Instance.StartListening(EventManager.EVENT__REMOVE_HEALTH,
             objAmtLost =>
             {
                 int amtLost = (int)objAmtLost;
@@ -211,9 +211,9 @@ public class Person : MonoBehaviour
     private void Die()
     {
         if (RoomManager.Instance.KillEnemy(this))
-            EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__KILL_ENEMY, this);
+            EventManager.Instance.TriggerEvent(EventManager.EVENT__KILL_ENEMY, this);
         else 
-            EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAYER_DEATH, null);
+            EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAYER_DEATH, null);
         Destroy(gameObject); //perhaps undefined behavior for player death?
         // gameObject.SetActive(false);
     }

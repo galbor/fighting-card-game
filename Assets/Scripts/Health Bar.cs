@@ -113,7 +113,7 @@ public class HealthBar : MonoBehaviour
         _slider.value = _currentHealth;
         _healthText.text = _currentHealth + "/" + _maxHealth;
 
-        if (healthChange < 0) EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__REMOVE_HEALTH, -healthChange);
+        if (healthChange < 0) EventManager.Instance.TriggerEvent(EventManager.EVENT__REMOVE_HEALTH, -healthChange);
         if (!IsAlive()) RemoveAllStatusEffects();
         
         return IsAlive();
@@ -253,7 +253,7 @@ public class HealthBar : MonoBehaviour
     {
         _statusEffects.ForEach(x =>
         {
-            x.transform.SetParent(EventManagerScript.Instance._TextParent, true); //might as well be parent
+            x.transform.SetParent(EventManager.Instance._TextParent, true); //might as well be parent
             _pool.ReturnToPool(x);
         });
         _statusEffects.Clear();

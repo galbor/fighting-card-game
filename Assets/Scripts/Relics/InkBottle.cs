@@ -14,11 +14,11 @@ namespace DefaultNamespace.Relics
         {
             base.Awake();
             
-            EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__PLAY_CARD, OnCardPlay);
+            EventManager.Instance.StartListening(EventManager.EVENT__PLAY_CARD, OnCardPlay);
             if (_resetEveryTurn)
-                EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_TURN, ResetCounter);
+                EventManager.Instance.StartListening(EventManager.EVENT__START_TURN, ResetCounter);
             if (_resetEveryCombat)
-                EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__START_COMBAT, ResetCounter);
+                EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, ResetCounter);
 
             _counterCycleLength = _cardsBeforeDraw;
 

@@ -14,7 +14,7 @@ namespace DefaultNamespace
         private Transform _parent;
         new void Awake()
         {
-            _parent = EventManagerScript.Instance._TextParent;
+            _parent = EventManager.Instance._TextParent;
             if (_carriedSubject == null)
             {
                 GameObject textPrefab = Instantiate(Resources.Load<GameObject>(TEXTPREFAB), _parent);

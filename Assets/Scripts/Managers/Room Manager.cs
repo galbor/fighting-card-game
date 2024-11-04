@@ -43,7 +43,7 @@ public class RoomManager : Singleton<RoomManager>
             _enemies[i].Init(_enemyParent);
         }
         
-        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__START_COMBAT, null);
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__START_COMBAT, null);
         
         PlaceEnemies();
     }
@@ -90,7 +90,7 @@ public class RoomManager : Singleton<RoomManager>
     
     private void RoomWin()
     {
-        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__END_COMBAT, null);
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__END_COMBAT, null);
         
         CardDraftManager.Instance.StartCardDraft();
     }

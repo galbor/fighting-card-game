@@ -88,8 +88,8 @@ namespace DefaultNamespace.StatusEffects
                     };
                     return new TypeParameters(
                         Resources.Load<Sprite>("Bleed"),
-                        x => EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__END_TURN, action),
-                        x => EventManagerScript.Instance.StopListening(EventManagerScript.EVENT__END_TURN, action)
+                        x => EventManager.Instance.StartListening(EventManager.EVENT__END_TURN, action),
+                        x => EventManager.Instance.StopListening(EventManager.EVENT__END_TURN, action)
                     );
                 default:
                     throw new Exception($"No coded TypeParameter for type {type}");

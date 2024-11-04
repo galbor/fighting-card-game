@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Serialization;
 
-public class EventManagerScript : Singleton<EventManagerScript>
+public class EventManager : Singleton<EventManager>
 {
-    protected EventManagerScript()
+    protected EventManager()
     {
         Init();
     } // guarantee this will be always a singleton only - can't use the constructor!

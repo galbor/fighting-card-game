@@ -276,7 +276,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         Energy -= _hand[index].Cost;
         
         _hand[index].Play(Player.Instance.Person, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
-        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAY_CARD, this);
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAY_CARD, this);
         
         DiscardCard(index);
         
@@ -291,7 +291,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         ShowEnergy(true);
         _playerPerson.SetProtectionDefault();
         
-        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__START_TURN, null);
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__START_TURN, null);
         
         DrawHand();
         ResetAction();
@@ -299,7 +299,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     
     public void EndTurn()
     {
-        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__END_TURN, null);
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__END_TURN, null);
         RoomManager.Instance.CheckRoomWin();
         
         DiscardHand();
@@ -345,7 +345,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         if (card == null) return false;
         _hand.Add(card);
         
-        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__DRAW_CARD, card);
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__DRAW_CARD, card);
         
         return true;
     }
@@ -389,7 +389,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     {
         if (_hand[index] == null) return false;
         
-        EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__DISCARD_CARD, _hand[index]);
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__DISCARD_CARD, _hand[index]);
         
         _discardPile.Enqueue(_hand[index]);
         _hand.RemoveAt(index);

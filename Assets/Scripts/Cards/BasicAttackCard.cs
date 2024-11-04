@@ -86,8 +86,8 @@ public class BasicAttackCard : BasicCard
             var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
             target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, _bleed));
             
-            EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__HIT, 
-                new EventManagerScript.AttackStruct(
+            EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, 
+                new EventManager.AttackStruct(
                     userIsPlayer ? target : user,
                     userIsPlayer ? attacking_part : cur_affected_part,
                     userIsPlayer ? cur_affected_part : attacking_part,

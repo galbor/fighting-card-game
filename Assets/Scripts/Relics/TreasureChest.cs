@@ -9,7 +9,7 @@
         {
             base.Awake();
             
-            EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__END_COMBAT, GetRelic);
+            EventManager.Instance.StartListening(EventManager.EVENT__END_COMBAT, GetRelic);
         }
 
         private void GetRelic(object obj)
