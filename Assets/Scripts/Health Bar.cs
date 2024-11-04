@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    private const string BLEEDID = "Bleed";
-    
     [SerializeField] private Slider _slider;
     [SerializeField] private RectTransform _rectTransform;
     [SerializeField] private Text _healthText;
@@ -22,32 +20,15 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Transform _statusEffectParent;
     [SerializeField] private Sprite _bleedImage; //TODO find another way to get this image
 
-    private Pool<BodyPartStatusEffect> _pool;
+    private static Pool<BodyPartStatusEffect> _pool;
     private List<BodyPartStatusEffect> _statusEffects;
-    
+
     private int _maxHealth = 50;
     private int _currentHealth = 50;
     private int _defense = 0;
     private int _invincibility = 0;
-    private int _bleed;
     public int Defense { get => _defense;
         set => SetDefense(value);
-    }
-    public int Bleed { get => _bleed;
-        private set
-        {
-            int newBleed = Math.Max(value, 0);
-            if (newBleed == 0)
-            {
-                RemoveStatusEffect(BLEEDID);
-            }
-            else
-            {
-                AddStatusEffect(BLEEDID, newBleed-_bleed, _bleedImage);
-            }
-
-            _bleed = newBleed;
-        }
     }
 
     private float _widthMaxHealthRatio;
@@ -77,7 +58,7 @@ public class HealthBar : MonoBehaviour
         _slider.maxValue = _maxHealth;
         _widthMaxHealthRatio = _rectTransform.sizeDelta.x / _maxHealth;
         SetHealth(_maxHealth);
-        _pool = new Pool<BodyPartStatusEffect>(Instantiate(_statusEffectPrefab, _statusEffectParent));
+        _pool ??= new Pool<BodyPartStatusEffect>(Instantiate(_statusEffectPrefab, _statusEffectParent)); //if null assign
         _statusEffects = new List<BodyPartStatusEffect>();
     }
     
@@ -123,9 +104,14 @@ public class HealthBar : MonoBehaviour
     public bool SetHealth(int health)
     {
         health = Mathf.Clamp(health, 0, _maxHealth);
+        int healthChange = health - _currentHealth;
         _currentHealth = health;
         _slider.value = _currentHealth;
         _healthText.text = _currentHealth + "/" + _maxHealth;
+
+        if (healthChange < 0) EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__REMOVE_HEALTH, -healthChange);
+        if (!IsAlive()) RemoveAllStatusEffects();
+        
         return IsAlive();
     }
 
@@ -156,19 +142,6 @@ public class HealthBar : MonoBehaviour
         Defense += amt;
     }
     
-    public void AddBleed(int amt)
-    {
-        Bleed += amt;
-    }
-    
-    /**
-     * Bleed cannot go below 0
-     */
-    public void RemoveBleed(int amt)
-    {
-        Bleed -= amt;
-    }
-    
     /**
     * Add health to the object
     * @param health The health to add
@@ -194,18 +167,6 @@ public class HealthBar : MonoBehaviour
         damage = ReduceDefense(damage);
         return SetHealth(_currentHealth - damage);
     }
-
-    /**
-     * Removes health based on amount of bleed
-     * removes 1 bleed
-     * @return True iff the object is still alive 
-     */
-    public bool TakeBleedDamage()
-    {
-        RemoveHealth(Bleed);
-        RemoveBleed(1);
-        return IsAlive();
-    }
     
     public bool IsAlive()
     {
@@ -214,32 +175,48 @@ public class HealthBar : MonoBehaviour
 
     /**
      * adds a status effect
-     * if ID already exists, adds amt to the existing one
+     * if already exists, adds amt to the existing one
      * if the sum with amt is 0, removes the status effect
      */
-    public void AddStatusEffect(string ID, int amt, Sprite sprite)
+    public void AddStatusEffect(BodyPartStatusEffect.Type type, int amt)
     {
-        BodyPartStatusEffect status = _statusEffects.Find(x => x.ID == ID);
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
         if (status != null)
         {
-            status.Sprite = sprite;
-            status.Number += amt;
-            if (status.Number == 0) RemoveStatusEffect(status);
+            SetStatusEffect(type, status.Number + amt);
+        }
+        SetStatusEffect(type, amt);
+    }
+
+    /**
+     * sets a status effect's amt
+     * if type doesn't exist, creates it
+     * if 0, removes it
+     */
+    public void SetStatusEffect(BodyPartStatusEffect.Type type, int amt)
+    {
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
+        if (status != null)
+        {
+            status.Number = amt; //if amt == 0, removes self
             return;
         }
 
         status = _pool.GetFromPool();
-        (status.ID, status.Number, status.Sprite) = (ID, amt, sprite);
+        status.SetType(type);
+        status._bodyPart = this;
         status.transform.position += new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
+        status.transform.SetParent(_statusEffectParent, false);
         _statusEffects.Add(status);
+        status.Number = amt;
     }
 
     /**
      * @return true iff status effect existed
      */
-    public bool RemoveStatusEffect(string ID)
+    public bool RemoveStatusEffect(BodyPartStatusEffect.Type type)
     {
-        BodyPartStatusEffect status = _statusEffects.Find(x => x.ID == ID);
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
         if (status == null) return false;
         RemoveStatusEffect(status);
 
@@ -248,9 +225,9 @@ public class HealthBar : MonoBehaviour
 
     /**
      * removes status effect
-     * ASSUMES STATUS EFFECT EXISTED
+     * ASSUMES STATUS IS IN LIST
      */
-    private void RemoveStatusEffect(BodyPartStatusEffect status)
+    public void RemoveStatusEffect(BodyPartStatusEffect status)
     {
         _pool.ReturnToPool(status);
         _statusEffects.Remove(status);
@@ -259,5 +236,11 @@ public class HealthBar : MonoBehaviour
             _statusEffects[i].transform.position = 
                 new Vector2(_statusEffectParent.position.x + i * _statusEffectSpacing, 0);
         }
+    }
+
+    private void RemoveAllStatusEffects()
+    {
+        _statusEffects.ForEach(x => _pool.ReturnToPool(x));
+        _statusEffects.Clear();
     }
 }

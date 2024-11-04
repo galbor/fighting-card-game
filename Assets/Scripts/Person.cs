@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace.StatusEffects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -102,6 +103,13 @@ public class Person : MonoBehaviour
                 _body._bodyPartTexts[(int)bodyPart]);
         }
         
+        EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__REMOVE_HEALTH,
+            objAmtLost =>
+            {
+                int amtLost = (int)objAmtLost;
+                CheckAlive();
+            });
+        
         SetProtectionDefault();
     }
 
@@ -154,12 +162,13 @@ public class Person : MonoBehaviour
         {
             RemoveProtection(bodyPart);
         }
-        if (!IsAlive()) Die();
+        CheckAlive();
     }
     
-    public void Bleed(BodyPartEnum bodyPart, int bleed)
+    public void Bleed(BodyPartEnum bodyPart, int amt)
     {
-        _bodyParts[(int)bodyPart]._HealthBar.AddBleed(bleed);
+        if (amt == 0) return;
+        _bodyParts[(int)bodyPart]._HealthBar.AddStatusEffect(BodyPartStatusEffect.Type.BLEED, amt);
     }
     
     public void Heal(BodyPartEnum bodyPart, int heal)
@@ -187,13 +196,22 @@ public class Person : MonoBehaviour
         return _bodyParts[(int)BodyPartEnum.HEAD]._HealthBar.IsAlive() && _bodyParts[(int)BodyPartEnum.TORSO]._HealthBar.IsAlive();
     }
 
+    /**
+     * if !IsAlive() dies
+     */
+    public void CheckAlive()
+    {
+        if (!IsAlive()) Die();
+    }
+
     private void Die()
     {
         if (RoomManager.Instance.KillEnemy(this))
             EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__KILL_ENEMY, this);
         else 
             EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAYER_DEATH, null);
-        Destroy(gameObject); //perhaps undefined behavior for player death?
+        // Destroy(gameObject); //perhaps undefined behavior for player death?
+        gameObject.SetActive(false);
     }
     
     //guard protects protectedPart
@@ -253,16 +271,6 @@ public class Person : MonoBehaviour
         _body._enemyNumber.text = number.ToString();
         
         _body._enemyNumber.gameObject.SetActive(number > 0);
-    }
-
-    /**
-     * Makes every body part take Bleed Damage
-     */
-    public void TakeBleedDamage()
-    {
-        ForEachBodyPart(bodyPart => _bodyParts[(int)bodyPart]._HealthBar.TakeBleedDamage());
-
-        if (!IsAlive()) Die();
     }
 
     /**

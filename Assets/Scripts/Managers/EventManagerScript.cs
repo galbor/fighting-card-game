@@ -21,6 +21,7 @@ public class EventManagerScript : Singleton<EventManagerScript>
     // public const string EVENT__TAKE_DAMAGE = "event_takeDamage";
     // public const string EVENT__DEAL_DAMAGE = "event_dealDamage";
     public const string EVENT__KILL_ENEMY = "event_killEnemy";
+    public const string EVENT__REMOVE_HEALTH = "event_removeHealth";
     // public const string EVENT__BREAK_ENEMY_BLOCK = "event_breakEnemyBlock";
     // public const string EVENT__BLOCK_BROKEN = "event_breakEnemyBlock";
     public const string EVENT__PLAYER_DEATH = "event_die";
