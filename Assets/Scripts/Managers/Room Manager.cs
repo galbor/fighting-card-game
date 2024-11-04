@@ -71,15 +71,24 @@ public class RoomManager : Singleton<RoomManager>
         PlayerTurn.Instance.GetEnemies(this);    
         PlaceEnemies();
 
-        if (_enemies.Length == 0)
-        {
-            RoomWin();
-        }
+        // if (_enemies.Length == 0)
+        // {
+        //     RoomWin();
+        // }
 
         return true;
     }
 
-    public void RoomWin()
+    /**
+     * Triggers RoomWin() iff all enemies are dead
+     */
+    public void CheckRoomWin()
+    {
+        if (_enemies.Length == 0)
+            RoomWin();
+    }
+    
+    private void RoomWin()
     {
         EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__END_COMBAT, null);
         

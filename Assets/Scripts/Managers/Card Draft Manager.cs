@@ -74,7 +74,6 @@ namespace DefaultNamespace.Managers
             HandDisplayManager.Instance.HideMiscCards();
             _darkBackground.SetActive(false);
             _skipText.SetActive(false);
-            PlayerTurn.Instance.ShowEnergy(true);
         }
     }
 }

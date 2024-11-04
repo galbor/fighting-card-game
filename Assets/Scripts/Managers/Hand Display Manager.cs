@@ -111,6 +111,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
     public void HideMiscCards()
     {
         HideCardsList(_miscCardDisplays);
+        //TODO do this normal
         while (_miscCardDisplays.Count > 0)
         {
             _cardDisplayPool.ReturnToPool(_miscCardDisplays[0]);

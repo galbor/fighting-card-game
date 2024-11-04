@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
+using DefaultNamespace.Managers;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -279,8 +280,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         
         DiscardCard(index);
         
-        // if (RoomManager.Instance.Enemies.Length == 0)
-        //     RoomManager.Instance.RoomWin();
+        RoomManager.Instance.CheckRoomWin();
         
         return true;
     }
@@ -288,6 +288,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void StartTurn()
     {
         Energy = _defaultEnergy;
+        ShowEnergy(true);
         _playerPerson.SetProtectionDefault();
         
         EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__START_TURN, null);
@@ -299,6 +300,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void EndTurn()
     {
         EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__END_TURN, null);
+        RoomManager.Instance.CheckRoomWin();
         
         DiscardHand();
         EnemiesAttack();

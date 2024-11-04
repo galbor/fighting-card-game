@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc96f707a3da449bab184d4abdc4f965, type: 3}
   m_Name: Weak Enemy
   m_EditorClassIdentifier: 
-  _personPrefab: {fileID: 1410273768557505198, guid: 53f1d59d184244b4a87dc1e181c24a4e, type: 3}
+  _personPrefab: {fileID: 6515819704711374854, guid: 53f1d59d184244b4a87dc1e181c24a4e, type: 3}
   _maxHealth: 20
   _name: Weak Enemy
   _attackPattern: 0
