@@ -60,7 +60,12 @@ public class HealthBar : MonoBehaviour
         _pool ??= new Pool<BodyPartStatusEffect>(Instantiate(_statusEffectPrefab, _statusEffectParent)); //if null assign
         _statusEffects = new List<BodyPartStatusEffect>();
     }
-    
+
+    private void OnDisable()
+    {
+        RemoveAllStatusEffects();
+    }
+
     public void SetBlockImage(Sprite sprite)
     {
         _image.sprite = sprite;
@@ -204,10 +209,16 @@ public class HealthBar : MonoBehaviour
         status = _pool.GetFromPool();
         status.SetType(type);
         status.BodyPart = this;
-        status.transform.position += new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
-        status.transform.SetParent(_statusEffectParent, false);
+        SetNewStatusPosition(status);
         _statusEffects.Add(status);
         status.Number = amt;
+    }
+
+    private void SetNewStatusPosition(BodyPartStatusEffect status)
+    {
+        status.transform.localPosition = new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
+        status.transform.SetParent(_statusEffectParent, false);
+        status.transform.localScale = Vector3.one;
     }
 
     /**
@@ -239,7 +250,11 @@ public class HealthBar : MonoBehaviour
 
     private void RemoveAllStatusEffects()
     {
-        _statusEffects.ForEach(x => _pool.ReturnToPool(x));
+        _statusEffects.ForEach(x =>
+        {
+            x.transform.SetParent(EventManagerScript.Instance._TextParent, true); //might as well be parent
+            _pool.ReturnToPool(x);
+        });
         _statusEffects.Clear();
     }
 }

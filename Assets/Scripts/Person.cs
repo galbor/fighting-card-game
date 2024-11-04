@@ -94,14 +94,13 @@ public class Person : MonoBehaviour
     public void Awake()
     {
         _bodyParts = new BodyPart[Enum.GetNames(typeof(BodyPartEnum)).Length];
-        foreach (BodyPartEnum bodyPart in Enum.GetValues(typeof(BodyPartEnum)))
+        ForEachBodyPart(bodyPart =>
         {
-            if (bodyPart == BodyPartEnum.NONE) continue;
             _bodyParts[(int)bodyPart] = new BodyPart(bodyPart,
                 _body._healthBars[(int)bodyPart],
                 (int)(HealthValues[bodyPart] * _maxHealth),
                 _body._bodyPartTexts[(int)bodyPart]);
-        }
+        });
         
         EventManagerScript.Instance.StartListening(EventManagerScript.EVENT__REMOVE_HEALTH,
             objAmtLost =>
@@ -117,11 +116,10 @@ public class Person : MonoBehaviour
     {
         _maxHealth = maxHealth;
         if (_bodyParts == null) return;
-        foreach (BodyPartEnum bodyPart in Enum.GetValues(typeof(BodyPartEnum)))
+        ForEachBodyPart(bodyPart =>
         {
-            if (bodyPart == BodyPartEnum.NONE) continue;
             _bodyParts[(int)bodyPart]._HealthBar.MaxHealth = (int)(HealthValues[bodyPart] * _maxHealth);
-        }
+        });
     }
     
     public void HighlightBodyParts(BasicCard.TargetTypeEnum targetType)
@@ -150,7 +148,11 @@ public class Person : MonoBehaviour
         partsLst.ToList().ForEach(part => _bodyParts[(int)part]._letterDisplay.text = func(part));
     }
     
-    public void TakeDamage(BodyPartEnum bodyPart, int damage)
+    /**
+     * deals damage to bodyPart, or to a bodyPart that protects it
+     * returns the bodyPart that takes damage
+     */
+    public BodyPartEnum TakeDamage(BodyPartEnum bodyPart, int damage)
     {
         if (_curProtections.Values.Contains(bodyPart))
         {
@@ -163,6 +165,8 @@ public class Person : MonoBehaviour
             RemoveProtection(bodyPart);
         }
         CheckAlive();
+
+        return bodyPart;
     }
     
     public void Bleed(BodyPartEnum bodyPart, int amt)
@@ -210,8 +214,8 @@ public class Person : MonoBehaviour
             EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__KILL_ENEMY, this);
         else 
             EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__PLAYER_DEATH, null);
-        // Destroy(gameObject); //perhaps undefined behavior for player death?
-        gameObject.SetActive(false);
+        Destroy(gameObject); //perhaps undefined behavior for player death?
+        // gameObject.SetActive(false);
     }
     
     //guard protects protectedPart

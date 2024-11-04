@@ -18,6 +18,7 @@ public class EventManagerScript : Singleton<EventManagerScript>
     public const string EVENT__DRAW_CARD = "event_drawCard";
     public const string EVENT__PLAY_CARD = "event_playCard";
     public const string EVENT__DISCARD_CARD = "event_dicardCard";
+    public const string EVENT__HIT = "event_hit";
     // public const string EVENT__TAKE_DAMAGE = "event_takeDamage";
     // public const string EVENT__DEAL_DAMAGE = "event_dealDamage";
     public const string EVENT__KILL_ENEMY = "event_killEnemy";
@@ -36,10 +37,21 @@ public class EventManagerScript : Singleton<EventManagerScript>
 
     public struct AttackStruct
     {
-	    public Enemy enemy;
-	    public Person.BodyPartEnum playerPart;
-	    public Person.BodyPartEnum enemyPart;
-	    public int damage;
+	    public AttackStruct(Person enemy, Person.BodyPartEnum playerPart, Person.BodyPartEnum enemyPart, int damage,
+		    bool playerAttacker)
+	    {
+		    _enemy = enemy;
+		    _playerPart = playerPart;
+		    _enemyPart = enemyPart;
+		    _damage = damage;
+		    _playerAttacker = playerAttacker;
+	    }
+	    
+	    public Person _enemy;
+	    public Person.BodyPartEnum _playerPart;
+	    public Person.BodyPartEnum _enemyPart;
+	    public int _damage;
+	    public bool _playerAttacker; //true if attacker is player
     }
 	
 	private void Init ()

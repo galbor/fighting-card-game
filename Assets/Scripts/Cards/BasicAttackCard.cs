@@ -75,13 +75,26 @@ public class BasicAttackCard : BasicCard
             if (affected_part == Person.BodyPartEnum.LEFT_ARM) affected_part = Person.BodyPartEnum.LEFT_LEG;
             else affected_part = Person.BodyPartEnum.RIGHT_LEG;
         }
+
+        bool userIsPlayer = user == Player.Instance.Person;
         foreach (var attacking_part in attacking_parts)
-            {
-                user.RemoveProtection(attacking_part);
-                
-                target.TakeDamage(affected_part, user.GetAttackDamage(attacking_part, _damage));
-                target.Bleed(affected_part, user.GetAttackBleed(attacking_part, _bleed));
-            }
+        {
+            user.RemoveProtection(attacking_part);
+
+            int hitDamage = user.GetAttackDamage(attacking_part, _damage);
+            
+            var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
+            target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, _bleed));
+            
+            EventManagerScript.Instance.TriggerEvent(EventManagerScript.EVENT__HIT, 
+                new EventManagerScript.AttackStruct(
+                    userIsPlayer ? target : user,
+                    userIsPlayer ? attacking_part : cur_affected_part,
+                    userIsPlayer ? cur_affected_part : attacking_part,
+                    hitDamage,
+                    userIsPlayer
+                ));
+        }
     }
     // public void Heal(Person player, Person.BodyPartEnum[] targetBodyParts){
     //     foreach (Person.BodyPartEnum targetBodyPart in targetBodyParts)

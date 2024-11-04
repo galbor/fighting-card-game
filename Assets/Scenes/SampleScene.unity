@@ -2406,6 +2406,7 @@ MonoBehaviour:
   _spacing: 1
   _possibleRelics:
   - {fileID: 6731101213316211108, guid: e31a08819e5f4e94eadee039f4632eb4, type: 3}
+  - {fileID: 5398193657126507640, guid: 9d34117b560713c4d8ae7fb63f1ae183, type: 3}
 --- !u!114 &1611676124
 MonoBehaviour:
   m_ObjectHideFlags: 0
