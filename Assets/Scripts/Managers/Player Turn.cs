@@ -300,7 +300,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void EndTurn()
     {
         EventManager.Instance.TriggerEvent(EventManager.EVENT__END_TURN, null);
-        RoomManager.Instance.CheckRoomWin();
+        if (RoomManager.Instance.CheckRoomWin()) return; //if All enemies are dead, doesn't start new turn
         
         DiscardHand();
         EnemiesAttack();

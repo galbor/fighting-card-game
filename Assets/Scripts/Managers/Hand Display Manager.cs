@@ -111,12 +111,8 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
     public void HideMiscCards()
     {
         HideCardsList(_miscCardDisplays);
-        //TODO do this normal
-        while (_miscCardDisplays.Count > 0)
-        {
-            _cardDisplayPool.ReturnToPool(_miscCardDisplays[0]);
-            _miscCardDisplays.RemoveAt(0);
-        }
+        _miscCardDisplays.ForEach(x => _cardDisplayPool.ReturnToPool(x));
+        _miscCardDisplays.Clear();
     }
 
     private void HideCardsList(List<CardDisplay> cardDisplays)
@@ -124,6 +120,9 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         cardDisplays.ForEach(x => x.gameObject.SetActive(false));
     }
     
+    /**
+     * places the chosen card in the center of the screen
+     */
     public void ChooseCard(int index)
     {
         _handCardDisplays[index].transform.position = _ChosenCardLocation;

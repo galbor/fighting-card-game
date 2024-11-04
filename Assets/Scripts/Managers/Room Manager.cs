@@ -82,10 +82,11 @@ public class RoomManager : Singleton<RoomManager>
     /**
      * Triggers RoomWin() iff all enemies are dead
      */
-    public void CheckRoomWin()
+    public bool CheckRoomWin()
     {
         if (_enemies.Length == 0)
             RoomWin();
+        return _enemies.Length == 0;
     }
     
     private void RoomWin()
