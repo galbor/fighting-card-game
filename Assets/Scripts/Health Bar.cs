@@ -188,6 +188,7 @@ public class HealthBar : MonoBehaviour
         if (status != null)
         {
             SetStatusEffect(type, status.Number + amt);
+            return;
         }
         SetStatusEffect(type, amt);
     }
