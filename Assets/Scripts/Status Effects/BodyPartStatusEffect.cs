@@ -12,7 +12,7 @@ namespace DefaultNamespace.StatusEffects
         [SerializeField] private Image _image;
         [SerializeField] private TMP_Text _text;
 
-        public HealthBar _bodyPart;
+        public HealthBar BodyPart { get; set; }
         
         private Type _type;
         private Dictionary<Type, TypeParameters> _typeParametersMap;
@@ -45,7 +45,7 @@ namespace DefaultNamespace.StatusEffects
             {
                 _number = value;
                 _text.text = value.ToString();
-                if (_number == 0) _bodyPart.RemoveStatusEffect(this);
+                if (_number == 0) BodyPart.RemoveStatusEffect(this);
             }
         }
 
@@ -83,7 +83,7 @@ namespace DefaultNamespace.StatusEffects
                 case Type.BLEED:
                     UnityAction<object> action = obj =>
                     {
-                        _bodyPart.RemoveHealth(Number);
+                        BodyPart.RemoveHealth(Number);
                         Number -= 1;
                     };
                     return new TypeParameters(

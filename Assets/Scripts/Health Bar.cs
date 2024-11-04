@@ -18,7 +18,6 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private float _statusEffectSpacing;
     [SerializeField] private BodyPartStatusEffect _statusEffectPrefab;
     [SerializeField] private Transform _statusEffectParent;
-    [SerializeField] private Sprite _bleedImage; //TODO find another way to get this image
 
     private static Pool<BodyPartStatusEffect> _pool;
     private List<BodyPartStatusEffect> _statusEffects;
@@ -204,7 +203,7 @@ public class HealthBar : MonoBehaviour
 
         status = _pool.GetFromPool();
         status.SetType(type);
-        status._bodyPart = this;
+        status.BodyPart = this;
         status.transform.position += new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
         status.transform.SetParent(_statusEffectParent, false);
         _statusEffects.Add(status);
