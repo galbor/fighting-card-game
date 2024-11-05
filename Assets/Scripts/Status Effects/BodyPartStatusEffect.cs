@@ -99,7 +99,7 @@ namespace DefaultNamespace.StatusEffects
                     UnityAction<object> inflictBleed = obj =>
                     {
                         var attack = (EventManager.AttackStruct)obj;
-                        if (attack._attackingHealthBar = BodyPart)
+                        if (attack._attackingHealthBar == BodyPart)
                             attack._affectedHealthBar.AddStatusEffect(Type.BLEED, Number);
                     };
                     return new TypeParameters(
