@@ -79,6 +79,8 @@ public class BasicAttackCard : BasicCard
         bool userIsPlayer = user == Player.Instance.Person;
         foreach (var attacking_part in attacking_parts)
         {
+            if (user.GetHealthBar(attacking_part).Health == 0) continue;
+            
             user.RemoveProtection(attacking_part);
 
             int hitDamage = user.GetAttackDamage(attacking_part, _damage);
