@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "Enemy")]
@@ -18,6 +16,7 @@ public class Enemy : ScriptableObject
     
     private Person _person;
     private int _lastAttack = -1;
+    private int _nextAttack;
     private BasicAttackCard _attack;
     
     public int MaxHealth { get => _maxHealth; }
@@ -33,20 +32,34 @@ public class Enemy : ScriptableObject
     
     public void Init(Transform personParent)
     {
-        // _person = Resources.Load<Person>(_personPrefab);
         _person = Instantiate(_personPrefab, personParent);
         _person.SetMaxHealth(MaxHealth);
         _attack = ScriptableObject.CreateInstance<BasicAttackCard>();
+        ChooseAndDisplayNextAction();
     }
 
     public void Attack()
     {
         if (!_person.IsAlive()) return;
-        int action = GetNextAction();
-        _attack.Damage = _possibleActions[action].Damage;
-        _attack.Bleed = _possibleActions[action].Bleed;
-        _attack.Play(_person, _possibleActions[action].AttackingParts.ToList(), Player.Instance.Person, _possibleActions[action].AffectedPart);
-        _lastAttack = action;
+        
+        _attack.Damage = _possibleActions[_nextAttack].Damage;
+        _attack.Bleed = _possibleActions[_nextAttack].Bleed;
+        _attack.Play(_person, _possibleActions[_nextAttack].AttackingParts.ToList(), Player.Instance.Person, _possibleActions[_nextAttack].AffectedPart);
+        _lastAttack = _nextAttack;
+
+        ChooseAndDisplayNextAction();
+    }
+
+    /**
+     * chooses the next action and displays it on the PlannedAttackDisplay
+     */
+    private void ChooseAndDisplayNextAction()
+    {
+        _nextAttack = GetNextAction();
+        var attack = _possibleActions[_nextAttack];
+        _person.DisplayPlannedAttack(_person.GetBodyPartSprite(attack.AttackingParts[0]),
+            _person.GetBodyPartSprite(attack.AffectedPart)
+            , attack.Damage);
     }
 
     private int GetNextAction()

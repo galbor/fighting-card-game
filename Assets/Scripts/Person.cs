@@ -301,4 +301,26 @@ public class Person : MonoBehaviour
     {
         return _bodyParts[(int)bodyPart]._HealthBar;
     }
+
+    /**
+     * displays the given sprites
+     */
+    public void DisplayPlannedAttack(Sprite attackingPart, Sprite affectedPart, int damage)
+    {
+        _body._plannedAttackDisplay.gameObject.SetActive(true);
+        _body._plannedAttackDisplay.SetAttackingPart(attackingPart);
+        _body._plannedAttackDisplay.SetAffectedPart(affectedPart);
+        _body._plannedAttackDisplay.SetDamage(damage);
+    }
+
+    public void HidePlannedAttack()
+    {
+        _body._plannedAttackDisplay.gameObject.SetActive(false);
+    }
+
+    public Sprite GetBodyPartSprite(BodyPartEnum bodyPart)
+    {
+        if (bodyPart == BodyPartEnum.NONE) return null;
+        return GetHealthBar(bodyPart).transform.parent.parent.GetComponent<Image>().sprite; //the healthbar's parent's parent is the body part
+    }
 }
