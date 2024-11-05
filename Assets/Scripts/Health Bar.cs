@@ -249,7 +249,7 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    private void RemoveAllStatusEffects()
+    public void RemoveAllStatusEffects()
     {
         _statusEffects.ForEach(x =>
         {

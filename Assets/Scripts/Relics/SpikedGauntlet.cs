@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DefaultNamespace.StatusEffects;
+using UnityEngine;
 
 namespace DefaultNamespace.Relics
 {
@@ -14,20 +15,17 @@ namespace DefaultNamespace.Relics
         {
             base.Awake();
             
-            EventManager.Instance.StartListening(EventManager.EVENT__HIT, InflictBleed);
+            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, GiveKnife);
             
             Description = MyUtils.ReplaceFirstOccurrence(Description, "bleed", _bleed.ToString());
         }
 
         /**
-         * inflicts bleed if player is the attacker and the attacking part is _bodyPart
+         * gives the knife status effect, which inflicts bleed when attacking
          */
-        private void InflictBleed(object obj)
+        private void GiveKnife(object obj)
         {
-            var attack = (EventManager.AttackStruct)obj;
-            if (!attack._playerAttacker || attack._playerPart != _bodyPart) return;
-            attack._enemy.Bleed(attack._enemyPart, _bleed);
-            
+            Player.Instance.Person.GetHealthBar(_bodyPart).AddStatusEffect(BodyPartStatusEffect.Type.KNIFE, _bleed);
             Activate();
         }
     }

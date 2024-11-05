@@ -43,8 +43,6 @@ public class RoomManager : Singleton<RoomManager>
             _enemies[i].Init(_enemyParent);
         }
         
-        EventManager.Instance.TriggerEvent(EventManager.EVENT__START_COMBAT, null);
-        
         PlaceEnemies();
     }
 

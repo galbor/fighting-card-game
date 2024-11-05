@@ -256,6 +256,14 @@ public class Person : MonoBehaviour
         ForEachBodyPart(bodyPart => _bodyParts[(int)bodyPart]._HealthBar.Defense = 0);
     }
 
+    public void RemoveAllStatusEffects()
+    {
+        ForEachBodyPart(x =>
+        {
+            _bodyParts[(int)x]._HealthBar.RemoveAllStatusEffects();
+        });
+    } 
+
     private void DisplayProtection(BodyPartEnum guard, BodyPartEnum protectedPart)
     {
         if (guard == BodyPartEnum.NONE) return;
@@ -287,5 +295,10 @@ public class Person : MonoBehaviour
             if (bodyPart == BodyPartEnum.NONE) continue;
             action(bodyPart);
         }
+    }
+
+    public HealthBar GetHealthBar(BodyPartEnum bodyPart)
+    {
+        return _bodyParts[(int)bodyPart]._HealthBar;
     }
 }

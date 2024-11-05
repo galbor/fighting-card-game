@@ -92,7 +92,9 @@ public class BasicAttackCard : BasicCard
                     userIsPlayer ? attacking_part : cur_affected_part,
                     userIsPlayer ? cur_affected_part : attacking_part,
                     hitDamage,
-                    userIsPlayer
+                    userIsPlayer,
+                    user.GetHealthBar(attacking_part),
+                    target.GetHealthBar(cur_affected_part)
                 ));
         }
     }

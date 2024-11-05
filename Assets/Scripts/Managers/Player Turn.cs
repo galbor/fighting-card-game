@@ -109,6 +109,9 @@ public class PlayerTurn : Singleton<PlayerTurn>
         ShuffleDiscardPile();
         
         _playerPerson.RemoveAllDefense();
+        _playerPerson.RemoveAllStatusEffects();
+        
+        EventManager.Instance.TriggerEvent(EventManager.EVENT__START_COMBAT, null);
 
         GetEnemies();
         StartTurn();

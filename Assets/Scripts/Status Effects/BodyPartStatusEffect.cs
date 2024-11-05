@@ -20,7 +20,8 @@ namespace DefaultNamespace.StatusEffects
         public enum Type
         {
             None,
-            BLEED
+            BLEED,
+            KNIFE
         }
 
         private struct TypeParameters
@@ -85,15 +86,26 @@ namespace DefaultNamespace.StatusEffects
             switch (type)
             {
                 case Type.BLEED:
-                    UnityAction<object> action = obj =>
+                    UnityAction<object> takeBleedDamage = obj =>
                     {
                         BodyPart.RemoveHealth(Number);
                         Number -= 1;
                     };
                     return new TypeParameters(
                         Resources.Load<Sprite>("Bleed"),
-                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__END_TURN, action } }
+                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__END_TURN, takeBleedDamage } }
                     );
+                case Type.KNIFE:
+                    UnityAction<object> inflictBleed = obj =>
+                    {
+                        var attack = (EventManager.AttackStruct)obj;
+                        if (attack._attackingHealthBar = BodyPart)
+                            attack._affectedHealthBar.AddStatusEffect(Type.BLEED, Number);
+                    };
+                    return new TypeParameters(
+                        Resources.Load<Sprite>("BloodyKnife"),
+                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictBleed } }
+                        );
                 default:
                     throw new Exception($"No coded TypeParameter for type {type}");
             }

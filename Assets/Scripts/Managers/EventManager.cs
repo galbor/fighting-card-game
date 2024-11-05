@@ -38,13 +38,15 @@ public class EventManager : Singleton<EventManager>
     public struct AttackStruct
     {
 	    public AttackStruct(Person enemy, Person.BodyPartEnum playerPart, Person.BodyPartEnum enemyPart, int damage,
-		    bool playerAttacker)
+		    bool playerAttacker, HealthBar attackingHealthBar, HealthBar affectedHealthBar)
 	    {
 		    _enemy = enemy;
 		    _playerPart = playerPart;
 		    _enemyPart = enemyPart;
 		    _damage = damage;
 		    _playerAttacker = playerAttacker;
+		    _attackingHealthBar = attackingHealthBar;
+		    _affectedHealthBar = affectedHealthBar;
 	    }
 	    
 	    public Person _enemy;
@@ -52,6 +54,8 @@ public class EventManager : Singleton<EventManager>
 	    public Person.BodyPartEnum _enemyPart;
 	    public int _damage;
 	    public bool _playerAttacker; //true if attacker is player
+	    public HealthBar _attackingHealthBar;
+	    public HealthBar _affectedHealthBar;
     }
 	
 	private void Init ()
