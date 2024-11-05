@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
+using DefaultNamespace.UI;
 
 public class EventManager : Singleton<EventManager>
 {

@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
-using DefaultNamespace.Managers;
-using JetBrains.Annotations;
+using DefaultNamespace.Utility;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerTurn : Singleton<PlayerTurn>
 {

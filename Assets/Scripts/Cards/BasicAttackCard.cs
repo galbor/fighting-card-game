@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using DefaultNamespace;
+using DefaultNamespace.Utility;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(menuName = "Cards/Basic Attack Card")]
 public class BasicAttackCard : BasicCard

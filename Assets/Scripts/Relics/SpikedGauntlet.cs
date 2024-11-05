@@ -1,4 +1,5 @@
 ﻿using DefaultNamespace.StatusEffects;
+using DefaultNamespace.Utility;
 using UnityEngine;
 
 namespace DefaultNamespace.Relics

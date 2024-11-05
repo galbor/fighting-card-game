@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using DefaultNamespace;
+using DefaultNamespace.Utility;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Cards/Basic Defense Card")]

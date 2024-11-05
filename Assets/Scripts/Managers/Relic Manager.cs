@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DefaultNamespace;
 using DefaultNamespace.Relics;
+using DefaultNamespace.Utility;
 using UnityEngine;
 
 public class RelicManager : Singleton<RelicManager>
