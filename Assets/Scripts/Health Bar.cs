@@ -182,15 +182,16 @@ public class HealthBar : MonoBehaviour
      * if already exists, adds amt to the existing one
      * if the sum with amt is 0, removes the status effect
      */
-    public void AddStatusEffect(BodyPartStatusEffect.Type type, int amt)
+    public void AddStatusEffect(BodyPartStatusEffect.Type type, int amt, bool affectsDeadBodyParts = false)
     {
+        if (!affectsDeadBodyParts && !IsAlive()) return;
         BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
         if (status != null)
         {
-            SetStatusEffect(type, status.Number + amt);
+            SetStatusEffect(type, status.Number + amt, affectsDeadBodyParts);
             return;
         }
-        SetStatusEffect(type, amt);
+        SetStatusEffect(type, amt, affectsDeadBodyParts);
     }
 
     /**
@@ -198,8 +199,9 @@ public class HealthBar : MonoBehaviour
      * if type doesn't exist, creates it
      * if 0, removes it
      */
-    public void SetStatusEffect(BodyPartStatusEffect.Type type, int amt)
+    public void SetStatusEffect(BodyPartStatusEffect.Type type, int amt, bool affectsDeadBodyParts = false)
     {
+        if (!affectsDeadBodyParts && !IsAlive()) return;
         BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
         if (status != null)
         {
