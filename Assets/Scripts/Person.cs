@@ -156,7 +156,8 @@ public class Person : MonoBehaviour
     {
         if (_curProtections.Values.Contains(bodyPart))
         {
-            bodyPart = _curProtections.First(pair => pair.Value == bodyPart).Key;
+            bodyPart = _curProtections.Where(pair => pair.Value == bodyPart).
+                OrderByDescending(pair => GetHealthBar(pair.Key).Defense).First().Key;
         }
 
         //RemoveHealth returns true if health > 0
