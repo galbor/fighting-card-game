@@ -15,7 +15,7 @@ namespace DefaultNamespace.StatusEffects
         public HealthBar BodyPart { get; set; }
         
         private Type _type;
-        private Dictionary<Type, TypeParameters> _typeParametersMap;
+        private static Dictionary<Type, TypeParameters> _typeParametersMap;
         
         public enum Type
         {
@@ -25,16 +25,14 @@ namespace DefaultNamespace.StatusEffects
 
         private struct TypeParameters
         {
-            public TypeParameters(Sprite sprite, Action<object> onEnable, Action<object> onDisable)
+            public TypeParameters(Sprite sprite, Dictionary<string, UnityAction<object>> eventActionDict)
             {
                 _sprite = sprite;
-                _onEnableAction = onEnable;
-                _onDisableAction = onDisable;
+                _eventActionDict = eventActionDict;
             }
             
             public Sprite _sprite;
-            public Action<object> _onEnableAction;
-            public Action<object> _onDisableAction;
+            public Dictionary<string, UnityAction<object>> _eventActionDict;
         }
 
         private int _number = 1;
@@ -52,21 +50,27 @@ namespace DefaultNamespace.StatusEffects
         private void Awake()
         {
             Number = _number;
-            _typeParametersMap = new Dictionary<Type, TypeParameters>();
+            _typeParametersMap ??= new Dictionary<Type, TypeParameters>();
         }
 
         private void OnDisable()
         {
             if (_type == Type.None) return;
-            GetTypeParameters(_type)._onDisableAction(null);
+            foreach (var pair in GetTypeParameters(_type)._eventActionDict)
+            {
+                EventManager.Instance.StopListening(pair.Key, pair.Value);
+            }
         }
 
         public void SetType(Type type)
         {
             _type = type;
-            var _params = GetTypeParameters(_type);
-            _params._onEnableAction(null);
-            _image.sprite = _params._sprite;
+            var typeParams = GetTypeParameters(_type);
+            _image.sprite = typeParams._sprite;
+            foreach (var pair in typeParams._eventActionDict)
+            {
+                EventManager.Instance.StartListening(pair.Key, pair.Value);
+            }
         }
 
         public Type GetStatusType()
@@ -88,8 +92,7 @@ namespace DefaultNamespace.StatusEffects
                     };
                     return new TypeParameters(
                         Resources.Load<Sprite>("Bleed"),
-                        x => EventManager.Instance.StartListening(EventManager.EVENT__END_TURN, action),
-                        x => EventManager.Instance.StopListening(EventManager.EVENT__END_TURN, action)
+                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__END_TURN, action } }
                     );
                 default:
                     throw new Exception($"No coded TypeParameter for type {type}");
