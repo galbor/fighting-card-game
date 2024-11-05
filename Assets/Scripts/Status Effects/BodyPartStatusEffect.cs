@@ -14,26 +14,26 @@ namespace DefaultNamespace.StatusEffects
 
         public HealthBar BodyPart { get; set; }
         
-        private Type _type;
-        private static Dictionary<Type, TypeParameters> _typeParametersMap;
+        private StatusType _statusType;
+        private TypeParameters _typeParameters;
         
-        public enum Type
+        public enum StatusType
         {
-            None,
+            NONE,
             BLEED,
             KNIFE
         }
 
         private struct TypeParameters
         {
-            public TypeParameters(Sprite sprite, Dictionary<string, UnityAction<object>> eventActionDict)
+            public TypeParameters(string spriteName, Dictionary<string, UnityAction<object>> eventActionDict)
             {
-                _sprite = sprite;
-                _eventActionDict = eventActionDict;
+                Sprite = Resources.Load<Sprite>(spriteName);
+                EventActionDict = eventActionDict;
             }
             
-            public Sprite _sprite;
-            public Dictionary<string, UnityAction<object>> _eventActionDict;
+            public Sprite Sprite { get; private set; }
+            public Dictionary<string, UnityAction<object>> EventActionDict { get; private set; }
         }
 
         private int _number = 1;
@@ -51,63 +51,65 @@ namespace DefaultNamespace.StatusEffects
         private void Awake()
         {
             Number = _number;
-            _typeParametersMap ??= new Dictionary<Type, TypeParameters>();
         }
 
         private void OnDisable()
         {
-            if (_type == Type.None) return;
-            foreach (var pair in GetTypeParameters(_type)._eventActionDict)
+            if (_statusType == StatusType.NONE) return;
+            foreach (var pair in _typeParameters.EventActionDict)
             {
                 EventManager.Instance.StopListening(pair.Key, pair.Value);
             }
         }
 
-        public void SetType(Type type)
+        public void SetType(StatusType statusType)
         {
-            _type = type;
-            var typeParams = GetTypeParameters(_type);
-            _image.sprite = typeParams._sprite;
-            foreach (var pair in typeParams._eventActionDict)
+            if (statusType == StatusType.NONE) return;
+            
+            _statusType = statusType;
+            ObtainTypeParameters();
+            _image.sprite = _typeParameters.Sprite;
+            foreach (var pair in _typeParameters.EventActionDict)
             {
                 EventManager.Instance.StartListening(pair.Key, pair.Value);
             }
         }
 
-        public Type GetStatusType()
+        public StatusType GetStatusType()
         {
-            return _type;
+            return _statusType;
         }
 
-        private TypeParameters GetTypeParameters(Type type)
+        /**
+         * puts the new TypeParameters in a variable
+         */
+        private void ObtainTypeParameters()
         {
-            if (_typeParametersMap.TryGetValue(type, out var res))
-                return res;
-            switch (type)
+            switch (_statusType)
             {
-                case Type.BLEED:
+                case StatusType.BLEED:
                     UnityAction<object> takeBleedDamage = obj =>
                     {
                         BodyPart.RemoveHealth(Number);
                         Number -= 1;
                     };
-                    return new TypeParameters(
-                        Resources.Load<Sprite>("Bleed"),
+                    _typeParameters = new TypeParameters("Bleed",
                         new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__END_TURN, takeBleedDamage } }
                     );
-                case Type.KNIFE:
+                    return;
+                case StatusType.KNIFE:
                     UnityAction<object> inflictBleed = obj =>
                     {
                         var attack = (EventManager.AttackStruct)obj;
                         if (attack._attackingHealthBar == BodyPart)
-                            attack._affectedHealthBar.AddStatusEffect(Type.BLEED, Number);
+                            attack._affectedHealthBar.AddStatusEffect(StatusType.BLEED, Number);
                     };
-                    return new TypeParameters(
-                        Resources.Load<Sprite>("BloodyKnife"),
+                    _typeParameters = new TypeParameters("BloodyKnife",
                         new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictBleed } }
                         );
+                    return;
                 default:
-                    throw new Exception($"No coded TypeParameter for type {type}");
+                    throw new Exception($"No coded TypeParameter for type {_statusType}");
             }
         }
     }

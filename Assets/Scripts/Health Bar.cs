@@ -182,16 +182,16 @@ public class HealthBar : MonoBehaviour
      * if already exists, adds amt to the existing one
      * if the sum with amt is 0, removes the status effect
      */
-    public void AddStatusEffect(BodyPartStatusEffect.Type type, int amt, bool affectsDeadBodyParts = false)
+    public void AddStatusEffect(BodyPartStatusEffect.StatusType statusType, int amt, bool affectsDeadBodyParts = false)
     {
         if (!affectsDeadBodyParts && !IsAlive()) return;
-        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == statusType);
         if (status != null)
         {
-            SetStatusEffect(type, status.Number + amt, affectsDeadBodyParts);
+            SetStatusEffect(statusType, status.Number + amt, affectsDeadBodyParts);
             return;
         }
-        SetStatusEffect(type, amt, affectsDeadBodyParts);
+        SetStatusEffect(statusType, amt, affectsDeadBodyParts);
     }
 
     /**
@@ -199,10 +199,10 @@ public class HealthBar : MonoBehaviour
      * if type doesn't exist, creates it
      * if 0, removes it
      */
-    public void SetStatusEffect(BodyPartStatusEffect.Type type, int amt, bool affectsDeadBodyParts = false)
+    public void SetStatusEffect(BodyPartStatusEffect.StatusType statusType, int amt, bool affectsDeadBodyParts = false)
     {
         if (!affectsDeadBodyParts && !IsAlive()) return;
-        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == statusType);
         if (status != null)
         {
             status.Number = amt; //if amt == 0, removes self
@@ -210,7 +210,7 @@ public class HealthBar : MonoBehaviour
         }
 
         status = _pool.GetFromPool();
-        status.SetType(type);
+        status.SetType(statusType);
         status.BodyPart = this;
         SetNewStatusPosition(status);
         _statusEffects.Add(status);
@@ -227,9 +227,9 @@ public class HealthBar : MonoBehaviour
     /**
      * @return true iff status effect existed
      */
-    public bool RemoveStatusEffect(BodyPartStatusEffect.Type type)
+    public bool RemoveStatusEffect(BodyPartStatusEffect.StatusType statusType)
     {
-        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == type);
+        BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == statusType);
         if (status == null) return false;
         RemoveStatusEffect(status);
 

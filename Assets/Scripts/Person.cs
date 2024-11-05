@@ -173,7 +173,7 @@ public class Person : MonoBehaviour
     public void Bleed(BodyPartEnum bodyPart, int amt)
     {
         if (amt == 0) return;
-        _bodyParts[(int)bodyPart]._HealthBar.AddStatusEffect(BodyPartStatusEffect.Type.BLEED, amt);
+        _bodyParts[(int)bodyPart]._HealthBar.AddStatusEffect(BodyPartStatusEffect.StatusType.BLEED, amt);
     }
     
     public void Heal(BodyPartEnum bodyPart, int heal)
