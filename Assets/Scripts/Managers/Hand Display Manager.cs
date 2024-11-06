@@ -18,7 +18,8 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
     
     private float _middleX;
     private float _defaultY;
-    private float _spacing;
+    private float _horizontalSpacing;
+    private float _verticalSpacing;
     private Vector3 _defaultScale;
 
     protected HandDisplayManager()
@@ -38,8 +39,9 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         _cardDisplayPool = new Pool<CardDisplay>(Instantiate(_handCardDisplays[0], _cardDisplayParent));
         _defaultY = _handCardDisplays[0].transform.position.y;
         _middleX = (_handCardDisplays[0].transform.position.x + _handCardDisplays[^1].transform.position.x) / 2; //^1 is -1 index like python
-        _spacing = _handCardDisplays[1].transform.position.x - _handCardDisplays[0].transform.position.x;
         _defaultScale = _handCardDisplays[0].transform.localScale;
+        _horizontalSpacing = _handCardDisplays[1].transform.position.x - _handCardDisplays[0].transform.position.x;
+        _verticalSpacing = CalculateVerticalSpacing(_handCardDisplays[0].GetCardSize(),_horizontalSpacing,_defaultScale);
         _ChosenCardLocation = Camera.main.WorldToScreenPoint(_ChosenCardLocation);
     }
     
@@ -49,7 +51,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         SetDisplay(cards,_handCardDisplays, new Vector2(_middleX, _defaultY), 1f);
     }
 
-    private void SetDisplay(List<BasicCard> cards, List<CardDisplay> cardDisplays, Vector2 middle, float scale)
+    private void SetDisplay(List<BasicCard> cards, List<CardDisplay> cardDisplays, Vector2 middle, float scale, bool displayNumber = true)
     {
         int amt = cards.Count;
         if (cardDisplays == _handCardDisplays)
@@ -73,6 +75,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         {
             cardDisplays[i].SetCard(cards[i]);
             cardDisplays[i].SetCardNumber(i+1);
+            cardDisplays[i].SetNumberActive(displayNumber);
             cardDisplays[i].gameObject.SetActive(true);
         }
 
@@ -82,6 +85,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
     public void DisplayHand()
     {
         DisplayCards(_handCardDisplays, _currentHandSize, new Vector2(_middleX, _defaultY), 1f);
+        SetActiveNumbers(true);
     }
     
     //for card drafting
@@ -90,15 +94,35 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         SetDisplay(cards, _miscCardDisplays, _ChosenCardLocation, _ChosenCardSize);
     }
 
+    /**
+     * places the cardDisplays in their place
+     */
     private void DisplayCards(List<CardDisplay> cardDisplays, int amt, Vector2 middleVector, float scale)
     {
-        float middle = ((float)amt-1) / 2;
-        for (int i = 0; i < amt; i++)
+        //doesn't work well with resolution change after game was started
+        
+        int rows = (int)Math.Ceiling(_horizontalSpacing * scale * amt / Screen.width);
+        int cols = (int)Math.Floor(Screen.width / (_horizontalSpacing * scale));
+        
+        float middleRow = ((float)rows-1) / 2;
+        float middleCol;
+
+        int i = 0;
+        for (int row = 0; row < rows; row++)
         {
-            cardDisplays[i].transform.position = new Vector2(middleVector.x + _spacing * scale * (i - middle), middleVector.y);
-            cardDisplays[i].transform.localScale = _defaultScale * scale;
+            cols = Math.Min(cols, amt - row * cols);
+            middleCol = ((float)cols-1) / 2;
+            
+            for (int col = 0; col < cols; col++)
+            {
+                cardDisplays[i].transform.position = 
+                    new Vector2(middleVector.x + _horizontalSpacing * scale * (col - middleCol),
+                        middleVector.y - _verticalSpacing * scale * (row - middleRow));
+                
+                cardDisplays[i].transform.localScale = _defaultScale * scale;
+                if (++i >= amt) return;
+            }
         }
-        SetActiveNumbers(true);
     }
 
     public void HideHand()
@@ -143,5 +167,16 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         {
             _handCardDisplays[i].EnergyCostColor();
         }
+    }
+
+    /**
+     * the cards: ****_****
+     * the horizontalSpacing would be **_**
+     * so the space between the cards would be **_**  -   ****   =   _
+     */
+    private float CalculateVerticalSpacing(Vector2 cardSize, float horizontalSpacing, Vector2 defaultScale)
+    {
+        float spaceBetweenCards = horizontalSpacing - cardSize.x * defaultScale.x;
+        return spaceBetweenCards + cardSize.y * defaultScale.y;
     }
 }

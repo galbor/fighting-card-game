@@ -48,5 +48,10 @@ namespace DefaultNamespace.UI
         {
             _numberText.text = num.ToString();
         }
+
+        public Vector2 GetCardSize()
+        {
+            return transform.localScale * _cardSprite.GetComponent<RectTransform>().sizeDelta;
+        }
     }
 }
