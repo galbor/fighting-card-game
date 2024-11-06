@@ -76,7 +76,6 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
             cardDisplays[i].SetCard(cards[i]);
             cardDisplays[i].SetCardNumber(i+1);
             cardDisplays[i].SetNumberActive(displayNumber);
-            cardDisplays[i].gameObject.SetActive(true);
         }
 
         DisplayCards(cardDisplays, amt, middle, scale);
@@ -84,6 +83,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
 
     public void DisplayHand()
     {
+        
         DisplayCards(_handCardDisplays, _currentHandSize, new Vector2(_middleX, _defaultY), 1f);
         SetActiveNumbers(true);
     }
@@ -115,6 +115,7 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
             
             for (int col = 0; col < cols; col++)
             {
+                cardDisplays[i].gameObject.SetActive(true);
                 cardDisplays[i].transform.position = 
                     new Vector2(middleVector.x + _horizontalSpacing * scale * (col - middleCol),
                         middleVector.y - _verticalSpacing * scale * (row - middleRow));

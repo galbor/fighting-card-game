@@ -18,6 +18,10 @@ namespace DefaultNamespace.Managers
         [SerializeField] private KeyCode _selectCard3 = KeyCode.Alpha3;
         [SerializeField] private KeyCode _selectSkip = KeyCode.Alpha0;
 
+        private List<BasicCard> _chosenCards;
+        private IEnumerator _draftCoroutine;
+        public bool Drafting { get; private set; }
+
         protected CardDraftManager()
         {
             
@@ -26,17 +30,20 @@ namespace DefaultNamespace.Managers
         
         public void StartCardDraft()
         {
-            HandDisplayManager.Instance.HideHand();
+            Drafting = true;
 
             //chooses the 3 cards to draft
-            List<BasicCard> chosenCards = new List<BasicCard>();
-            MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Length, 3).ForEach(x => chosenCards.Add(_possibleCards[x]));
-            StartCoroutine(CardDraft(chosenCards));
+            _chosenCards = new List<BasicCard>();
+            MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Length, 3).ForEach(x => _chosenCards.Add(_possibleCards[x]));
+            SetDraftActive(true);
         }
 
         IEnumerator CardDraft(List<BasicCard> chosenCards)
         {
             int selectedCard = -1;
+            
+            Player.Instance.Person.gameObject.SetActive(false);
+            HandDisplayManager.Instance.HideHand();
             
             DisplayChoice(chosenCards);
             
@@ -54,6 +61,10 @@ namespace DefaultNamespace.Managers
             if (selectedCard >= 0) Player.Instance.AddToDeck(chosenCards[selectedCard]);
             
             HideChoice();
+
+            Drafting = false;
+            
+            Player.Instance.Person.gameObject.SetActive(true);
             
             RoomManager.Instance.SetNextRoom();
             
@@ -74,6 +85,24 @@ namespace DefaultNamespace.Managers
             HandDisplayManager.Instance.HideMiscCards();
             _darkBackground.SetActive(false);
             _skipText.SetActive(false);
+        }
+
+        /**
+         * if active starts draft anew
+         * else      hides draft
+         *
+         * SHOULD NOT BE CALLED BEFORE StartDraft
+         */
+        public void SetDraftActive(bool active)
+        {
+            if (active && _chosenCards != null)
+            {
+                _draftCoroutine = CardDraft(_chosenCards);
+                StartCoroutine(_draftCoroutine);
+                return;
+            }
+            StopCoroutine(_draftCoroutine);
+            HideChoice();
         }
     }
 }

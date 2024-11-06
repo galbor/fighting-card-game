@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
+using DefaultNamespace.Managers;
 using DefaultNamespace.Utility;
 using UnityEngine;
 
@@ -55,6 +56,9 @@ public class PlayerTurn : Singleton<PlayerTurn>
     private List<BasicCard> _deck;
     private Queue<BasicCard> _drawPile;
     private Queue<BasicCard> _discardPile;
+    
+    public List<BasicCard> DiscardPile { get => _discardPile.ToList(); }
+    public List<BasicCard> DrawPile { get =>_drawPile.ToList(); }
     
     public Dictionary<Person.BodyPartEnum, KeyCode> _BodyPartKeyCodes;
 
@@ -325,11 +329,12 @@ public class PlayerTurn : Singleton<PlayerTurn>
         _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
     }
     
-    private void ResetAction()
+    public void ResetAction()
     {
         StopAction();
         
-        StartCoroutine(SelectCard());
+        if (!CardDraftManager.Instance.Drafting)
+            StartCoroutine(SelectCard());
     }
     
     public bool DrawCard()
