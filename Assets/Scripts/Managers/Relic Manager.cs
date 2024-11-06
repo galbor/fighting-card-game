@@ -6,10 +6,8 @@ using UnityEngine;
 
 public class RelicManager : Singleton<RelicManager>
 {
-    private float RELICIMAGESIZE = 100f; //it's 100x100
-    
     [SerializeField] private Transform _relicParent;
-    [SerializeField] private float _spacing;
+    [SerializeField] private float _spacing; //relic distance in relics
     [SerializeField] private AbstractRelic[] _possibleRelics;
 
     private Queue<AbstractRelic> _shuffledRelicsList;
@@ -26,7 +24,7 @@ public class RelicManager : Singleton<RelicManager>
         _shuffledRelicsList = new Queue<AbstractRelic>();
         GenerateShuffledRelicsList();
         
-        _spacing *= RELICIMAGESIZE;
+        _spacing *= _possibleRelics[0].GetComponent<RectTransform>().sizeDelta.x; 
     }
 
     public void AddRelic(AbstractRelic relicPrefab)

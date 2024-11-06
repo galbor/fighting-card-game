@@ -22,10 +22,10 @@ namespace DefaultNamespace.Relics
         private Image _image;
 
         private TMP_Text _descriptionTMP;
-        private const float DESCRIPTIONFONTSIZE = 24f;
+        private const float DESCRIPTIONFONTSIZE = 48f; //get from somewhere else
         
         private TMP_Text _counterText;
-        private const float COUNTERTEXTFONTSIZE = 16f;
+        private const float COUNTERTEXTFONTSIZE = 24f; //get from somewhere else
         private int _counter;
         protected int _counterCycleLength = Int32.MaxValue;
         protected int Counter
