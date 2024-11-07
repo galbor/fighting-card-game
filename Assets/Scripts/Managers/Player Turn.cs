@@ -122,6 +122,8 @@ public class PlayerTurn : Singleton<PlayerTurn>
     // Update is called once per frame
     void Update()
     {
+        if (CardDraftManager.Instance.Drafting) return;
+        
         //TODO turn ends too many times. do a check that turn isn't switching.
         if (Input.GetKeyDown(_endTurnKey)) EndTurn();
 
