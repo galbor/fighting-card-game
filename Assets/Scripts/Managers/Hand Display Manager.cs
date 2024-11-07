@@ -88,10 +88,13 @@ public class HandDisplayManager : Singleton<HandDisplayManager>
         SetActiveNumbers(true);
     }
     
-    //for card drafting
-    public void DisplayCardsMiddle(List<BasicCard> cards)
+    /**
+     * shows _cards_ in the middle
+     * @param displayNumbers true means the card numbers are on 
+     */
+    public void DisplayCardsMiddle(List<BasicCard> cards, bool displayNumbers = true)
     {
-        SetDisplay(cards, _miscCardDisplays, _ChosenCardLocation, _ChosenCardSize);
+        SetDisplay(cards, _miscCardDisplays, _ChosenCardLocation, _ChosenCardSize, displayNumbers);
     }
 
     /**

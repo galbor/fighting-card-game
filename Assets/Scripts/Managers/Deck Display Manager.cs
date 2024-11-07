@@ -77,7 +77,7 @@ namespace Managers
             SetActivePersons(false);
             _darkBackground.SetActive(true);
             PlayerTurn.Instance.StopAction();
-            HandDisplayManager.Instance.DisplayCardsMiddle(cards);
+            HandDisplayManager.Instance.DisplayCardsMiddle(cards, displayNumbers: false);
         }
 
         private void HideCardList()
