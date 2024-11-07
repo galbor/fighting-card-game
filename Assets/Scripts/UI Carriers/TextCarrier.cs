@@ -6,7 +6,7 @@ namespace DefaultNamespace
 {
     public class TextCarrier : Carrier
     {
-        private const string TEXTPREFAB = "TextPrefab";
+        private const string TEXTPREFAB = "UI/TextPrefab";
         
         [SerializeField] private String _text;
         [SerializeField] private int _fontSize = 0;

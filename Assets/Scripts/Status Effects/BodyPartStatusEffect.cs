@@ -4,6 +4,8 @@ using DefaultNamespace.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace DefaultNamespace.StatusEffects
@@ -11,7 +13,9 @@ namespace DefaultNamespace.StatusEffects
     public class BodyPartStatusEffect : MonoBehaviour
     {
         [SerializeField] private Image _image;
-        [SerializeField] private TMP_Text _text;
+        [FormerlySerializedAs("_text")] [SerializeField] private TMP_Text _stacks;
+
+        [SerializeField] private DescriptionViewer _description;
 
         public HealthBar BodyPart { get; set; }
         
@@ -27,14 +31,16 @@ namespace DefaultNamespace.StatusEffects
 
         private struct TypeParameters
         {
-            public TypeParameters(string spriteName, Dictionary<string, UnityAction<object>> eventActionDict)
+            public TypeParameters(string spriteName, Dictionary<string, UnityAction<object>> eventActionDict, string description)
             {
                 Sprite = Resources.Load<Sprite>(spriteName);
                 EventActionDict = eventActionDict;
+                Description = description;
             }
             
             public Sprite Sprite { get; private set; }
             public Dictionary<string, UnityAction<object>> EventActionDict { get; private set; }
+            public string Description { get; private set; }
         }
 
         private int _number = 1;
@@ -44,7 +50,7 @@ namespace DefaultNamespace.StatusEffects
             set
             {
                 _number = value;
-                _text.text = value.ToString();
+                _stacks.text = value.ToString();
                 if (_number == 0) BodyPart.RemoveStatusEffect(this);
             }
         }
@@ -74,6 +80,8 @@ namespace DefaultNamespace.StatusEffects
             {
                 EventManager.Instance.StartListening(pair.Key, pair.Value);
             }
+
+            _description.Text = _typeParameters.Description;
         }
 
         public StatusType GetStatusType()
@@ -95,7 +103,8 @@ namespace DefaultNamespace.StatusEffects
                         Number -= 1;
                     };
                     _typeParameters = new TypeParameters("Bleed",
-                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__END_TURN, takeBleedDamage } }
+                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__END_TURN, takeBleedDamage } },
+                        "At the end of the turn, deals X damage and removes 1 stack"
                     );
                     return;
                 case StatusType.KNIFE:
@@ -106,7 +115,8 @@ namespace DefaultNamespace.StatusEffects
                             attack._affectedHealthBar.AddStatusEffect(StatusType.BLEED, Number);
                     };
                     _typeParameters = new TypeParameters("BloodyKnife",
-                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictBleed } }
+                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictBleed } },
+                        "When attacking, adds X bleed to the attacked body part"
                         );
                     return;
                 default:

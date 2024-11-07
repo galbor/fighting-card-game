@@ -282,14 +282,14 @@ RectTransform:
   m_GameObject: {fileID: 120528237}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1544398388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 75, y: -75}
+  m_AnchoredPosition: {x: 100, y: -100}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &242532772
@@ -2426,7 +2426,7 @@ MonoBehaviour:
   _relicParent: {fileID: 120528238}
   _spacing: 1
   _possibleRelics:
-  - {fileID: 6731101213316211108, guid: e31a08819e5f4e94eadee039f4632eb4, type: 3}
+  - {fileID: 8706466394470894858, guid: e31a08819e5f4e94eadee039f4632eb4, type: 3}
   - {fileID: 5398193657126507640, guid: 9d34117b560713c4d8ae7fb63f1ae183, type: 3}
 --- !u!114 &1611676124
 MonoBehaviour:
@@ -2444,7 +2444,7 @@ MonoBehaviour:
   _maxHandSize: 10
   _basicHandSize: 5
   _startingDeck: {fileID: 11400000, guid: 079717f82146c2f4fb8b59b8ebd2e9f5, type: 2}
-  _startingRelic: {fileID: 6060550723522611104, guid: a8aa283129d4c374fa875a6a0169b3ed, type: 3}
+  _startingRelic: {fileID: 1390514439150965442, guid: a8aa283129d4c374fa875a6a0169b3ed, type: 3}
   _personPrefab: {fileID: 4465453782092179438, guid: f6a907bb8a74fba4a9f4d93bcb15f1c3, type: 3}
   _personParent: {fileID: 1062863707}
   _personPosition: {x: -600, y: 0}

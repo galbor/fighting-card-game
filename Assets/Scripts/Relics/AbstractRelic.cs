@@ -1,28 +1,25 @@
 ﻿using System;
 using System.Collections;
+using DefaultNamespace.UI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 using Vector3 = UnityEngine.Vector3;
 
 namespace DefaultNamespace.Relics
 {
-    public abstract class AbstractRelic : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public abstract class AbstractRelic : MonoBehaviour
     {
-        private const string TEXTPREFAB = "TextPrefab";
-        private const string DESCRIPTIONPREFAB = "OnHoverDescriptionDisplay"; 
+        private const string TEXTPREFAB = "UI/TextPrefab";
         
         [SerializeField] protected bool _resetEveryTurn;
         [SerializeField] protected bool _resetEveryCombat;
         [SerializeField] protected bool _displayCounter;
         [SerializeField] private string _description;
 
-        private Image _image;
+        [SerializeField] private DescriptionViewer _descriptionScript;
 
-        private TMP_Text _descriptionTMP;
-        private const float DESCRIPTIONFONTSIZE = 48f; //get from somewhere else
+        private Image _image;
         
         private TMP_Text _counterText;
         private const float COUNTERTEXTFONTSIZE = 24f; //get from somewhere else
@@ -44,7 +41,7 @@ namespace DefaultNamespace.Relics
             set
             {
                 _description = value;
-                _descriptionTMP.text = value;
+                _descriptionScript.Text = value;
             }
         }
 
@@ -62,9 +59,6 @@ namespace DefaultNamespace.Relics
 
             // _descriptionTMP = Instantiate(Resources.Load<GameObject>(DESCRIPTIONPREFAB), transform).transform
             //     .GetChild(0).GetComponent<TMP_Text>();
-            _descriptionTMP = InstantiateText(new Vector2(0.5f, 0), DESCRIPTIONFONTSIZE);
-            _descriptionTMP.verticalAlignment = VerticalAlignmentOptions.Top;
-            _descriptionTMP.gameObject.SetActive(false);
             Description = _description;
         }
 
@@ -108,17 +102,6 @@ namespace DefaultNamespace.Relics
         protected void ResetCounter(object obj = null)
         {
             Counter = 0;
-        }
-
-        
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            _descriptionTMP.gameObject.SetActive(true);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            _descriptionTMP.gameObject.SetActive(false);
         }
     }
 }
