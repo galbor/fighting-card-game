@@ -73,7 +73,7 @@ namespace DefaultNamespace.UI
         public void SetBlockImage(Sprite sprite)
         {
             _image.sprite = sprite;
-            _image.enabled = sprite != null;
+            _image.gameObject.SetActive(sprite != null);
         }
 
         /**

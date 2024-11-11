@@ -62,7 +62,7 @@ MonoBehaviour:
   _resetEveryCombat: 0
   _displayCounter: 0
   _description: Deals {bleed} bleed whenever you attack with your right arm.
-  _descriptionScript: {fileID: 2227849853767242083}
+  _descriptionScript: {fileID: 1707807390515689872}
   _bodyPart: 3
   _bleed: 5
 --- !u!1001 &3878969795786595188
@@ -171,9 +171,9 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2616041130246231167, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
   m_PrefabInstance: {fileID: 3878969795786595188}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2227849853767242083 stripped
+--- !u!114 &1707807390515689872 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3115989398121318935, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2479099377456325348, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
   m_PrefabInstance: {fileID: 3878969795786595188}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
