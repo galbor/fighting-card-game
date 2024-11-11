@@ -12,13 +12,11 @@ namespace DefaultNamespace
         [SerializeField] private int _maxHandSize = 10;
         [SerializeField] private int _basicHandSize = 5;
         [SerializeField] private StartingDeckScriptableObject _startingDeck;
-        [SerializeField] private AbstractRelic _startingRelic;
         [SerializeField] private Person _personPrefab;
         [SerializeField] private Transform _personParent;
         [SerializeField] private Vector2 _personPosition;
         private Person _player;
         private List<BasicCard> _deck;
-        //private List<relic> _relics
 
         public List<BasicCard> Deck
         {
@@ -66,7 +64,7 @@ namespace DefaultNamespace
 
         public void AddStartingRelic()
         {
-            RelicManager.Instance.AddRelic(_startingRelic);
+            RelicManager.Instance.AddRelic(_startingDeck.StartingRelic);
         }
     }
 }

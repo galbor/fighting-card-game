@@ -2705,7 +2705,6 @@ MonoBehaviour:
   _maxHandSize: 10
   _basicHandSize: 5
   _startingDeck: {fileID: 11400000, guid: 079717f82146c2f4fb8b59b8ebd2e9f5, type: 2}
-  _startingRelic: {fileID: 1390514439150965442, guid: a8aa283129d4c374fa875a6a0169b3ed, type: 3}
   _personPrefab: {fileID: 4465453782092179438, guid: f6a907bb8a74fba4a9f4d93bcb15f1c3, type: 3}
   _personParent: {fileID: 1062863707}
   _personPosition: {x: -600, y: 0}
