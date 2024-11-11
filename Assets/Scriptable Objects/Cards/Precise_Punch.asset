@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: Precise_Punch
   m_EditorClassIdentifier: 
   _name: Precise Punch
-  _description: Precise punch at any body part.\nDeal {damage} damage
+  _description: Precise punch with your right hand at any body part.\nDeal {damage}
+    damage
   _image: {fileID: 0}
   _cost: 2
-  _damage: 22
-  _bleed: 0
-  _defense: 0
-  _heal: 0
+  _draw: 0
   _singleEnemyTarget: 1
   _targetType: 1
   _preSelectedTarget: 0
   _attackerType: 01000000
+  _cardsToPlay: []
+  _damage: 22
+  _bleed: 0
