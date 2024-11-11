@@ -278,13 +278,19 @@ public class Person : MonoBehaviour
     public int MaxHealth => _maxHealth;
 
     /**
-     * if number <= 0: sets inactive
+     * EnemyNumber is the number over the person
      */
     public void SetEnemyNumber(int number)
     {
         _body._enemyNumber.text = number.ToString();
-        
-        _body._enemyNumber.gameObject.SetActive(number > 0);
+    }
+
+    /**
+     * EnemyNumber is the number over the person
+     */
+    public void SetEnemyNumberActive(bool active)
+    {
+        _body._enemyNumber.gameObject.SetActive(active);
     }
 
     /**

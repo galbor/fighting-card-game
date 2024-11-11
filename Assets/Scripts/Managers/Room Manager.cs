@@ -52,6 +52,7 @@ public class RoomManager : Singleton<RoomManager>
             _enemies[i].Person.transform.position = _camera.WorldToScreenPoint(
                 new Vector3(_center.x + (i - (float)(_enemies.Length-1)/2) * _spacing, _center.y, 0));
             _enemies[i].Person.SetEnemyNumber(i+1);
+            _enemies[i].Person.SetEnemyNumberActive(false);
         }
     }
 

@@ -29,7 +29,7 @@ namespace DefaultNamespace
         {
             _player = Instantiate(_personPrefab, _personParent);
             _player.transform.localPosition = _personPosition;
-            _player.SetEnemyNumber(-1); //hides EnemyNumber
+            _player.SetEnemyNumberActive(false);
             InitDeck();
             InitPlayerTurn();
         }

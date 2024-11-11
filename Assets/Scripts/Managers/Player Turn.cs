@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -170,6 +171,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         _selectedEnemy = 0;
         if (_hand[_selectedCard].SingleEnemyTarget && _enemies.Length > 1)
         {
+            ForEachEnemy(x => x.Person.SetEnemyNumberActive(true));
             while (true)
             {
                 yield return null;
@@ -185,6 +187,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
                     break;
                 }
             }
+            ForEachEnemy(x => x.Person.SetEnemyNumberActive(false));
         }
 
         StartCoroutine(SelectAttackerTypes());
@@ -316,18 +319,22 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     private void EnemiesAttack()
     {
-        foreach (Enemy enemy in _enemies)
+        ForEachEnemy(enemy =>
         {
             enemy.Person.SetProtectionDefault();
             enemy.Attack();
-        }
+        });
     }
 
     public void StopAction()
     {
         StopAllCoroutines();
         
-        _enemies.ToList().ForEach(enemy => enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED));
+        ForEachEnemy(enemy =>
+        {
+            enemy.Person.SetEnemyNumberActive(false);
+            enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED);
+        });
         _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
     }
     
@@ -480,5 +487,16 @@ public class PlayerTurn : Singleton<PlayerTurn>
     public void ShowEnergy(bool active)
     {
         _energyText.gameObject.SetActive(active);
+    }
+
+    /**
+     * I write too much _enemies.ToList.ForEach(...)
+     */
+    private void ForEachEnemy(Action<Enemy> action)
+    {
+        foreach (var enemy in _enemies)
+        {
+            action(enemy);
+        }
     }
 }
