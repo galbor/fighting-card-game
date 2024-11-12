@@ -36,6 +36,14 @@ public class Enemy : ScriptableObject
         _person.SetMaxHealth(MaxHealth);
         _attack = ScriptableObject.CreateInstance<BasicAttackCard>();
         ChooseAndDisplayNextAction();
+        
+                
+        EventManager.Instance.StartListening(EventManager.EVENT__HIT, objHit =>
+        {
+            EventManager.AttackStruct attack = (EventManager.AttackStruct)objHit;
+            if (attack.GetPerson(false) == Person)
+                DisplayNextAction();
+        });
     }
 
     public void Attack()
@@ -56,9 +64,14 @@ public class Enemy : ScriptableObject
     private void ChooseAndDisplayNextAction()
     {
         _nextAttack = GetNextAction();
+        DisplayNextAction();
+    }
+
+    private void DisplayNextAction()
+    {
         var attack = _possibleActions[_nextAttack];
-        _person.DisplayPlannedAttack(_person.GetBodyPartSprite(attack.AttackingParts[0]),
-            _person.GetBodyPartSprite(attack.AffectedPart)
+        _person.DisplayPlannedAttack(attack.AttackingParts[0],
+            attack.AffectedPart
             , attack.Damage);
     }
 

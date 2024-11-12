@@ -205,7 +205,7 @@ public class Person : MonoBehaviour
     /**
      * if !IsAlive() dies
      */
-    public void CheckAlive()
+    private void CheckAlive()
     {
         if (!IsAlive()) Die();
     }
@@ -313,12 +313,12 @@ public class Person : MonoBehaviour
     /**
      * displays the given sprites
      */
-    public void DisplayPlannedAttack(Sprite attackingPart, Sprite affectedPart, int damage)
+    public void DisplayPlannedAttack(BodyPartEnum attackingPart, BodyPartEnum affectedPart, int damage)
     {
         _body._plannedAttackDisplay.gameObject.SetActive(true);
-        _body._plannedAttackDisplay.SetAttackingPart(attackingPart);
-        _body._plannedAttackDisplay.SetAffectedPart(affectedPart);
-        _body._plannedAttackDisplay.SetDamage(damage);
+        _body._plannedAttackDisplay.SetAttackingPart(GetBodyPartSprite(attackingPart));
+        _body._plannedAttackDisplay.SetAffectedPart(GetBodyPartSprite(affectedPart));
+        _body._plannedAttackDisplay.SetDamage(GetAttackDamage(attackingPart, damage));
     }
 
     public void HidePlannedAttack()
@@ -326,7 +326,7 @@ public class Person : MonoBehaviour
         _body._plannedAttackDisplay.gameObject.SetActive(false);
     }
 
-    public Sprite GetBodyPartSprite(BodyPartEnum bodyPart)
+    private Sprite GetBodyPartSprite(BodyPartEnum bodyPart)
     {
         if (bodyPart == BodyPartEnum.NONE) return null;
         return GetHealthBar(bodyPart).transform.parent.parent.GetComponent<Image>().sprite; //the healthbar's parent's parent is the body part
