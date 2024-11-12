@@ -5,11 +5,12 @@ using System.Linq;
 using DefaultNamespace;
 using DefaultNamespace.Managers;
 using DefaultNamespace.Utility;
+using TMPro;
 using UnityEngine;
 
 public class PlayerTurn : Singleton<PlayerTurn>
 {
-    [SerializeField] private TextCarrier _energyText;
+    [SerializeField] private TMP_Text _energyText; //energyText's parent should be the image
     
     [SerializeField] private KeyCode _endTurnKey = KeyCode.Return;
     [SerializeField] private KeyCode _undo = KeyCode.Z;
@@ -83,7 +84,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         set //used to be private
         {
             _energy = value;
-            _energyText.Text = _energy.ToString();
+            _energyText.text = _energy.ToString();
             HandDisplayManager.Instance.SetEnergyCostColors();
         }
     }
@@ -486,7 +487,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     public void ShowEnergy(bool active)
     {
-        _energyText.gameObject.SetActive(active);
+        _energyText.transform.parent.gameObject.SetActive(active);
     }
 
     /**
