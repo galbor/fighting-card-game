@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3409523576449752813}
   - component: {fileID: 6515819704711374854}
-  - component: {fileID: 4049067282754591477}
   m_Layer: 5
   m_Name: Weak Enemy
   m_TagString: Untagged
@@ -51,23 +50,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _body: {fileID: 7381084660353407052}
---- !u!114 &4049067282754591477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1410273768557505198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8adead0f069447ea07ec5b91467b103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _carriedSubject: {fileID: 0}
-  _distance: {x: 0, y: 0, z: 0}
-  _size: {x: 0, y: 0, z: 0}
-  _text: 
-  _fontSize: 0
 --- !u!1001 &7692761806897041052
 PrefabInstance:
   m_ObjectHideFlags: 0
