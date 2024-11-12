@@ -111,8 +111,8 @@ namespace DefaultNamespace.StatusEffects
                     UnityAction<object> inflictBleed = obj =>
                     {
                         var attack = (EventManager.AttackStruct)obj;
-                        if (attack._attackingHealthBar == BodyPart)
-                            attack._affectedHealthBar.AddStatusEffect(StatusType.BLEED, Number);
+                        if (attack.GetHealthBar(true) == BodyPart)
+                            attack.GetHealthBar(false).AddStatusEffect(StatusType.BLEED, Number);
                     };
                     _typeParameters = new TypeParameters("BloodyKnife",
                         new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictBleed } },

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using DefaultNamespace;
 using DefaultNamespace.UI;
 
 public class EventManager : Singleton<EventManager>
@@ -37,15 +38,13 @@ public class EventManager : Singleton<EventManager>
     public struct AttackStruct
     {
 	    public AttackStruct(Person enemy, Person.BodyPartEnum playerPart, Person.BodyPartEnum enemyPart, int damage,
-		    bool playerAttacker, HealthBar attackingHealthBar, HealthBar affectedHealthBar)
+		    bool playerAttacker)
 	    {
 		    _enemy = enemy;
 		    _playerPart = playerPart;
 		    _enemyPart = enemyPart;
 		    _damage = damage;
 		    _playerAttacker = playerAttacker;
-		    _attackingHealthBar = attackingHealthBar;
-		    _affectedHealthBar = affectedHealthBar;
 	    }
 	    
 	    public Person _enemy;
@@ -53,16 +52,28 @@ public class EventManager : Singleton<EventManager>
 	    public Person.BodyPartEnum _enemyPart;
 	    public int _damage;
 	    public bool _playerAttacker; //true if attacker is player
-	    public HealthBar _attackingHealthBar;
-	    public HealthBar _affectedHealthBar;
+
+	    /**
+	     * if true get attacker health bar, otherwise the affected health bar
+	     */
+	    public HealthBar GetHealthBar(bool attacker)
+	    {
+		    if (_playerAttacker ^ !attacker)  return Player.Instance.Person.GetHealthBar(_playerPart); // a XOR !b    ===    a <=> b
+		    return _enemy.GetHealthBar(_enemyPart);
+	    }
+
+	    /**
+	     * if true get the attacker's Person, otherwise get the victim's Person
+	     */
+	    public Person GetPerson(bool attacker)
+	    {
+		    return _playerAttacker ^ attacker ? _enemy : Player.Instance.Person;
+	    }
     }
 	
 	private void Init ()
 	{
-		if (eventDictionary == null)
-		{
-			eventDictionary = new Dictionary<string, FloatEvent>();
-		}
+		eventDictionary ??= new Dictionary<string, FloatEvent>();
 	}
 	
 	public void StartListening (string eventName, UnityAction<object> listener)
