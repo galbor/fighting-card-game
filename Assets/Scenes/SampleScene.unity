@@ -3034,6 +3034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _darkBackground: {fileID: 597712086}
+  _energyDisplay: {fileID: 1265503201}
   _deckKey: 97
   _discardPileKey: 115
   _drawPileKey: 100

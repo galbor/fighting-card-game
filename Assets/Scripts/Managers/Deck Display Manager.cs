@@ -10,6 +10,7 @@ namespace Managers
     public class DeckDisplayManager : MonoBehaviour
     {
         [SerializeField] private GameObject _darkBackground;
+        [SerializeField] private GameObject _energyDisplay;
 
         [SerializeField] private KeyCode _deckKey;
         [SerializeField] private KeyCode _discardPileKey;
@@ -76,6 +77,7 @@ namespace Managers
             HandDisplayManager.Instance.HideHand();
             SetActivePersons(false);
             _darkBackground.SetActive(true);
+            _energyDisplay.SetActive(false);
             PlayerTurn.Instance.StopAction();
             HandDisplayManager.Instance.DisplayCardsMiddle(cards, displayNumbers: false);
         }
@@ -83,6 +85,7 @@ namespace Managers
         private void HideCardList()
         {
             PlayerTurn.Instance.ResetAction(); //doesn't reset if drafting
+            _energyDisplay.SetActive(true);
             _darkBackground.SetActive(false);
             SetActivePersons(true);
             HandDisplayManager.Instance.DisplayHand();
