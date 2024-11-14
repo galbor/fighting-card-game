@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Hard Room
   m_EditorClassIdentifier: 
   _enemies:
-  - {fileID: 11400000, guid: ad865fe2c805a6c4e803ba3f7cdc0e09, type: 2}
   - {fileID: 11400000, guid: 6c7eae0552840db4d987480a94449c52, type: 2}
   - {fileID: 11400000, guid: 6c7eae0552840db4d987480a94449c52, type: 2}
+  - {fileID: 11400000, guid: eeab4ec23ab47e847bfe2d663d2614a5, type: 2}

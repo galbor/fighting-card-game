@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using DefaultNamespace.StatusEffects;
 using DefaultNamespace.UI;
 using TMPro;
@@ -317,7 +318,7 @@ public class Person : MonoBehaviour
     {
         _body._plannedAttackDisplay.gameObject.SetActive(true);
         _body._plannedAttackDisplay.SetAttackingPart(GetBodyPartSprite(attackingPart));
-        _body._plannedAttackDisplay.SetAffectedPart(GetBodyPartSprite(affectedPart));
+        _body._plannedAttackDisplay.SetAffectedPart(Player.Instance.Person.GetBodyPartSprite(affectedPart));
         _body._plannedAttackDisplay.SetDamage(GetAttackDamage(attackingPart, damage));
     }
 

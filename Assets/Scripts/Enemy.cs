@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
+using DefaultNamespace.StatusEffects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,6 +15,23 @@ public class Enemy : ScriptableObject
     
     [SerializeField] private AttackPattern _attackPattern;
     [SerializeField] private Action[] _possibleActions;
+
+    [SerializeField] private List<StartingStatusEffect> _startingStatusEffects;
+
+    [Serializable]
+    private struct StartingStatusEffect
+    {
+        public Person.BodyPartEnum _bodyPart;
+        public BodyPartStatusEffect.StatusType _statusEffect;
+        public int _amt;
+
+        public StartingStatusEffect(Person.BodyPartEnum bodyPart, BodyPartStatusEffect.StatusType statusEffect, int amt)
+        {
+            _bodyPart = bodyPart;
+            _statusEffect = statusEffect;
+            _amt = amt;
+        }
+    }
     
     private Person _person;
     private int _lastAttack = -1;
@@ -36,6 +55,11 @@ public class Enemy : ScriptableObject
         _person.SetMaxHealth(MaxHealth);
         _attack = ScriptableObject.CreateInstance<BasicAttackCard>();
         ChooseAndDisplayNextAction();
+
+        foreach (var triplet in _startingStatusEffects)
+        {
+            _person.GetHealthBar(triplet._bodyPart).AddStatusEffect(triplet._statusEffect, triplet._amt);
+        }
         
                 
         EventManager.Instance.StartListening(EventManager.EVENT__HIT, objHit =>
