@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Heel2Knee
   m_EditorClassIdentifier: 
   _name: Heel to the Knee
-  _description: Kick the enemy's leg.\nDeal {damage} damage
   _image: {fileID: 0}
   _cost: 2
   _draw: 0

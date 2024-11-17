@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Precise_Punch
   m_EditorClassIdentifier: 
   _name: Precise Punch
-  _description: Precise punch with your right hand at any body part.\nDeal {damage}
-    damage
   _image: {fileID: 0}
   _cost: 2
   _draw: 0

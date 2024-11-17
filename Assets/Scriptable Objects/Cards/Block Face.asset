@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Block Face
   m_EditorClassIdentifier: 
   _name: Block Face
-  _description: Arm blocks face and gets {block} block.
   _image: {fileID: 0}
   _cost: 1
   _draw: 0

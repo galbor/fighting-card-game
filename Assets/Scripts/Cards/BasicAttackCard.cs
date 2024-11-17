@@ -63,19 +63,17 @@ public class BasicAttackCard : BasicCard
     protected override string GenerateThisDescription()
     {
         StringBuilder res = new StringBuilder(base.GenerateThisDescription());
-        if (AttackerType == null) return ""; //Enemy attack is a card without an AttackerType
-        foreach (var attackerType in AttackerType)
+        for (int i = 0; i < AttackerType.Length; i++)
         {
-            res.AppendFormat("{0} ", AttackerTypeName(attackerType));
-            res.AppendFormat("the enemy's "); //_singleEnemyTarget
-            res.AppendFormat("{0}.\n", TargetTypeName(TargetType));
-            
-            
-            
-            if (Damage > 0) res.AppendFormat("Deal {0} damage.", Damage);
-            if (Bleed > 0) res.AppendFormat("Apply {0} bleed.", Bleed);
-            res.Append("\n");
+            if (i > 0) res.Append(", ");
+            res.AppendFormat("{0}", AttackerTypeName(AttackerType[i]));
         }
+        res.AppendFormat(" the enemy's "); //_singleEnemyTarget
+        res.AppendFormat("{0}.\n", TargetTypeName(TargetType));
+        
+        if (Damage > 0) res.AppendFormat("Deal {0} damage. ", Damage);
+        if (Bleed > 0) res.AppendFormat("Apply {0} bleed.", Bleed);
+        res.Append("\n");
 
         return res.ToString();
     }
@@ -89,25 +87,27 @@ public class BasicAttackCard : BasicCard
     
     public void Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
     {
-        if (_targetType == TargetTypeEnum.SIDE && (_preSelectedTarget == Person.BodyPartEnum.LEFT_LEG || _preSelectedTarget == Person.BodyPartEnum.RIGHT_LEG))
+        if (TargetType == TargetTypeEnum.SIDE && (PreSelectedTarget == Person.BodyPartEnum.LEFT_LEG || PreSelectedTarget == Person.BodyPartEnum.RIGHT_LEG))
         {
             if (affected_part == Person.BodyPartEnum.LEFT_ARM) affected_part = Person.BodyPartEnum.LEFT_LEG;
             else affected_part = Person.BodyPartEnum.RIGHT_LEG;
         }
+        else if (TargetType == TargetTypeEnum.PRE_SELECTED)
+            affected_part = PreSelectedTarget;
 
-        bool userIsPlayer = user == Player.Instance.Person;
-        foreach (var attacking_part in attacking_parts)
+        var userIsPlayer = user == Player.Instance.Person;
+        attacking_parts.ForEach(attacking_part =>
         {
-            if (user.GetHealthBar(attacking_part).Health == 0) continue;
-            
+            if (user.GetHealthBar(attacking_part).Health == 0) return; //return is like continue in this case
+
             user.RemoveProtection(attacking_part);
 
             int hitDamage = user.GetAttackDamage(attacking_part, Damage);
-            
+
             var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
             target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, Bleed));
-            
-            EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, 
+
+            EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT,
                 new EventManager.AttackStruct(
                     userIsPlayer ? target : user,
                     userIsPlayer ? attacking_part : cur_affected_part,
@@ -115,7 +115,7 @@ public class BasicAttackCard : BasicCard
                     hitDamage,
                     userIsPlayer
                 ));
-        }
+        });
     }
 
 

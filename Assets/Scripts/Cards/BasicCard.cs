@@ -8,6 +8,7 @@ using UnityEngine;
 public class BasicCard : ScriptableObject
 {
     [SerializeField] private string _name = "";
+    [SerializeField] private string _description = "";
     [SerializeField] Sprite _image;
     [SerializeField] int _cost = 1;
     [SerializeField] int _draw = 0;
@@ -15,7 +16,7 @@ public class BasicCard : ScriptableObject
     [SerializeField] protected bool _singleEnemyTarget = true;
     [SerializeField] protected TargetTypeEnum _targetType = TargetTypeEnum.BODY_PART;
     [SerializeField] protected Person.BodyPartEnum _preSelectedTarget;
-    [SerializeField] AttackerTypeEnum[] _attackerType;
+    [SerializeField] AttackerTypeEnum[] _attackerType = Array.Empty<AttackerTypeEnum>();
 
     [SerializeField] private List<BasicCard> _cardsToPlay;
     
@@ -113,6 +114,18 @@ public class BasicCard : ScriptableObject
         _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_part));
     }
 
+    /**
+     * either generates description or takes the description from the _description field if it's filled
+     */
+    protected virtual string GetThisDescription()
+    {
+        if (_description == "") return GenerateThisDescription();
+        return _description.Replace("\\n", "\n");;
+    }
+
+    /**
+     * creates a description from known parameters of the card and its class
+     */
     protected virtual string GenerateThisDescription()
     {
         StringBuilder res = new StringBuilder();
@@ -127,12 +140,15 @@ public class BasicCard : ScriptableObject
         _displayDescription = GenerateDescription();
     }
 
+    /**
+     * generates description from this card's description and the cards it plays' descriptions2
+     */
     private String GenerateDescription()
     {
-        var res = new StringBuilder(GenerateThisDescription());
+        var res = new StringBuilder(GetThisDescription());
         foreach (var card in _cardsToPlay)
         {
-            res.Append(card.GenerateThisDescription());
+            res.Append(card.GetThisDescription());
         }
 
         return res.ToString();

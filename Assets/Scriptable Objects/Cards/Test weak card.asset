@@ -18,7 +18,7 @@ MonoBehaviour:
   _cost: 1
   _draw: 0
   _singleEnemyTarget: 1
-  _targetType: 1
+  _targetType: 0
   _preSelectedTarget: 5
   _attackerType: 05000000
   _cardsToPlay: []

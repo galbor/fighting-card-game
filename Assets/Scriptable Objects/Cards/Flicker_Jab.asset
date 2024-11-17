@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Flicker_Jab
   m_EditorClassIdentifier: 
   _name: Flicker Jab
-  _description: Three quick punches with your left arm.\nDeal {damage}x3 damage
   _image: {fileID: 0}
   _cost: 1
   _damage: 3

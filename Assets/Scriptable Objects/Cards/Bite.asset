@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Bite
   m_EditorClassIdentifier: 
   _name: Bite
-  _description: Bite the enemy's upper body.\nDeal {damage} damage and {bleed} bleed.
   _image: {fileID: 0}
   _cost: 1
   _draw: 0

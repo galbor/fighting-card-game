@@ -24,6 +24,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ec2dfc525ff18554fa2fcac3fe09c438, type: 2}
   - {fileID: 11400000, guid: ec2dfc525ff18554fa2fcac3fe09c438, type: 2}
   - {fileID: 11400000, guid: c6f45fbcd7d675443b8c9eacbcaa23b2, type: 2}
-  - {fileID: 11400000, guid: c6f45fbcd7d675443b8c9eacbcaa23b2, type: 2}
-  - {fileID: 11400000, guid: c6f45fbcd7d675443b8c9eacbcaa23b2, type: 2}
   StartingRelic: {fileID: 1390514439150965442, guid: a8aa283129d4c374fa875a6a0169b3ed, type: 3}

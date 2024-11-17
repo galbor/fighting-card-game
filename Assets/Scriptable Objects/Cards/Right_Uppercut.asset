@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Right_Uppercut
   m_EditorClassIdentifier: 
   _name: Right Uppercut
-  _description: Punch enemy head with your right fist.\nDeal {damage} damage
   _image: {fileID: 0}
   _cost: 1
   _damage: 15
