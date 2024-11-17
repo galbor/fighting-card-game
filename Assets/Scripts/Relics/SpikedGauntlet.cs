@@ -18,7 +18,7 @@ namespace DefaultNamespace.Relics
             
             EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, GiveKnife);
             
-            Description = MyUtils.ReplaceFirstOccurrence(Description, "bleed", _bleed.ToString());
+            Description = MyUtils.ReplaceAllBrackets(Description, "bleed", _bleed.ToString());
         }
 
         /**

@@ -23,7 +23,7 @@ namespace DefaultNamespace.Relics
 
             _counterCycleLength = _cardsBeforeDraw;
 
-            Description = MyUtils.ReplaceFirstOccurrence(Description, "draw", _cardsBeforeDraw.ToString());
+            Description = MyUtils.ReplaceAllBrackets(Description, "draw", _cardsBeforeDraw.ToString());
         }
 
         private void OnCardPlay(object obj)

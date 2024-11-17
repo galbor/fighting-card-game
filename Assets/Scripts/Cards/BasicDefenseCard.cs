@@ -27,7 +27,7 @@ public class BasicDefenseCard : BasicCard
     public override void UpdateDescription()
     {
         base.UpdateDescription();
-        _displayDescription = MyUtils.ReplaceFirstOccurrence(_displayDescription, "block", _block.ToString());
-        _displayDescription = MyUtils.ReplaceFirstOccurrence(_displayDescription, "invincibility", _invincibility.ToString());
+        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "block", _block.ToString());
+        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "invincibility", _invincibility.ToString());
     }
 }

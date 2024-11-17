@@ -114,13 +114,6 @@ public class BasicCard : ScriptableObject
     
     public virtual void UpdateDescription()
     {
-        string[] descriptionarray = _description.Split("\\n");
-        StringBuilder descriptionbuilder = new StringBuilder();
-        foreach (var str in descriptionarray)
-        {
-            descriptionbuilder.Append(str);
-            descriptionbuilder.Append('\n');
-        }
-        _displayDescription = descriptionbuilder.ToString();
+        _displayDescription = _description.Replace("\\n", "\n");
     }
 }

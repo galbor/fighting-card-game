@@ -54,8 +54,8 @@ public class BasicAttackCard : BasicCard
     public override void UpdateDescription()
     {
         base.UpdateDescription();
-        _displayDescription = MyUtils.ReplaceFirstOccurrence(_displayDescription, "damage", _damage.ToString());
-        _displayDescription = MyUtils.ReplaceFirstOccurrence(_displayDescription, "bleed", _bleed.ToString());
+        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "damage", _damage.ToString());
+        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "bleed", _bleed.ToString());
     }
 
     public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
