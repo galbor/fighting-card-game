@@ -239,28 +239,28 @@ public class PlayerTurn : Singleton<PlayerTurn>
 
     IEnumerator SelectAffectedPart()
     {
-        BasicAttackCard.TargetTypeEnum targetType = _hand[_selectedCard].TargetType;
+        BasicCard.TargetTypeEnum targetType = _hand[_selectedCard].TargetType;
         Person.BodyPartEnum selectedBodyPart = Person.BodyPartEnum.NONE;
         _enemies[_selectedEnemy].Person.HighlightBodyParts(targetType);
-        if (targetType != BasicAttackCard.TargetTypeEnum.PRE_SELECTED)
+        if (targetType != BasicCard.TargetTypeEnum.PRE_SELECTED)
         {
             while (true)
             {
                 yield return null;
                 selectedBodyPart = GetPressedBodyPart();
                 if (selectedBodyPart == Person.BodyPartEnum.NONE) continue;
-                if (targetType == BasicAttackCard.TargetTypeEnum.SIDE)
+                if (targetType == BasicCard.TargetTypeEnum.SIDE)
                 {
                     if (Person.GetSide(selectedBodyPart) == Person.SideEnum.LEFT)
                     {
                         _selectedAffectedBodyPart = Person.BodyPartEnum.LEFT_ARM;
                     }
-                    else
+                    else if (Person.GetSide(selectedBodyPart) == Person.SideEnum.RIGHT)
                     {
                         _selectedAffectedBodyPart = Person.BodyPartEnum.RIGHT_ARM;
                     }
                 }
-                else if (targetType == BasicAttackCard.TargetTypeEnum.UPPER_BODY)
+                else if (targetType == BasicCard.TargetTypeEnum.UPPER_BODY)
                 {
                     if (selectedBodyPart == Person.BodyPartEnum.RIGHT_LEG)
                         selectedBodyPart = Person.BodyPartEnum.RIGHT_ARM;
@@ -285,9 +285,11 @@ public class PlayerTurn : Singleton<PlayerTurn>
         if (_hand[index].Cost > Energy)
             return false;
         Energy -= _hand[index].Cost;
+
+        var enemy = _enemies[_selectedEnemy].Person;
         
-        _hand[index].Play(_playerPerson, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
-        _hand[index].PlayExtraCards(_playerPerson, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
+        _hand[index].Play(_playerPerson, _selectedAttackerBodyParts, enemy, _selectedAffectedBodyPart);
+        _hand[index].PlayExtraCards(_playerPerson, _selectedAttackerBodyParts, enemy, _selectedAffectedBodyPart);
         EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAY_CARD, this);
         
         DiscardCard(index);
@@ -335,7 +337,7 @@ public class PlayerTurn : Singleton<PlayerTurn>
         ForEachEnemy(enemy =>
         {
             enemy.Person.SetEnemyNumberActive(false);
-            enemy.Person.HighlightBodyParts(BasicAttackCard.TargetTypeEnum.PRE_SELECTED);
+            enemy.Person.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
         });
         _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
     }

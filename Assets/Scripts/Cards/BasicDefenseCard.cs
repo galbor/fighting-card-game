@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using DefaultNamespace.Utility;
 using UnityEngine;
 
@@ -24,10 +25,23 @@ public class BasicDefenseCard : BasicCard
             attacking_parts.ForEach(x => user.SetProtection(x, affected_part));
     }
 
-    public override void UpdateDescription()
+    protected override void UpdateDescription()
     {
         base.UpdateDescription();
         _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "block", _block.ToString());
         _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "invincibility", _invincibility.ToString());
+    }
+
+    protected override string GenerateThisDescription()
+    {
+        var res = new StringBuilder(base.GenerateThisDescription());
+        foreach (var attackerType in AttackerType)
+        {
+            res.AppendFormat("Defend your {0} ", TargetTypeName(TargetType));
+            res.AppendFormat("with your {0}.\n", attackerType.ToString());
+            res.AppendFormat("Gain {0} block", _block);
+        }
+
+        return res.ToString();
     }
 }

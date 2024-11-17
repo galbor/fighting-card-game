@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using DefaultNamespace;
@@ -52,20 +53,31 @@ public class BasicAttackCard : BasicCard
     }
     
     
-    public override void UpdateDescription()
+    protected override void UpdateDescription()
     {
         base.UpdateDescription();
-        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "damage", _damage.ToString());
-        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "bleed", _bleed.ToString());
+        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "damage", Damage.ToString());
+        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "bleed", Bleed.ToString());
     }
 
-    protected override void GenerateThisDescription()
+    protected override string GenerateThisDescription()
     {
-        base.GenerateThisDescription();
-        StringBuilder res = new StringBuilder(_displayDescription);
-        //TODO add "attack" or "punch" or whatever
-        if (_damage > 0) res.AppendFormat("Deal {0} damage.\n", _damage);
-        if (_bleed > 0) res.AppendFormat("Apply {0} bleed.\n", _bleed);
+        StringBuilder res = new StringBuilder(base.GenerateThisDescription());
+        if (AttackerType == null) return ""; //Enemy attack is a card without an AttackerType
+        foreach (var attackerType in AttackerType)
+        {
+            res.AppendFormat("{0} ", AttackerTypeName(attackerType));
+            res.AppendFormat("the enemy's "); //_singleEnemyTarget
+            res.AppendFormat("{0}.\n", TargetTypeName(TargetType));
+            
+            
+            
+            if (Damage > 0) res.AppendFormat("Deal {0} damage.", Damage);
+            if (Bleed > 0) res.AppendFormat("Apply {0} bleed.", Bleed);
+            res.Append("\n");
+        }
+
+        return res.ToString();
     }
 
     public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
@@ -90,10 +102,10 @@ public class BasicAttackCard : BasicCard
             
             user.RemoveProtection(attacking_part);
 
-            int hitDamage = user.GetAttackDamage(attacking_part, _damage);
+            int hitDamage = user.GetAttackDamage(attacking_part, Damage);
             
             var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
-            target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, _bleed));
+            target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, Bleed));
             
             EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, 
                 new EventManager.AttackStruct(
@@ -105,10 +117,30 @@ public class BasicAttackCard : BasicCard
                 ));
         }
     }
-    // public void Heal(Person player, Person.BodyPartEnum[] targetBodyParts){
-    //     foreach (Person.BodyPartEnum targetBodyPart in targetBodyParts)
-    //     {
-    //         player.Heal(targetBodyPart, _heal);
-    //     }
-    // }
+
+
+    private string AttackerTypeName(AttackerTypeEnum attackerType)
+    {
+        switch (attackerType)
+        {
+            case AttackerTypeEnum.ARM:
+                return "Punch";
+            case AttackerTypeEnum.LEG:
+                return "Kick";
+            case AttackerTypeEnum.HEAD:
+                return "Headbutt";
+            case AttackerTypeEnum.TORSO:
+                return "Chestbump";
+            case AttackerTypeEnum.LEFT_ARM:
+                return "Left punch";
+            case AttackerTypeEnum.RIGHT_ARM:
+                return "Right punch";
+            case AttackerTypeEnum.LEFT_LEG:
+                return "Left kick";
+            case AttackerTypeEnum.RIGHT_LEG:
+                return "Right kick";
+        }
+
+        throw new ArgumentException("attacker type has no name");
+    }
 }

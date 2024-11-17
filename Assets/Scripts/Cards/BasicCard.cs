@@ -8,12 +8,11 @@ using UnityEngine;
 public class BasicCard : ScriptableObject
 {
     [SerializeField] private string _name = "";
-    [SerializeField] private string _description = "";
     [SerializeField] Sprite _image;
     [SerializeField] int _cost = 1;
     [SerializeField] int _draw = 0;
     
-    [SerializeField] bool _singleEnemyTarget = true;
+    [SerializeField] protected bool _singleEnemyTarget = true;
     [SerializeField] protected TargetTypeEnum _targetType = TargetTypeEnum.BODY_PART;
     [SerializeField] protected Person.BodyPartEnum _preSelectedTarget;
     [SerializeField] AttackerTypeEnum[] _attackerType;
@@ -114,16 +113,48 @@ public class BasicCard : ScriptableObject
         _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_part));
     }
 
-    protected virtual void GenerateThisDescription()
+    protected virtual string GenerateThisDescription()
     {
         StringBuilder res = new StringBuilder();
         if (_draw > 0) res.AppendFormat("Draw {0} cards.\n", _draw);
 
-        _displayDescription = res.ToString();
+        return res.ToString();
     }
     
-    public virtual void UpdateDescription()
+    protected virtual void UpdateDescription()
     {
-        _displayDescription = _description.Replace("\\n", "\n");
+        // _displayDescription = _description.Replace("\\n", "\n");
+        _displayDescription = GenerateDescription();
+    }
+
+    private String GenerateDescription()
+    {
+        var res = new StringBuilder(GenerateThisDescription());
+        foreach (var card in _cardsToPlay)
+        {
+            res.Append(card.GenerateThisDescription());
+        }
+
+        return res.ToString();
+    }
+
+    protected string TargetTypeName(TargetTypeEnum targetType)
+    {
+        switch (targetType)
+        {
+            case TargetTypeEnum.UPPER_BODY:
+                return "Upper body";
+            case TargetTypeEnum.BODY_PART:
+                return "Any body part";
+            case TargetTypeEnum.PRE_SELECTED:
+                return PreSelectedTarget.ToString();
+            case TargetTypeEnum.SIDE:
+                if (PreSelectedTarget == Person.BodyPartEnum.LEFT_LEG ||
+                    PreSelectedTarget == Person.BodyPartEnum.RIGHT_LEG)
+                    return "Leg";
+                return "Arm";
+        }
+
+        throw new ArgumentException("target type has no name");
     }
 }
