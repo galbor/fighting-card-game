@@ -18,7 +18,7 @@ MonoBehaviour:
   _attackPattern: 0
   _possibleActions:
   - AttackingParts: 03000000
-    AffectedPart: 3
+    AffectedPart: 1
     Damage: 3
     Bleed: 0
   - AttackingParts: 00000000
