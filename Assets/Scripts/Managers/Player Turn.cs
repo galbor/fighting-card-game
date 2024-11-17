@@ -286,7 +286,8 @@ public class PlayerTurn : Singleton<PlayerTurn>
             return false;
         Energy -= _hand[index].Cost;
         
-        _hand[index].Play(Player.Instance.Person, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
+        _hand[index].Play(_playerPerson, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
+        _hand[index].PlayExtraCards(_playerPerson, _selectedAttackerBodyParts, _enemies[_selectedEnemy].Person, _selectedAffectedBodyPart);
         EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAY_CARD, this);
         
         DiscardCard(index);

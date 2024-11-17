@@ -98,19 +98,29 @@ public class BasicCard : ScriptableObject
     public virtual void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
         Person.BodyPartEnum affected_part)
     {
-        PlayAbility(user, attacking_parts, target, affected_part);
-        _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_part));
-    }
-    
-    public void PlayAbility(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
-    {
         PlayerTurn playerTurn = PlayerTurn.Instance;
         for (int i = 0; i < _draw; i++)
         {
             if (!playerTurn.DrawCard()) break;
         }
     }
-    
+
+    /**
+     * plays all cards in the _cardsToPlay list
+     */
+    public void PlayExtraCards(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
+        Person.BodyPartEnum affected_part)
+    {
+        _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_part));
+    }
+
+    protected virtual void GenerateThisDescription()
+    {
+        StringBuilder res = new StringBuilder();
+        if (_draw > 0) res.AppendFormat("Draw {0} cards.\n", _draw);
+
+        _displayDescription = res.ToString();
+    }
     
     public virtual void UpdateDescription()
     {

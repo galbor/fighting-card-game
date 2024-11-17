@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using DefaultNamespace;
 using DefaultNamespace.Utility;
 using UnityEngine;
@@ -56,6 +57,15 @@ public class BasicAttackCard : BasicCard
         base.UpdateDescription();
         _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "damage", _damage.ToString());
         _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "bleed", _bleed.ToString());
+    }
+
+    protected override void GenerateThisDescription()
+    {
+        base.GenerateThisDescription();
+        StringBuilder res = new StringBuilder(_displayDescription);
+        //TODO add "attack" or "punch" or whatever
+        if (_damage > 0) res.AppendFormat("Deal {0} damage.\n", _damage);
+        if (_bleed > 0) res.AppendFormat("Apply {0} bleed.\n", _bleed);
     }
 
     public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
