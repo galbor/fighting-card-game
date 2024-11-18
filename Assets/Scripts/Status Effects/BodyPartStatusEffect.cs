@@ -60,13 +60,13 @@ namespace DefaultNamespace.StatusEffects
             Number = _number;
         }
 
-        private void OnDisable()
+        /**
+         * disables listeners
+         */
+        public void Disable()
         {
             if (_statusType == StatusType.NONE) return;
-            foreach (var pair in _typeParameters.EventActionDict)
-            {
-                EventManager.Instance.StopListening(pair.Key, pair.Value);
-            }
+            StopListening();
         }
 
         public void SetType(StatusType statusType)
@@ -76,12 +76,25 @@ namespace DefaultNamespace.StatusEffects
             _statusType = statusType;
             ObtainTypeParameters();
             _image.sprite = _typeParameters.Sprite;
+            StartListening();
+
+            _description.Text = _typeParameters.Description;
+        }
+
+        private void StopListening()
+        {
+            foreach (var pair in _typeParameters.EventActionDict)
+            {
+                EventManager.Instance.StopListening(pair.Key, pair.Value);
+            }
+        }
+
+        private void StartListening()
+        {
             foreach (var pair in _typeParameters.EventActionDict)
             {
                 EventManager.Instance.StartListening(pair.Key, pair.Value);
             }
-
-            _description.Text = _typeParameters.Description;
         }
 
         public StatusType GetStatusType()

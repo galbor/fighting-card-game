@@ -66,7 +66,7 @@ namespace DefaultNamespace.UI
             _statusEffects = new List<BodyPartStatusEffect>();
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             RemoveAllStatusEffects();
         }
@@ -251,6 +251,7 @@ namespace DefaultNamespace.UI
          */
         public void RemoveStatusEffect(BodyPartStatusEffect status)
         {
+            status.Disable();
             _pool.ReturnToPool(status);
             _statusEffects.Remove(status);
             for (int i = 0; i < _statusEffects.Count; i++)
