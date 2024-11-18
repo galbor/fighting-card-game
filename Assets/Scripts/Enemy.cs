@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DefaultNamespace;
+using Managers;
 using DefaultNamespace.StatusEffects;
 using UnityEngine;
 using Random = UnityEngine.Random;

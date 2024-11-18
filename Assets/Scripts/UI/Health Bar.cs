@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DefaultNamespace.StatusEffects;
 using DefaultNamespace.Utility;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DefaultNamespace.Utility;
 using UnityEngine;
 
-namespace DefaultNamespace.Managers
+namespace Managers
 {
     public class CardDraftManager : Singleton<CardDraftManager>
     {

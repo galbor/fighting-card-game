@@ -1,4 +1,6 @@
-﻿namespace DefaultNamespace.Relics
+﻿using Managers;
+
+namespace DefaultNamespace.Relics
 {
     /**
      * gets a relic after every combat

@@ -4,7 +4,7 @@ using DefaultNamespace.Relics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace Managers
 {
     public class Player : Singleton<Player>
     {
