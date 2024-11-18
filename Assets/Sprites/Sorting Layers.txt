@@ -1,3 +1,5 @@
 1000 - Canvas
-2000 - Body Parts
+2000 - Body Part healthbar/number
+2100 - Dark Background
+2500 - Card Canvas
 3000 - Front Canvas (description)
