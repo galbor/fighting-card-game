@@ -47,7 +47,7 @@ namespace Managers
 
         private void InitPlayerTurn()
         {
-            PlayerTurn.Instance.GetDeck();
+            PlayerTurn.Instance.ObtainDeck();
             PlayerTurn.Instance.SetParameters(_defaultEnergy, _maxHandSize, _basicHandSize, _player);
         }
         
@@ -59,7 +59,7 @@ namespace Managers
         public void AddToDeck(BasicCard card)
         {
             _deck.Add(card);
-            PlayerTurn.Instance.GetDeck();
+            PlayerTurn.Instance.ObtainDeck();
         }
 
         public void AddStartingRelic()

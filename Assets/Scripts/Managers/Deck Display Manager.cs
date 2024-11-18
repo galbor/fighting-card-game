@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class DeckDisplayManager : MonoBehaviour
+    public class DeckDisplayManager : Singleton<DeckDisplayManager>
     {
         [SerializeField] private GameObject _darkBackground;
         [SerializeField] private GameObject _energyDisplay;
@@ -15,17 +15,16 @@ namespace Managers
         [SerializeField] private KeyCode _drawPileKey;
 
         private KeyCode _curKeyCode;
-        private bool _isActive = false; //can't 
 
+        protected DeckDisplayManager() { }
+        
         private void Awake()
         {
-            _isActive = false;
+            DeckDisplayManager.Instance.enabled = false;
         }
         
         private void Update()
         {
-            if (!_isActive) return;
-            
             if (Input.GetKeyDown(_curKeyCode))
             {
                 HideCardList();
@@ -35,8 +34,7 @@ namespace Managers
 
             if (Input.GetKeyDown(_deckKey))
                 _curKeyCode = _deckKey;
-            else if (CardDraftManager.Instance.Drafting)
-                return;
+            else if (!PlayerTurn.Instance.enabled) return;
             else if (Input.GetKeyDown(_discardPileKey))
                 _curKeyCode = _discardPileKey;
             else if (Input.GetKeyDown(_drawPileKey))
@@ -44,14 +42,6 @@ namespace Managers
             else return;
             
             ShowCardList(GetCardList(_curKeyCode));
-        }
-
-        /**
-         * can't get the draw pile before the game started
-         */
-        public void Activate()
-        {
-            _isActive = true;
         }
 
         /**
@@ -70,34 +60,22 @@ namespace Managers
 
         private void ShowCardList(List<BasicCard> cards)
         {
-            SetActiveDraft(false);
-            HandDisplayManager.Instance.HideMiscCards();
-            HandDisplayManager.Instance.HideHand();
+            StateManager.Instance.AddState(this);
+            
             SetActivePersons(false);
             _darkBackground.SetActive(true);
             _energyDisplay.SetActive(false);
-            PlayerTurn.Instance.StopAction();
             HandDisplayManager.Instance.DisplayCardsMiddle(cards, displayNumbers: false);
         }
 
         private void HideCardList()
         {
-            PlayerTurn.Instance.ResetAction(); //doesn't reset if drafting
+            HandDisplayManager.Instance.HideMiscCards();
             _energyDisplay.SetActive(true);
             _darkBackground.SetActive(false);
             SetActivePersons(true);
-            HandDisplayManager.Instance.DisplayHand();
-            HandDisplayManager.Instance.HideMiscCards();
-            SetActiveDraft(true);
-        }
-        
-        /**
-         * if drafting, returns to draft or hides draft
-         */
-        private void SetActiveDraft(bool active)
-        {
-            if (CardDraftManager.Instance.Drafting)
-                CardDraftManager.Instance.SetDraftActive(active);
+            
+            StateManager.Instance.RemoveState();
         }
 
         private void SetActivePersons(bool active)

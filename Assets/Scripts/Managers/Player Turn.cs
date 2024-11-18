@@ -59,14 +59,16 @@ namespace Managers
         private Queue<BasicCard> _drawPile;
         private Queue<BasicCard> _discardPile;
         
-        public List<BasicCard> DiscardPile { get => _discardPile.ToList(); }
+        public List<BasicCard> DiscardPile
+        {
+            get => _discardPile.ToList();
+        }
+
         public List<BasicCard> DrawPile { get =>_drawPile.ToList(); }
         
         public Dictionary<Person.BodyPartEnum, KeyCode> _BodyPartKeyCodes;
 
-        protected PlayerTurn()
-        {
-        }
+        protected PlayerTurn() { }
 
         private void Awake()
         {
@@ -96,8 +98,6 @@ namespace Managers
             _maxHandSize = maxHandSize;
             _basicHandSize = basicHandSize;
             _playerPerson = playerPerson;
-
-            // StartRound();
         }
 
         public void StartRound()
@@ -124,8 +124,6 @@ namespace Managers
         // Update is called once per frame
         void Update()
         {
-            if (CardDraftManager.Instance.Drafting) return;
-            
             //TODO turn ends too many times. do a check that turn isn't switching.
             if (Input.GetKeyDown(_endTurnKey)) EndTurn();
 
@@ -275,8 +273,9 @@ namespace Managers
             }
             else _selectedAffectedBodyPart = _hand[_selectedCard].PreSelectedTarget;
             PlayCard(_selectedCard);
-            // StartCoroutine(SelectCard());
             ResetAction();
+            
+            RoomManager.Instance.CheckRoomWin();
         }
         
         private bool PlayCard(int index)
@@ -293,8 +292,6 @@ namespace Managers
             EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAY_CARD, this);
             
             DiscardCard(index);
-            
-            RoomManager.Instance.CheckRoomWin();
             
             return true;
         }
@@ -334,6 +331,8 @@ namespace Managers
         {
             StopAllCoroutines();
             
+            HandDisplayManager.Instance.HideHand();
+            
             ForEachEnemy(enemy =>
             {
                 enemy.Person.SetEnemyNumberActive(false);
@@ -346,8 +345,7 @@ namespace Managers
         {
             StopAction();
             
-            if (!CardDraftManager.Instance.Drafting)
-                StartCoroutine(SelectCard());
+            StartCoroutine(SelectCard());
         }
         
         public bool DrawCard()
@@ -481,7 +479,7 @@ namespace Managers
 
         
         //Copies deck from Player
-        public void GetDeck()
+        public void ObtainDeck()
         {
             var deck = Player.Instance.Deck;
             _deck = new List<BasicCard>();

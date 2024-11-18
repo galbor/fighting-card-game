@@ -20,19 +20,15 @@ namespace Managers
 
         private List<BasicCard> _chosenCards;
         private IEnumerator _draftCoroutine;
-        public bool Drafting { get; private set; }
 
-        protected CardDraftManager()
-        {
-            
-        }
+        protected CardDraftManager() { }
         
         
         public void StartCardDraft()
         {
-            Drafting = true;
-
             //chooses the 3 cards to draft
+            StateManager.Instance.AddState(this);
+            
             _chosenCards = new List<BasicCard>();
             MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Length, 3).ForEach(x => _chosenCards.Add(_possibleCards[x]));
             SetDraftActive(true);
@@ -43,7 +39,6 @@ namespace Managers
             int selectedCard = -1;
             
             Player.Instance.Person.gameObject.SetActive(false);
-            HandDisplayManager.Instance.HideHand();
             
             DisplayChoice(chosenCards);
             
@@ -61,14 +56,14 @@ namespace Managers
             if (selectedCard >= 0) Player.Instance.AddToDeck(chosenCards[selectedCard]);
             
             HideChoice();
-
-            Drafting = false;
             
             Player.Instance.Person.gameObject.SetActive(true);
             
             RoomManager.Instance.SetNextRoom();
             
             PlayerTurn.Instance.StartRound();
+            
+            StateManager.Instance.RemoveState();
         }
 
         private void DisplayChoice(List<BasicCard> chosenCards)
@@ -95,13 +90,13 @@ namespace Managers
          */
         public void SetDraftActive(bool active)
         {
+            if (_draftCoroutine != null) StopCoroutine(_draftCoroutine);
             if (active && _chosenCards != null)
             {
                 _draftCoroutine = CardDraft(_chosenCards);
                 StartCoroutine(_draftCoroutine);
                 return;
             }
-            StopCoroutine(_draftCoroutine);
             HideChoice();
         }
     }
