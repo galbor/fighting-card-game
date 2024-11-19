@@ -788,6 +788,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3683819942821718555, guid: 064d74fe0adce9942ad61cb6e8159d51, type: 3}
+      propertyPath: _text
+      value: When the depicted body part is attacked, this body part is attacked
+        instead.
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683819942821718555, guid: 064d74fe0adce9942ad61cb6e8159d51, type: 3}
       propertyPath: _defaultText
       value: When the depicted body part is attacked, this body part is attacked
         instead.

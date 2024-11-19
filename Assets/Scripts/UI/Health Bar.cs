@@ -265,6 +265,7 @@ namespace DefaultNamespace.UI
         {
             _statusEffects.ForEach(x =>
             {
+                x.Disable();
                 x.transform.SetParent(EventManager.Instance._TextParent, true); //might as well be parent
                 _pool.ReturnToPool(x);
             });

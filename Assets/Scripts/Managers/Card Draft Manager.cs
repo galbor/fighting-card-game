@@ -38,7 +38,7 @@ namespace Managers
         {
             int selectedCard = -1;
             
-            Player.Instance.Person.gameObject.SetActive(false);
+            // Player.Instance.Person.gameObject.SetActive(false);
             
             DisplayChoice(chosenCards);
             
@@ -57,13 +57,11 @@ namespace Managers
             
             HideChoice();
             
-            Player.Instance.Person.gameObject.SetActive(true);
-            
-            RoomManager.Instance.SetNextRoom();
-            
-            PlayerTurn.Instance.StartRound();
+            // Player.Instance.Person.gameObject.SetActive(true);
             
             StateManager.Instance.RemoveState();
+
+            StateManager.Instance.AddState(MapManager.Instance);
         }
 
         private void DisplayChoice(List<BasicCard> chosenCards)

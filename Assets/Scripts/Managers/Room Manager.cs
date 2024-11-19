@@ -15,15 +15,7 @@ namespace Managers
 
         private BasicAttackCard _prize;
 
-        protected RoomManager()
-        {
-
-        }
-
-        void Awake()
-        {
-            // SetNextRoom();
-        }
+        protected RoomManager() { }
 
         public void SetNextRoom()
         {
@@ -33,10 +25,15 @@ namespace Managers
 
         private void SetRoom(int roomIndex)
         {
-            _enemies = new Enemy[_rooms[roomIndex].Enemies.Length];
+            SetRoom(_rooms[roomIndex]);
+        }
+
+        public void SetRoom(Room room)
+        {
+            _enemies = new Enemy[room.Enemies.Length];
             for (int i = 0; i < _enemies.Length; i++)
             {
-                _enemies[i] = Instantiate(_rooms[roomIndex].Enemies[i]);
+                _enemies[i] = Instantiate(room.Enemies[i]);
                 _enemies[i].Init(_enemyParent);
             }
 

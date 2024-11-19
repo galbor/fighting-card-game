@@ -12,6 +12,7 @@ namespace Managers
             PLAYING,
             DRAFTING,
             DECKVIEW,
+            MAP,
             NONE
         }
 
@@ -29,6 +30,7 @@ namespace Managers
         {
             if (obj == PlayerTurn.Instance) return State.PLAYING;
             if (obj == CardDraftManager.Instance) return State.DRAFTING;
+            if (obj == MapManager.Instance) return State.MAP;
             if (obj == DeckDisplayManager.Instance) return State.DECKVIEW;
             return State.NONE;
         } 
@@ -65,10 +67,14 @@ namespace Managers
                 case State.PLAYING:
                     PlayerTurn.Instance.enabled = true;
                     PlayerTurn.Instance.ResetAction();
+                    Player.Instance.Person.gameObject.SetActive(true);
                     break;
                 case State.DRAFTING:
                     CardDraftManager.Instance.enabled = true;
                     CardDraftManager.Instance.SetDraftActive(true);
+                    break;
+                case State.MAP:
+                    MapManager.Instance.SetMapActive(true);
                     break;
                 case State.DECKVIEW:  //deckdisplaymanager should always be on
                 default:
@@ -83,10 +89,14 @@ namespace Managers
                 case State.PLAYING:
                     PlayerTurn.Instance.enabled = false;
                     PlayerTurn.Instance.StopAction();
+                    Player.Instance.Person.gameObject.SetActive(false);
                     break;
                 case State.DRAFTING:
                     CardDraftManager.Instance.enabled = false;
                     CardDraftManager.Instance.SetDraftActive(false);
+                    break;
+                case State.MAP:
+                    MapManager.Instance.SetMapActive(false);
                     break;
                 case State.DECKVIEW: //deckdisplaymanager should always be on
                 default: 
