@@ -3,7 +3,7 @@ using DefaultNamespace.Utility;
 using Managers;
 using UnityEngine;
 
-namespace DefaultNamespace.Relics
+namespace Relics
 {
     /**
      * inflicts _bleed bleed on the attacker body part when the player attacks with _bodyPart

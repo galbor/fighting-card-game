@@ -78,6 +78,7 @@ namespace Managers
             
 
             SetBodyPartKeyCodes();
+            enabled = false;
         }
         
         public int Energy
@@ -329,8 +330,6 @@ namespace Managers
         {
             StopAllCoroutines();
             
-            HandDisplayManager.Instance.HideHand();
-            
             ForEachEnemy(enemy =>
             {
                 enemy.Person.SetEnemyNumberActive(false);
@@ -342,6 +341,7 @@ namespace Managers
         public void ResetAction()
         {
             StopAction();
+            HandDisplayManager.Instance.DisplayHand();
             
             StartCoroutine(SelectCard());
         }

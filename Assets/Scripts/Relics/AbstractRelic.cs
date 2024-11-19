@@ -6,7 +6,7 @@ using UnityEngine;
 using Image = UnityEngine.UI.Image;
 using Vector3 = UnityEngine.Vector3;
 
-namespace DefaultNamespace.Relics
+namespace Relics
 {
     public abstract class AbstractRelic : MonoBehaviour
     {

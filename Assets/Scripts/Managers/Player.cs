@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DefaultNamespace.Relics;
+using Relics;
 using Unity.VisualScripting;
 using UnityEngine;
 

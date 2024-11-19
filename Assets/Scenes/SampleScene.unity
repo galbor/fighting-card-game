@@ -3138,6 +3138,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 81c4786ae25e40346921039997e30636, type: 2}
   - {fileID: 11400000, guid: 0263e2a05f235d3448e452d4a4f3cbcf, type: 2}
   - {fileID: 11400000, guid: c6f45fbcd7d675443b8c9eacbcaa23b2, type: 2}
+  - {fileID: 11400000, guid: 5336be44bfe005c44a95a0fa3ccb9302, type: 2}
   _darkBackground: {fileID: 597712086}
   _skipText: {fileID: 1348303358}
   _selectCard1: 49
@@ -3159,8 +3160,11 @@ MonoBehaviour:
   _relicParent: {fileID: 120528238}
   _spacing: 1.5
   _possibleRelics:
-  - {fileID: 8706466394470894858, guid: e31a08819e5f4e94eadee039f4632eb4, type: 3}
+  - {fileID: 6089494831786019724, guid: ac537ba2eea8d6b429520b53938ec3e1, type: 3}
+  - {fileID: 8505983185546911333, guid: 373b2c4f2bd470349b7ea1767d75f737, type: 3}
+  - {fileID: 1432588086205640488, guid: bc49905166b24c74ca17372515dfafbd, type: 3}
   - {fileID: 5398193657126507640, guid: 9d34117b560713c4d8ae7fb63f1ae183, type: 3}
+  - {fileID: 8706466394470894858, guid: e31a08819e5f4e94eadee039f4632eb4, type: 3}
 --- !u!114 &1611676124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3187,7 +3191,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1611676116}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d08a384df574c2780a697ff059a9596, type: 3}
   m_Name: 

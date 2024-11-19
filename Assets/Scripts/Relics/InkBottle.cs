@@ -2,7 +2,7 @@
 using UnityEngine;
 using Managers;
 
-namespace DefaultNamespace.Relics
+namespace Relics
 {
     /**
      * Draws a card every n cards played.

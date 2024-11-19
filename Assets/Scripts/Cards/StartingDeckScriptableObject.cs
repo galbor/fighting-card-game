@@ -1,4 +1,4 @@
-using DefaultNamespace.Relics;
+using Relics;
 using UnityEngine;
 
 [CreateAssetMenu]
