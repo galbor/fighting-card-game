@@ -26,6 +26,7 @@ namespace Managers
         private void Awake()
         {
             _player = Instantiate(_personPrefab, _personParent);
+            _player.gameObject.SetActive(false);
             _player.transform.localPosition = _personPosition;
             _player.SetEnemyNumberActive(false);
             InitDeck();

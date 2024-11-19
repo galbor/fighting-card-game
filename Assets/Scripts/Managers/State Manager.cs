@@ -21,6 +21,7 @@ namespace Managers
         private void Awake()
         {
             _states.Push(State.PLAYING);
+            _states.Push(State.MAP);
         }
 
         /**
