@@ -51,7 +51,6 @@ namespace Managers
 
         public void SetHand(List<BasicCard> cards)
         {
-            _cardDisplayParent.gameObject.SetActive(true);
             SetDisplay(cards, _handCardDisplays, new Vector2(_middleX, _defaultY), 1f);
         }
 
@@ -59,6 +58,7 @@ namespace Managers
             bool displayNumber = true)
         {
             int amt = cards.Count;
+            _cardDisplayParent.gameObject.SetActive(true);
             if (cardDisplays == _handCardDisplays)
             {
                 amt = _currentHandSize = Math.Min(amt, _handCardDisplays.Count);
@@ -70,6 +70,7 @@ namespace Managers
             }
             else
             {
+                HideMiscCards();
                 while (cardDisplays.Count < amt)
                 {
                     cardDisplays.Add(_cardDisplayPool.GetFromPool());

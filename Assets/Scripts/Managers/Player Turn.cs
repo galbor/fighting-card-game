@@ -51,7 +51,7 @@ namespace Managers
         private List<Person.BodyPartEnum> _selectedAttackerBodyParts;
         
         private int _defaultEnergy;
-        private int _energy;
+        private int _energy = 10; // assuming there aren't cards with >10 energy
         
         private List<BasicCard> _hand;
 
@@ -75,6 +75,7 @@ namespace Managers
             // GetDeck();
             _hand = new List<BasicCard>();
             _drawPile = new Queue<BasicCard>();
+            _enemies = Array.Empty<Enemy>();
             
 
             SetBodyPartKeyCodes();
@@ -500,10 +501,16 @@ namespace Managers
          */
         public void ShowCombat(bool show)
         {
-            _playerPerson.gameObject.SetActive(show);
+            SetActivePersons(show);
             _energyText.transform.parent.gameObject.SetActive(show);
             if (show) HandDisplayManager.Instance.DisplayHand();
             else HandDisplayManager.Instance.HideHand();
+        }
+        
+        private void SetActivePersons(bool active)
+        {
+            _playerPerson.gameObject.SetActive(active);
+            ForEachEnemy(x=>x.Person.gameObject.SetActive(active));
         }
     }
 }

@@ -14,17 +14,21 @@ namespace Managers
         [SerializeField] private KeyCode _drawPileKey;
 
         private KeyCode _curKeyCode;
+        private bool _showing = false;
+        private bool _inCombat;
 
         protected DeckDisplayManager() { }
         
         private void Awake()
         {
             DeckDisplayManager.Instance.enabled = false;
+            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => _inCombat = true);
+            EventManager.Instance.StartListening(EventManager.EVENT__END_COMBAT, obj => _inCombat = false);
         }
         
         private void Update()
         {
-            if (Input.GetKeyDown(_curKeyCode))
+            if (_showing && Input.GetKeyDown(_curKeyCode))
             {
                 HideCardList();
                 _curKeyCode = KeyCode.None;
@@ -33,7 +37,7 @@ namespace Managers
 
             if (Input.GetKeyDown(_deckKey))
                 _curKeyCode = _deckKey;
-            else if (!PlayerTurn.Instance.enabled) return;
+            else if (!_inCombat) return;
             else if (Input.GetKeyDown(_discardPileKey))
                 _curKeyCode = _discardPileKey;
             else if (Input.GetKeyDown(_drawPileKey))
@@ -59,9 +63,10 @@ namespace Managers
 
         private void ShowCardList(List<BasicCard> cards)
         {
-            StateManager.Instance.AddState(this);
+            if (!_showing)
+                StateManager.Instance.AddState(this);
+            _showing = true;
             
-            SetActivePersons(false);
             _darkBackground.SetActive(true);
             HandDisplayManager.Instance.DisplayCardsMiddle(cards, displayNumbers: false);
         }
@@ -70,15 +75,9 @@ namespace Managers
         {
             HandDisplayManager.Instance.HideMiscCards();
             _darkBackground.SetActive(false);
-            SetActivePersons(true);
+            _showing = false;
             
             StateManager.Instance.RemoveState();
-        }
-
-        private void SetActivePersons(bool active)
-        {
-            Player.Instance.Person.gameObject.SetActive(active);
-            RoomManager.Instance.Enemies.ToList().ForEach(x=>x.Person.gameObject.SetActive(active));
         }
     }
 }
