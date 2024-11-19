@@ -68,7 +68,7 @@ namespace Managers
                 case State.PLAYING:
                     PlayerTurn.Instance.enabled = true;
                     PlayerTurn.Instance.ResetAction();
-                    Player.Instance.Person.gameObject.SetActive(true);
+                    PlayerTurn.Instance.ShowCombat(true);
                     break;
                 case State.DRAFTING:
                     CardDraftManager.Instance.enabled = true;
@@ -90,7 +90,7 @@ namespace Managers
                 case State.PLAYING:
                     PlayerTurn.Instance.enabled = false;
                     PlayerTurn.Instance.StopAction();
-                    Player.Instance.Person.gameObject.SetActive(false);
+                    PlayerTurn.Instance.ShowCombat(false);
                     break;
                 case State.DRAFTING:
                     CardDraftManager.Instance.enabled = false;

@@ -38,8 +38,6 @@ namespace Managers
         {
             int selectedCard = -1;
             
-            // Player.Instance.Person.gameObject.SetActive(false);
-            
             DisplayChoice(chosenCards);
             
             while (true)
@@ -69,7 +67,6 @@ namespace Managers
             _darkBackground.SetActive(true); //TODO combine dark background and skip-text?
             _skipText.SetActive(true);
             PlayerTurn.Instance.Energy = 10; //assumes all cards have a price <= 10
-            PlayerTurn.Instance.ShowEnergy(false);
             HandDisplayManager.Instance.DisplayCardsMiddle(chosenCards);
         }
 

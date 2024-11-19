@@ -102,7 +102,7 @@ namespace Managers
 
         public void StartRound()
         {
-            DiscardHand();
+            _hand = new List<BasicCard>();
             _drawPile = new Queue<BasicCard>();
             _discardPile = new Queue<BasicCard>();
 
@@ -135,7 +135,6 @@ namespace Managers
 
         IEnumerator SelectCard()
         {
-            HandDisplayManager.Instance.DisplayHand();
             int index = -1;
             while (true)
             {
@@ -299,7 +298,6 @@ namespace Managers
         public void StartTurn()
         {
             Energy = _defaultEnergy;
-            ShowEnergy(true);
             _playerPerson.SetProtectionDefault();
             
             EventManager.Instance.TriggerEvent(EventManager.EVENT__START_TURN, null);
@@ -486,11 +484,6 @@ namespace Managers
             deck.ForEach(x => _deck.Add(x));
         }
 
-        public void ShowEnergy(bool active)
-        {
-            _energyText.transform.parent.gameObject.SetActive(active);
-        }
-
         /**
          * I write too much _enemies.ToList.ForEach(...)
          */
@@ -500,6 +493,17 @@ namespace Managers
             {
                 action(enemy);
             }
+        }
+
+        /**
+         * like SetActive
+         */
+        public void ShowCombat(bool show)
+        {
+            _playerPerson.gameObject.SetActive(show);
+            _energyText.transform.parent.gameObject.SetActive(show);
+            if (show) HandDisplayManager.Instance.DisplayHand();
+            else HandDisplayManager.Instance.HideHand();
         }
     }
 }

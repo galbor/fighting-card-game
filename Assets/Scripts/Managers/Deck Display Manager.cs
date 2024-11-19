@@ -8,7 +8,6 @@ namespace Managers
     public class DeckDisplayManager : Singleton<DeckDisplayManager>
     {
         [SerializeField] private GameObject _darkBackground;
-        [SerializeField] private GameObject _energyDisplay;
 
         [SerializeField] private KeyCode _deckKey;
         [SerializeField] private KeyCode _discardPileKey;
@@ -64,14 +63,12 @@ namespace Managers
             
             SetActivePersons(false);
             _darkBackground.SetActive(true);
-            _energyDisplay.SetActive(false);
             HandDisplayManager.Instance.DisplayCardsMiddle(cards, displayNumbers: false);
         }
 
         private void HideCardList()
         {
             HandDisplayManager.Instance.HideMiscCards();
-            _energyDisplay.SetActive(true);
             _darkBackground.SetActive(false);
             SetActivePersons(true);
             
