@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DefaultNamespace.UI;
 using Managers;
 using DefaultNamespace.Utility;
 using UnityEngine;
@@ -53,6 +54,43 @@ public class BasicAttackCard : BasicCard
         
     }
     
+    public struct AttackStruct
+    {
+        public AttackStruct(Person enemy, Person.BodyPartEnum playerPart, Person.BodyPartEnum enemyPart, int damage,
+            bool playerAttacker)
+        {
+            _enemy = enemy;
+            _playerPart = playerPart;
+            _enemyPart = enemyPart;
+            _damage = damage;
+            _playerAttacker = playerAttacker;
+        }
+
+        public Person _enemy;
+        public Person.BodyPartEnum _playerPart;
+        public Person.BodyPartEnum _enemyPart;
+        public int _damage;
+        public bool _playerAttacker; //true if attacker is player
+
+        /**
+         * if true get attacker health bar, otherwise the affected health bar
+         */
+        public HealthBar GetHealthBar(bool attacker)
+        {
+            if (_playerAttacker ^ !attacker)
+                return Player.Instance.Person.GetHealthBar(_playerPart); // a XOR !b    ===    a <=> b
+            return _enemy.GetHealthBar(_enemyPart);
+        }
+
+        /**
+         * if true get the attacker's Person, otherwise get the victim's Person
+         */
+        public Person GetPerson(bool attacker)
+        {
+            return _playerAttacker ^ attacker ? _enemy : Player.Instance.Person;
+        }
+    }
+    
     
     protected override void UpdateDescription()
     {
@@ -86,7 +124,7 @@ public class BasicAttackCard : BasicCard
         Attack(user, attacking_parts, target, affected_part);
     }
     
-    protected virtual EventManager.AttackStruct[] Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
+    protected virtual AttackStruct[] Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
     {
         if (TargetType == TargetTypeEnum.SIDE && (PreSelectedTarget == Person.BodyPartEnum.LEFT_LEG || PreSelectedTarget == Person.BodyPartEnum.RIGHT_LEG))
         {
@@ -96,7 +134,7 @@ public class BasicAttackCard : BasicCard
         else if (TargetType == TargetTypeEnum.PRE_SELECTED)
             affected_part = PreSelectedTarget;
 
-        var res = new List<EventManager.AttackStruct>();
+        var res = new List<AttackStruct>();
         
         var userIsPlayer = user == Player.Instance.Person;
         attacking_parts.ForEach(attacking_part =>
@@ -110,7 +148,7 @@ public class BasicAttackCard : BasicCard
             var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
             target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, Bleed));
             
-            res.Add(new EventManager.AttackStruct(
+            res.Add(new AttackStruct(
                 userIsPlayer ? target : user,
                 userIsPlayer ? attacking_part : cur_affected_part,
                 userIsPlayer ? cur_affected_part : attacking_part,

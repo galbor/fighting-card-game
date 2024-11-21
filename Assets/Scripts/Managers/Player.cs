@@ -19,7 +19,7 @@ namespace Managers
         private List<BasicCard> _deck;
         
         //last hit this combat
-        public EventManager.AttackStruct LastHit { get; private set; }
+        public BasicAttackCard.AttackStruct LastHit { get; private set; }
 
         public List<BasicCard> Deck
         {
@@ -37,10 +37,10 @@ namespace Managers
 
         private void Start()
         {
-            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => LastHit = new EventManager.AttackStruct());
+            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => LastHit = new BasicAttackCard.AttackStruct());
             EventManager.Instance.StartListening(EventManager.EVENT__HIT, obj =>
             {
-                var hit = (EventManager.AttackStruct)obj;
+                var hit = (BasicAttackCard.AttackStruct)obj;
                 if (!hit._playerAttacker) return;
                 LastHit = hit;
             });

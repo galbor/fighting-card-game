@@ -10,10 +10,10 @@ using UnityEngine;
 public class ComboAttackCard : BasicAttackCard
 {
     private Person.SideEnum _lastSide;
-    private EventManager.AttackStruct _lastHit;
+    private AttackStruct _lastHit;
 
 
-    protected override EventManager.AttackStruct[] Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
+    protected override AttackStruct[] Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
     {
         var lastHit = Player.Instance.LastHit;
         var hits = base.Attack(user, attacking_parts, target, affected_part); //lastSide should change 

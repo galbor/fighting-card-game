@@ -43,43 +43,6 @@ namespace Managers
 
 		[SerializeField] public Transform _TextParent;
 
-		public struct AttackStruct
-		{
-			public AttackStruct(Person enemy, Person.BodyPartEnum playerPart, Person.BodyPartEnum enemyPart, int damage,
-				bool playerAttacker)
-			{
-				_enemy = enemy;
-				_playerPart = playerPart;
-				_enemyPart = enemyPart;
-				_damage = damage;
-				_playerAttacker = playerAttacker;
-			}
-
-			public Person _enemy;
-			public Person.BodyPartEnum _playerPart;
-			public Person.BodyPartEnum _enemyPart;
-			public int _damage;
-			public bool _playerAttacker; //true if attacker is player
-
-			/**
-			 * if true get attacker health bar, otherwise the affected health bar
-			 */
-			public HealthBar GetHealthBar(bool attacker)
-			{
-				if (_playerAttacker ^ !attacker)
-					return Player.Instance.Person.GetHealthBar(_playerPart); // a XOR !b    ===    a <=> b
-				return _enemy.GetHealthBar(_enemyPart);
-			}
-
-			/**
-			 * if true get the attacker's Person, otherwise get the victim's Person
-			 */
-			public Person GetPerson(bool attacker)
-			{
-				return _playerAttacker ^ attacker ? _enemy : Player.Instance.Person;
-			}
-		}
-
 		private void Init()
 		{
 			eventDictionary ??= new Dictionary<string, FloatEvent>();

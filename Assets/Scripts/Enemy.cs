@@ -64,7 +64,7 @@ public class Enemy : ScriptableObject
                 
         EventManager.Instance.StartListening(EventManager.EVENT__HIT, objHit =>
         {
-            EventManager.AttackStruct attack = (EventManager.AttackStruct)objHit;
+            var attack = (BasicAttackCard.AttackStruct)objHit;
             if (attack.GetPerson(false) == Person)
                 DisplayNextAction();
         });

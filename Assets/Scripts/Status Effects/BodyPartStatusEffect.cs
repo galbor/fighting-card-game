@@ -123,7 +123,7 @@ namespace DefaultNamespace.StatusEffects
                 case StatusType.KNIFE:
                     UnityAction<object> inflictBleed = obj =>
                     {
-                        var attack = (EventManager.AttackStruct)obj;
+                        var attack = (BasicAttackCard.AttackStruct)obj;
                         if (attack.GetHealthBar(true) == BodyPart)
                             attack.GetHealthBar(false).AddStatusEffect(StatusType.BLEED, Number);
                     };
