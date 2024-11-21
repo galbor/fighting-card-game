@@ -23,7 +23,7 @@ public class BasicCard : ScriptableObject
     
     public TargetTypeEnum TargetType { get => _targetType; }
     public Person.BodyPartEnum PreSelectedTarget {get => _preSelectedTarget;}
-    public AttackerTypeEnum[] AttackerType { get => _attackerType; }
+    public AttackerTypeEnum[] AttackerType { get => _attackerType; protected set => _attackerType = value; }
     public bool SingleEnemyTarget { get => _singleEnemyTarget; }
         
     public enum TargetTypeEnum
@@ -71,9 +71,9 @@ public class BasicCard : ScriptableObject
         }
     }
 
-    private void Awake()
+    protected void Awake()
     {
-        if (_cardsToPlay == null) _cardsToPlay = new List<BasicCard>();
+        _cardsToPlay ??= new List<BasicCard>();
     }
 
     protected string _displayDescription;

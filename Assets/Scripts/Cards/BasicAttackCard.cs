@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Managers;
 using DefaultNamespace.Utility;
@@ -85,7 +86,7 @@ public class BasicAttackCard : BasicCard
         Attack(user, attacking_parts, target, affected_part);
     }
     
-    public void Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
+    protected virtual EventManager.AttackStruct[] Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target, Person.BodyPartEnum affected_part)
     {
         if (TargetType == TargetTypeEnum.SIDE && (PreSelectedTarget == Person.BodyPartEnum.LEFT_LEG || PreSelectedTarget == Person.BodyPartEnum.RIGHT_LEG))
         {
@@ -95,6 +96,8 @@ public class BasicAttackCard : BasicCard
         else if (TargetType == TargetTypeEnum.PRE_SELECTED)
             affected_part = PreSelectedTarget;
 
+        var res = new List<EventManager.AttackStruct>();
+        
         var userIsPlayer = user == Player.Instance.Person;
         attacking_parts.ForEach(attacking_part =>
         {
@@ -106,16 +109,17 @@ public class BasicAttackCard : BasicCard
 
             var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
             target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, Bleed));
-
-            EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT,
-                new EventManager.AttackStruct(
-                    userIsPlayer ? target : user,
-                    userIsPlayer ? attacking_part : cur_affected_part,
-                    userIsPlayer ? cur_affected_part : attacking_part,
-                    hitDamage,
-                    userIsPlayer
-                ));
+            
+            res.Add(new EventManager.AttackStruct(
+                userIsPlayer ? target : user,
+                userIsPlayer ? attacking_part : cur_affected_part,
+                userIsPlayer ? cur_affected_part : attacking_part,
+                hitDamage,
+                userIsPlayer)); 
+            
+            EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, res.Last());
         });
+        return res.ToArray();
     }
 
 

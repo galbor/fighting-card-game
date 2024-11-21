@@ -17,6 +17,9 @@ namespace Managers
         [SerializeField] private Vector2 _personPosition;
         private Person _player;
         private List<BasicCard> _deck;
+        
+        //last hit this combat
+        public EventManager.AttackStruct LastHit { get; private set; }
 
         public List<BasicCard> Deck
         {
@@ -30,6 +33,17 @@ namespace Managers
             _player.SetEnemyNumberActive(false);
             InitDeck();
             InitPlayerTurn();
+        }
+
+        private void Start()
+        {
+            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => LastHit = new EventManager.AttackStruct());
+            EventManager.Instance.StartListening(EventManager.EVENT__HIT, obj =>
+            {
+                var hit = (EventManager.AttackStruct)obj;
+                if (!hit._playerAttacker) return;
+                LastHit = hit;
+            });
         }
 
         protected Player()
