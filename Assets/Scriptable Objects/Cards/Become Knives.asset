@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Become Knives
   m_EditorClassIdentifier: 
   _name: Become Knives
-  _description: Add Knife status effect to all body parts.
+  _description: Add {amount} {status} status effect to all body parts.
   _image: {fileID: 0}
   _cost: 2
   _draw: 0
