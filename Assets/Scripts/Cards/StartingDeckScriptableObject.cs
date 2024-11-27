@@ -1,5 +1,6 @@
 using Relics;
 using UnityEngine;
+using cards;
 
 [CreateAssetMenu]
 public class StartingDeckScriptableObject : ScriptableObject

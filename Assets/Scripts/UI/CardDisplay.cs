@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Managers;
+using cards;
 
 namespace DefaultNamespace.UI
 {

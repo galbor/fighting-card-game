@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DefaultNamespace.Utility;
 using DefaultNamespace.UI;
+using cards;
 using UnityEngine;
 
 namespace Managers

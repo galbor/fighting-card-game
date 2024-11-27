@@ -3,45 +3,49 @@ using System.Text;
 using DefaultNamespace.Utility;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Cards/Basic Defense Card")]
-public class BasicDefenseCard : BasicCard
+namespace cards
 {
-
-    [SerializeField] private int _block;
-    [SerializeField] private int _invincibility;
-    // Start is called before the first frame update
-
-    public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-        Person.BodyPartEnum affected_part)
+    [CreateAssetMenu(menuName = "Cards/Basic Defense Card")]
+    public class BasicDefenseCard : BasicCard
     {
-        Block(user, attacking_parts, affected_part);
-        base.Play(user, attacking_parts, target, affected_part);
-    }
 
-    private void Block(Person user, List<Person.BodyPartEnum> attacking_parts, Person.BodyPartEnum affected_part)
-    {
-        attacking_parts.ForEach(x => user.Defend(x, _block));
-        if (affected_part != Person.BodyPartEnum.NONE)
-            attacking_parts.ForEach(x => user.SetProtection(x, affected_part));
-    }
+        [SerializeField] private int _block;
+        [SerializeField] private int _invincibility;
+        // Start is called before the first frame update
 
-    protected override void UpdateDescription()
-    {
-        base.UpdateDescription();
-        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "block", _block.ToString());
-        _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "invincibility", _invincibility.ToString());
-    }
-
-    protected override string GenerateThisDescription()
-    {
-        var res = new StringBuilder(base.GenerateThisDescription());
-        foreach (var attackerType in AttackerType)
+        public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
+            Person.BodyPartEnum affected_part)
         {
-            res.AppendFormat("Defend your {0} ", TargetTypeName(TargetType));
-            res.AppendFormat("with your {0}.\n", attackerType.ToString());
-            res.AppendFormat("Gain {0} block", _block);
+            Block(user, attacking_parts, affected_part);
+            base.Play(user, attacking_parts, target, affected_part);
         }
 
-        return res.ToString();
+        private void Block(Person user, List<Person.BodyPartEnum> attacking_parts, Person.BodyPartEnum affected_part)
+        {
+            attacking_parts.ForEach(x => user.Defend(x, _block));
+            if (affected_part != Person.BodyPartEnum.NONE)
+                attacking_parts.ForEach(x => user.SetProtection(x, affected_part));
+        }
+
+        protected override void UpdateDescription()
+        {
+            base.UpdateDescription();
+            _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "block", _block.ToString());
+            _displayDescription =
+                MyUtils.ReplaceAllBrackets(_displayDescription, "invincibility", _invincibility.ToString());
+        }
+
+        protected override string GenerateThisDescription()
+        {
+            var res = new StringBuilder(base.GenerateThisDescription());
+            foreach (var attackerType in AttackerType)
+            {
+                res.AppendFormat("Defend your {0} ", TargetTypeName(TargetType));
+                res.AppendFormat("with your {0}.\n", attackerType.ToString());
+                res.AppendFormat("Gain {0} block", _block);
+            }
+
+            return res.ToString();
+        }
     }
 }

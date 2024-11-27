@@ -13,8 +13,6 @@ namespace Managers
         private Enemy[] _enemies;
         private int _roomIndex = -1;
 
-        private BasicAttackCard _prize;
-
         protected RoomManager() { }
 
         public void SetNextRoom()

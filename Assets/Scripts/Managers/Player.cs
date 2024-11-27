@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Relics;
-using Unity.VisualScripting;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using cards;
 
 namespace Managers
 {

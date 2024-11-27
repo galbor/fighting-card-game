@@ -5,6 +5,7 @@ using System.Linq;
 using DefaultNamespace.Utility;
 using TMPro;
 using UnityEngine;
+using cards;
 
 namespace Managers
 {

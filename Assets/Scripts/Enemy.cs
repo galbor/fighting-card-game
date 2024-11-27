@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using DefaultNamespace.StatusEffects;
+using cards;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

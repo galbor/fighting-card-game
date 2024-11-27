@@ -4,6 +4,7 @@ using System.Linq;
 using Managers;
 using DefaultNamespace.StatusEffects;
 using DefaultNamespace.UI;
+using cards;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
