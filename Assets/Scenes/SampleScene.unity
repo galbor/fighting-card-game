@@ -3200,6 +3200,7 @@ MonoBehaviour:
   _deckKey: 97
   _discardPileKey: 115
   _drawPileKey: 100
+  _exhaustPileKey: 120
 --- !u!114 &1611676126
 MonoBehaviour:
   m_ObjectHideFlags: 0

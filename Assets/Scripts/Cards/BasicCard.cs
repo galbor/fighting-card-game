@@ -20,18 +20,17 @@ namespace cards
         [SerializeField] protected Person.BodyPartEnum _preSelectedTarget;
         [SerializeField] AttackerTypeEnum[] _attackerType = Array.Empty<AttackerTypeEnum>();
 
+        [SerializeField] private bool _exhaust = false;
+        [SerializeField] private bool _ethereal = false;
+
         [SerializeField] private List<BasicCard> _cardsToPlay;
+        
+        public bool Exhaust { get => _exhaust; }
+        public bool Ethereal { get => _ethereal; }
 
+        public TargetTypeEnum TargetType { get => _targetType; }
 
-        public TargetTypeEnum TargetType
-        {
-            get => _targetType;
-        }
-
-        public Person.BodyPartEnum PreSelectedTarget
-        {
-            get => _preSelectedTarget;
-        }
+        public Person.BodyPartEnum PreSelectedTarget { get => _preSelectedTarget; }
 
         public AttackerTypeEnum[] AttackerType
         {
@@ -39,10 +38,7 @@ namespace cards
             protected set => _attackerType = value;
         }
 
-        public bool SingleEnemyTarget
-        {
-            get => _singleEnemyTarget;
-        }
+        public bool SingleEnemyTarget { get => _singleEnemyTarget; }
 
         public enum TargetTypeEnum
         {
@@ -155,6 +151,8 @@ namespace cards
         protected virtual string GenerateThisDescription()
         {
             StringBuilder res = new StringBuilder();
+            if (Exhaust) res.Append("Exhaust.\n");
+            if (Ethereal) res.Append("Ethereal.\n");
             if (_draw > 0) res.AppendFormat("Draw {0} cards.\n", _draw);
 
             return res.ToString();

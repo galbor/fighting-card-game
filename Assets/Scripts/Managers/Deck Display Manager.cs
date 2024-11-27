@@ -11,6 +11,7 @@ namespace Managers
         [SerializeField] private KeyCode _deckKey;
         [SerializeField] private KeyCode _discardPileKey;
         [SerializeField] private KeyCode _drawPileKey;
+        [SerializeField] private KeyCode _exhaustPileKey;
 
         private KeyCode _curKeyCode;
         private bool _showing = false;
@@ -41,6 +42,8 @@ namespace Managers
                 _curKeyCode = _discardPileKey;
             else if (Input.GetKeyDown(_drawPileKey))
                 _curKeyCode = _drawPileKey;
+            else if (Input.GetKeyDown(_exhaustPileKey))
+                _curKeyCode = _exhaustPileKey;
             else return;
             
             ShowCardList(GetCardList(_curKeyCode));
@@ -57,6 +60,8 @@ namespace Managers
                 return PlayerTurn.Instance.DiscardPile;
             if (key == _drawPileKey)
                 return PlayerTurn.Instance.DrawPile;
+            if (key == _exhaustPileKey)
+                return PlayerTurn.Instance.ExhaustPile;
             return null;
         }
 

@@ -59,13 +59,12 @@ namespace Managers
         private List<BasicCard> _deck;
         private Queue<BasicCard> _drawPile;
         private Queue<BasicCard> _discardPile;
+        private List<BasicCard> _exhaustPile;
         
-        public List<BasicCard> DiscardPile
-        {
-            get => _discardPile.ToList();
-        }
+        public List<BasicCard> DiscardPile { get => _discardPile.ToList(); }
 
         public List<BasicCard> DrawPile { get =>_drawPile.ToList(); }
+        public List<BasicCard> ExhaustPile { get => _exhaustPile; }
         
         public Dictionary<Person.BodyPartEnum, KeyCode> _BodyPartKeyCodes;
 
@@ -76,6 +75,7 @@ namespace Managers
             // GetDeck();
             _hand = new List<BasicCard>();
             _drawPile = new Queue<BasicCard>();
+            _exhaustPile = new List<BasicCard>();
             _enemies = Array.Empty<Enemy>();
             
 
@@ -108,6 +108,7 @@ namespace Managers
             _hand = new List<BasicCard>();
             _drawPile = new Queue<BasicCard>();
             _discardPile = new Queue<BasicCard>();
+            _exhaustPile = new List<BasicCard>();
 
             foreach (var card in _deck)
             {
@@ -293,7 +294,10 @@ namespace Managers
             _hand[index].PlayExtraCards(_playerPerson, _selectedAttackerBodyParts, enemy, _selectedAffectedBodyPart);
             EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAY_CARD, this);
             
-            DiscardCard(index);
+            if (_hand[index].Exhaust)
+                ExhaustCard(index);
+            else
+                DiscardCard(index);
             
             return true;
         }
@@ -313,6 +317,13 @@ namespace Managers
         {
             EventManager.Instance.TriggerEvent(EventManager.EVENT__END_TURN, null);
             if (RoomManager.Instance.CheckRoomWin()) return; //if All enemies are dead, doesn't start new turn
+
+            /**
+             * exhausts all ethereal cards in hand
+             */
+            _hand.ToList().Select((card, i) => new { Value = card, Index = i })
+                .Where(pair => pair.Value.Ethereal)
+                .ToList().ForEach(pair => ExhaustCardNoDisplay(pair.Index));
             
             DiscardHand();
             EnemiesAttack();
@@ -395,7 +406,7 @@ namespace Managers
             return _drawPile.Dequeue();
         }
 
-        private bool DiscardCard(int index)
+        public bool DiscardCard(int index)
         {
             if (!DiscardCardNoDisplay(index)) return false;
             HandDisplayManager.Instance.SetHand(_hand);
@@ -412,6 +423,23 @@ namespace Managers
             _hand.RemoveAt(index);
             
             return true;
+        }
+
+        /**
+         * exhausts card from hand
+         */
+        public void ExhaustCard(int index)
+        {
+            ExhaustCardNoDisplay(index);
+            HandDisplayManager.Instance.SetHand(_hand);
+        }
+        
+        private void ExhaustCardNoDisplay(int index)
+        {
+            EventManager.Instance.TriggerEvent(EventManager.EVENT__DISCARD_CARD, _hand[index]);
+            
+            _exhaustPile.Add(_hand[index]);
+            _hand.RemoveAt(index);
         }
 
         /**

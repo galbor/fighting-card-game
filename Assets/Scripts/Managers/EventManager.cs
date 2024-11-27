@@ -22,6 +22,7 @@ namespace Managers
 		public const string EVENT__DRAW_CARD = "event_drawCard";
 		public const string EVENT__PLAY_CARD = "event_playCard";
 		public const string EVENT__DISCARD_CARD = "event_dicardCard";
+		public const string EVENT__EXHAUST_CARD = "event_exhaustCard";
 
 		public const string EVENT__HIT = "event_hit";
 

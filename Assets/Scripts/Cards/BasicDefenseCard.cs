@@ -10,14 +10,12 @@ namespace cards
     {
 
         [SerializeField] private int _block;
-        [SerializeField] private int _invincibility;
-        // Start is called before the first frame update
 
         public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
             Person.BodyPartEnum affected_part)
         {
-            Block(user, attacking_parts, affected_part);
             base.Play(user, attacking_parts, target, affected_part);
+            Block(user, attacking_parts, affected_part);
         }
 
         private void Block(Person user, List<Person.BodyPartEnum> attacking_parts, Person.BodyPartEnum affected_part)
@@ -31,8 +29,6 @@ namespace cards
         {
             base.UpdateDescription();
             _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "block", _block.ToString());
-            _displayDescription =
-                MyUtils.ReplaceAllBrackets(_displayDescription, "invincibility", _invincibility.ToString());
         }
 
         protected override string GenerateThisDescription()
