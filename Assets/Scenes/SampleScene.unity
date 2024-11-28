@@ -3139,6 +3139,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0263e2a05f235d3448e452d4a4f3cbcf, type: 2}
   - {fileID: 11400000, guid: c6f45fbcd7d675443b8c9eacbcaa23b2, type: 2}
   - {fileID: 11400000, guid: 5336be44bfe005c44a95a0fa3ccb9302, type: 2}
+  - {fileID: 11400000, guid: 8cd9498c0a5b9934a869e648e1217a70, type: 2}
+  - {fileID: 11400000, guid: 7e441772b32d2f8408c021070f09a322, type: 2}
+  - {fileID: 11400000, guid: 6b1b6f7d05a50c3448695530d3f1cd0f, type: 2}
   _darkBackground: {fileID: 597712086}
   _skipText: {fileID: 1348303358}
   _selectCard1: 49
