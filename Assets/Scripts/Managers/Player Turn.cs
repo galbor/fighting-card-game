@@ -327,6 +327,7 @@ namespace Managers
             
             DiscardHand();
             EnemiesAttack();
+            if (RoomManager.Instance.CheckRoomWin()) return; //spike damage happens after EnemiesAttack()
             StartTurn();
         }
 

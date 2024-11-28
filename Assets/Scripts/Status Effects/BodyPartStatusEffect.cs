@@ -27,7 +27,8 @@ namespace DefaultNamespace.StatusEffects
         {
             NONE,
             BLEED,
-            KNIFE
+            KNIFE,
+            SPIKES
         }
 
         private struct TypeParameters
@@ -132,6 +133,18 @@ namespace DefaultNamespace.StatusEffects
                         new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictBleed } },
                         "When attacking, adds X bleed to the attacked body part"
                         );
+                    return;
+                case StatusType.SPIKES:
+                    UnityAction<object> inflictSpikeDamage = obj =>
+                    {
+                        var attack = (BasicAttackCard.AttackStruct)obj;
+                        if (attack.GetHealthBar(false) == BodyPart)
+                            attack.GetHealthBar(true).RemoveHealth(Number);
+                    };
+                    _typeParameters = new TypeParameters("Spike",
+                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictSpikeDamage } },
+                        "When attacked, deal X damage to attacking body part"
+                    );
                     return;
                 default:
                     throw new Exception($"No coded TypeParameter for type {_statusType}");

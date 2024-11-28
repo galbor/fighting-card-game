@@ -218,6 +218,7 @@ public class Person : MonoBehaviour
             EventManager.Instance.TriggerEvent(EventManager.EVENT__KILL_ENEMY, this);
         else 
             EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAYER_DEATH, null);
+        RemoveAllStatusEffects();
         Destroy(gameObject); //perhaps undefined behavior for player death?
         // gameObject.SetActive(false);
     }

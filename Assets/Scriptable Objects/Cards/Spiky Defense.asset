@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b8d8511acbdec49a11c7e7664e9b3b, type: 3}
+  m_Name: Spiky Defense
+  m_EditorClassIdentifier: 
+  _name: Spiky Defense
+  _description: 
+  _image: {fileID: 0}
+  _cost: 1
+  _draw: 0
+  _singleEnemyTarget: 0
+  _targetType: 0
+  _preSelectedTarget: 0
+  _attackerType: 00000000
+  _exhaust: 1
+  _ethereal: 0
+  _cardsToPlay:
+  - {fileID: 11400000, guid: e2acb1be8d4132f4dacc9cb612e25aa6, type: 2}
+  _block: 15

@@ -37,8 +37,8 @@ namespace cards
             foreach (var attackerType in AttackerType)
             {
                 res.AppendFormat("Defend your {0} ", TargetTypeName(TargetType));
-                res.AppendFormat("with your {0}.\n", attackerType.ToString());
-                res.AppendFormat("Gain {0} block", _block);
+                res.AppendFormat("with your {0}. ", attackerType.ToString());
+                res.AppendFormat("Gain {0} block.\n", _block);
             }
 
             return res.ToString();
