@@ -1,69 +1,12 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7726213827637130369
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3529259448339735092}
-  - component: {fileID: 6089494831786019724}
-  m_Layer: 5
-  m_Name: Tiny Shield
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &3529259448339735092
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7726213827637130369}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 528695934654255349}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6089494831786019724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7726213827637130369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781eab098aeb4711954cbe933467a1f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _resetEveryTurn: 1
-  _resetEveryCombat: 0
-  _displayCounter: 0
-  _description: At the start of the turn, left arm gets {block} block.
-  _sprite: {fileID: 21300000, guid: b57cd67acef606b4db7f947ab1bebfb8, type: 3}
-  _descriptionScript: {fileID: 108018312894277230}
-  _bodyPart: 2
-  _amt: 2
---- !u!1001 &2528847791197897866
+--- !u!1001 &4124615171323263358
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3529259448339735092}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2616041130246231167, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
       propertyPath: m_Pivot.x
@@ -145,23 +88,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8047833783604057865, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b57cd67acef606b4db7f947ab1bebfb8, type: 3}
     - target: {fileID: 8834210418297611936, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
       propertyPath: m_Name
-      value: AbstractRelic
+      value: Tiny Shield
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8834210418297611936, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5699968615900664713}
   m_SourcePrefab: {fileID: 100100000, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
---- !u!114 &108018312894277230 stripped
+--- !u!114 &1970909891342490522 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2479099377456325348, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
-  m_PrefabInstance: {fileID: 2528847791197897866}
+  m_PrefabInstance: {fileID: 4124615171323263358}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -169,8 +111,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af2fa478e07a42b8be013438c04ece73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &528695934654255349 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2616041130246231167, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
-  m_PrefabInstance: {fileID: 2528847791197897866}
+--- !u!1 &4874293603042058206 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8834210418297611936, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
+  m_PrefabInstance: {fileID: 4124615171323263358}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5699968615900664713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4874293603042058206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 781eab098aeb4711954cbe933467a1f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resetEveryTurn: 1
+  _resetEveryCombat: 0
+  _displayCounter: 0
+  _description: At the start of the turn, left arm gets {block} block.
+  _sprite: {fileID: 21300000, guid: b57cd67acef606b4db7f947ab1bebfb8, type: 3}
+  _descriptionScript: {fileID: 1970909891342490522}
+  _bodyPart: 2
+  _amt: 2

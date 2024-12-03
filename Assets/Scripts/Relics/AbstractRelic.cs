@@ -55,7 +55,7 @@ namespace Relics
 
         protected void Awake()
         {
-            _image = transform.GetChild(0).GetComponent<Image>();
+            _image = gameObject.GetComponent<Image>();
             _image.sprite = Sprite;
 
             _counterText = InstantiateText(new Vector2(1, 0), COUNTERTEXTFONTSIZE);

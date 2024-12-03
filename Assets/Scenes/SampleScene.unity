@@ -3163,11 +3163,11 @@ MonoBehaviour:
   _relicParent: {fileID: 120528238}
   _spacing: 1.5
   _possibleRelics:
-  - {fileID: 6089494831786019724, guid: ac537ba2eea8d6b429520b53938ec3e1, type: 3}
-  - {fileID: 8505983185546911333, guid: 373b2c4f2bd470349b7ea1767d75f737, type: 3}
-  - {fileID: 1432588086205640488, guid: bc49905166b24c74ca17372515dfafbd, type: 3}
-  - {fileID: 5398193657126507640, guid: 9d34117b560713c4d8ae7fb63f1ae183, type: 3}
-  - {fileID: 8706466394470894858, guid: e31a08819e5f4e94eadee039f4632eb4, type: 3}
+  - {fileID: 3719476968167422165, guid: 36d395fce0454ba4faffc4c61547a5dc, type: 3}
+  - {fileID: 6812717983294136450, guid: 7e553b788e578b442bb99c80e5b1b547, type: 3}
+  - {fileID: 3412955329375704865, guid: 72dcd439652a34140805d8aa52ab92d6, type: 3}
+  - {fileID: 4133761639971809206, guid: 9d87371ca6bc3614f96924b6c12cf073, type: 3}
+  - {fileID: 5699968615900664713, guid: 9868e27c48df73d41ad47f4348c302be, type: 3}
 --- !u!114 &1611676124
 MonoBehaviour:
   m_ObjectHideFlags: 0
