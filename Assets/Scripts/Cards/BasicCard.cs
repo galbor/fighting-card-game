@@ -142,7 +142,6 @@ namespace cards
         {
             if (_description == "") return GenerateThisDescription();
             return _description.Replace("\\n", "\n");
-            ;
         }
 
         /**
