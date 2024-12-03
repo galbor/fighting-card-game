@@ -1,12 +1,11 @@
 ﻿using Managers;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace Map
 {
     public class RoomChoice : MonoBehaviour
     {
         [SerializeField] private Room _room;
-        
         
         public void SetRoom()
         {

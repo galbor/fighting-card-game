@@ -53,6 +53,7 @@ MonoBehaviour:
   _resetEveryCombat: 0
   _displayCounter: 0
   _description: At the start of combat get 1 energy.
+  _sprite: {fileID: 21300000, guid: 97b00358c3d7fc140a0647596ac52518, type: 3}
   _descriptionScript: {fileID: 7075993736669724418}
 --- !u!1001 &4635749309545668070
 PrefabInstance:

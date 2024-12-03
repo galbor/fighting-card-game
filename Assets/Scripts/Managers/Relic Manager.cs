@@ -41,7 +41,7 @@ namespace Managers
          * has a shuffled list of relics, pops from the top
          * DOESN'T ADD THE RELIC TO THE RELIC LIST
          */
-        public AbstractRelic GetRandomUnseenRelic()
+        public AbstractRelic PopRandomUnseenRelic()
         {
             var res = _shuffledRelicsList.Dequeue();
             if (_shuffledRelicsList.Count == 0) GenerateShuffledRelicsList();
@@ -53,7 +53,7 @@ namespace Managers
          */
         public AbstractRelic AddRandomUnseenRelic()
         {
-            var res = GetRandomUnseenRelic();
+            var res = PopRandomUnseenRelic();
             AddRelic(res);
             return res;
         }

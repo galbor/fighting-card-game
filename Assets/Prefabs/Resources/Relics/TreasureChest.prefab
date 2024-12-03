@@ -62,6 +62,7 @@ MonoBehaviour:
   _resetEveryCombat: 0
   _displayCounter: 0
   _description: After every combat, get a relic.
+  _sprite: {fileID: 21300000, guid: 69bb05a6d3f38a64d8c004707e15a0dc, type: 3}
   _descriptionScript: {fileID: 1202709617513145955}
 --- !u!1001 &3663508670957487239
 PrefabInstance:
@@ -154,7 +155,7 @@ PrefabInstance:
     - target: {fileID: 8047833783604057865, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 69bb05a6d3f38a64d8c004707e15a0dc, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8834210418297611936, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
       propertyPath: m_Name
       value: AbstractRelic

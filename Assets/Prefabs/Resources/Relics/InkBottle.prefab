@@ -62,6 +62,7 @@ MonoBehaviour:
   _resetEveryCombat: 0
   _displayCounter: 1
   _description: Draws a card when you play {draw} cards.
+  _sprite: {fileID: 21300000, guid: acc5cebf77dd33b41856f2f10a9514f9, type: 3}
   _descriptionScript: {fileID: 1105897064502292658}
   _cardsBeforeDraw: 3
 --- !u!1001 &3260439257514463830
@@ -155,7 +156,7 @@ PrefabInstance:
     - target: {fileID: 8047833783604057865, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: acc5cebf77dd33b41856f2f10a9514f9, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8834210418297611936, guid: 795e5565274645c40b6db8657d558ec8, type: 3}
       propertyPath: m_Name
       value: AbstractRelic

@@ -16,6 +16,7 @@ namespace Relics
         [SerializeField] protected bool _resetEveryCombat;
         [SerializeField] protected bool _displayCounter;
         [SerializeField] private string _description;
+        [SerializeField] private Sprite _sprite;
 
         [SerializeField] private DescriptionViewer _descriptionScript;
 
@@ -44,6 +45,8 @@ namespace Relics
                 _descriptionScript.Text = value;
             }
         }
+        
+        public Sprite Sprite { get => _sprite; }
 
         private float _activateScaleMultiplier = 1.25f;
         private float _shrinkingScaleMultiplier = 1.01f;
@@ -52,13 +55,12 @@ namespace Relics
 
         protected void Awake()
         {
-            _image = gameObject.GetComponent<Image>();
+            _image = transform.GetChild(0).GetComponent<Image>();
+            _image.sprite = Sprite;
 
             _counterText = InstantiateText(new Vector2(1, 0), COUNTERTEXTFONTSIZE);
             if (!_displayCounter) _counterText.gameObject.SetActive(false);
 
-            // _descriptionTMP = Instantiate(Resources.Load<GameObject>(DESCRIPTIONPREFAB), transform).transform
-            //     .GetChild(0).GetComponent<TMP_Text>();
             Description = _description;
         }
 

@@ -53,6 +53,7 @@ MonoBehaviour:
   _resetEveryCombat: 0
   _displayCounter: 0
   _description: At the start of combat, right arm heals {health} health.
+  _sprite: {fileID: 21300000, guid: 436da00fb9efb874ea0c9961c2d213eb, type: 3}
   _descriptionScript: {fileID: 8038531218766986639}
   _bodyPart: 3
   _amt: 2
