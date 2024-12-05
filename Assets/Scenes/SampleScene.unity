@@ -3230,7 +3230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _possibleMaps:
   - {fileID: 3347352793382955099, guid: 11151609363692e4db1e515ab753116a, type: 3}
-  - {fileID: 3347352793382955099, guid: 11151609363692e4db1e515ab753116a, type: 3}
+  - {fileID: 1494593544172752616, guid: 931ce8b501704f746ae2e057764497b8, type: 3}
   - {fileID: 3347352793382955099, guid: 11151609363692e4db1e515ab753116a, type: 3}
 --- !u!1001 &1692649309
 PrefabInstance:
