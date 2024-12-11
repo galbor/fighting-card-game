@@ -25,5 +25,5 @@ MonoBehaviour:
   _exhaust: 1
   _ethereal: 1
   _cardsToPlay: []
-  _statusEffect: 2
+  _statusEffect: 0
   _amt: 3

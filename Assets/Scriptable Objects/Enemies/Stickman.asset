@@ -27,5 +27,5 @@ MonoBehaviour:
     Bleed: 0
   _startingStatusEffects:
   - _bodyPart: 3
-    _statusEffect: 2
+    _statusType: 0
     _amt: 10

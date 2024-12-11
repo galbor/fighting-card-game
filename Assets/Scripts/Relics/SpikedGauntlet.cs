@@ -27,7 +27,7 @@ namespace Relics
          */
         private void GiveKnife(object obj)
         {
-            Player.Instance.Person.GetHealthBar(_bodyPart).AddStatusEffect(BodyPartStatusEffect.StatusType.KNIFE, _bleed);
+            Player.Instance.Person.GetHealthBar(_bodyPart).AddStatusEffect(typeof(KnifeStatusEffect), _bleed);
             Activate();
         }
     }

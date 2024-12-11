@@ -22,7 +22,7 @@ namespace cards
         {
             base.Play(user, attacking_parts, target, affected_part);
             
-            attacking_parts.ForEach(x => user.GetHealthBar(x).AddStatusEffect(_statusEffect, _amt));
+            attacking_parts.ForEach(x => user.GetHealthBar(x).AddStatusEffect(BodyPartStatusEffect.GetTypeOfStatusType(_statusEffect), _amt));
         }
         
         protected override void UpdateDescription()

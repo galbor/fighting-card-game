@@ -23,13 +23,13 @@ public class Enemy : ScriptableObject
     private struct StartingStatusEffect
     {
         public Person.BodyPartEnum _bodyPart;
-        public BodyPartStatusEffect.StatusType _statusEffect;
+        public BodyPartStatusEffect.StatusType _statusType;
         public int _amt;
 
-        public StartingStatusEffect(Person.BodyPartEnum bodyPart, BodyPartStatusEffect.StatusType statusEffect, int amt)
+        public StartingStatusEffect(Person.BodyPartEnum bodyPart, BodyPartStatusEffect.StatusType statusType, int amt)
         {
             _bodyPart = bodyPart;
-            _statusEffect = statusEffect;
+            _statusType = statusType;
             _amt = amt;
         }
     }
@@ -59,7 +59,7 @@ public class Enemy : ScriptableObject
 
         foreach (var triplet in _startingStatusEffects)
         {
-            _person.GetHealthBar(triplet._bodyPart).AddStatusEffect(triplet._statusEffect, triplet._amt);
+            _person.GetHealthBar(triplet._bodyPart).AddStatusEffect(BodyPartStatusEffect.GetTypeOfStatusType(triplet._statusType), triplet._amt);
         }
         
                 

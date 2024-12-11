@@ -8,45 +8,48 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using cards;
+using DefaultNamespace.Utility;
 
 namespace DefaultNamespace.StatusEffects
 {
     public class BodyPartStatusEffect : MonoBehaviour
     {
         [SerializeField] private Image _image;
-        [FormerlySerializedAs("_text")] [SerializeField] private TMP_Text _stacks;
+        [SerializeField] private TMP_Text _stacks;
 
-        [SerializeField] private DescriptionViewer _description;
+        [FormerlySerializedAs("_description")] [SerializeField] private DescriptionViewer _descriptionViewer;
+
+        protected static Dictionary<Type, Pool<BodyPartStatusEffect>> _pools;
+
+        protected Sprite _sprite;
+        protected Dictionary<string, UnityAction<object>> _eventActionDict;
+        protected string _description;
 
         public HealthBar BodyPart { get; set; }
         
-        private StatusType _statusType;
-        private TypeParameters _typeParameters;
-        
+        public Pool<BodyPartStatusEffect> Pool => _pools[GetStatusType()];
+
         public enum StatusType
         {
-            NONE,
-            BLEED,
             KNIFE,
-            SPIKES
+            SPIKE
         }
 
-        private struct TypeParameters
+        /**
+         * returns inheritor type of BodyPartStatusEffect from StatusType enum
+         */
+        public static Type GetTypeOfStatusType(StatusType statusType) => statusType switch
         {
-            public TypeParameters(string spriteName, Dictionary<string, UnityAction<object>> eventActionDict, string description)
-            {
-                Sprite = Resources.Load<Sprite>(spriteName);
-                EventActionDict = eventActionDict;
-                Description = description;
-            }
-            
-            public Sprite Sprite { get; private set; }
-            public Dictionary<string, UnityAction<object>> EventActionDict { get; private set; }
-            public string Description { get; private set; }
-        }
+            StatusType.KNIFE =>
+                typeof(KnifeStatusEffect),
+            StatusType.SPIKE =>
+                typeof(SpikeStatusEffect),
+            _ => //default
+                throw new Exception("StatusType doesn't appear in this switch-case")
+        };
 
         private int _number = 1;
-        public int Number
+        public virtual int Number
         {
             get => _number;
             set
@@ -57,35 +60,36 @@ namespace DefaultNamespace.StatusEffects
             }
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Number = _number;
+            
+            _pools ??= new Dictionary<Type, Pool<BodyPartStatusEffect>>(); //if null;
+            if (!_pools.ContainsKey(GetType()))
+            {
+                _pools.Add(GetType(), new Pool<BodyPartStatusEffect>(this));
+            }
         }
 
         /**
          * disables listeners
          */
-        public void Disable()
+        private void OnDisable()
         {
-            if (_statusType == StatusType.NONE) return;
             StopListening();
         }
 
-        public void SetType(StatusType statusType)
+        public void OnEnable()
         {
-            if (statusType == StatusType.NONE) return;
-            
-            _statusType = statusType;
-            ObtainTypeParameters();
-            _image.sprite = _typeParameters.Sprite;
             StartListening();
-
-            _description.Text = _typeParameters.Description;
+            
+            _image.sprite = _sprite;
+            _descriptionViewer.Text = _description;
         }
 
         private void StopListening()
         {
-            foreach (var pair in _typeParameters.EventActionDict)
+            foreach (var pair in _eventActionDict)
             {
                 EventManager.Instance.StopListening(pair.Key, pair.Value);
             }
@@ -93,62 +97,30 @@ namespace DefaultNamespace.StatusEffects
 
         private void StartListening()
         {
-            foreach (var pair in _typeParameters.EventActionDict)
+            foreach (var pair in _eventActionDict)
             {
                 EventManager.Instance.StartListening(pair.Key, pair.Value);
             }
         }
 
-        public StatusType GetStatusType()
+        public static Pool<BodyPartStatusEffect> GetPool<TStatus>() where TStatus : BodyPartStatusEffect
         {
-            return _statusType;
+            return _pools[typeof(TStatus)];
         }
 
-        /**
-         * puts the new TypeParameters in a variable
-         */
-        private void ObtainTypeParameters()
+        public static Pool<BodyPartStatusEffect> GetPool(BodyPartStatusEffect status)
         {
-            switch (_statusType)
-            {
-                case StatusType.BLEED:
-                    UnityAction<object> takeBleedDamage = obj =>
-                    {
-                        BodyPart.RemoveHealth(Number);
-                        Number -= 1;
-                    };
-                    _typeParameters = new TypeParameters("Bleed",
-                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__END_TURN, takeBleedDamage } },
-                        "At the end of the turn, deals X damage and removes 1 stack"
-                    );
-                    return;
-                case StatusType.KNIFE:
-                    UnityAction<object> inflictBleed = obj =>
-                    {
-                        var attack = (BasicAttackCard.AttackStruct)obj;
-                        if (attack.GetHealthBar(true) == BodyPart)
-                            attack.GetHealthBar(false).AddStatusEffect(StatusType.BLEED, Number);
-                    };
-                    _typeParameters = new TypeParameters("BloodyKnife",
-                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictBleed } },
-                        "When attacking, adds X bleed to the attacked body part"
-                        );
-                    return;
-                case StatusType.SPIKES:
-                    UnityAction<object> inflictSpikeDamage = obj =>
-                    {
-                        var attack = (BasicAttackCard.AttackStruct)obj;
-                        if (attack.GetHealthBar(false) == BodyPart)
-                            attack.GetHealthBar(true).RemoveHealth(Number);
-                    };
-                    _typeParameters = new TypeParameters("Spike",
-                        new Dictionary<string, UnityAction<object>>() { { EventManager.EVENT__HIT, inflictSpikeDamage } },
-                        "When attacked, deal X damage to attacking body part"
-                    );
-                    return;
-                default:
-                    throw new Exception($"No coded TypeParameter for type {_statusType}");
-            }
+            return _pools[status.GetStatusType()];
+        }
+
+        public static Pool<BodyPartStatusEffect> GetPool(Type type)
+        {
+            return _pools[type];
+        }
+
+        public Type GetStatusType()
+        {
+            return GetType();
         }
     }
 }

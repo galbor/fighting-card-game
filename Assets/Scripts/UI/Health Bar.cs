@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using DefaultNamespace.StatusEffects;
-using DefaultNamespace.Utility;
 using Managers;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace DefaultNamespace.UI
@@ -20,7 +20,6 @@ namespace DefaultNamespace.UI
         [SerializeField] private BodyPartStatusEffect _statusEffectPrefab;
         [SerializeField] private Transform _statusEffectParent;
 
-        private static Pool<BodyPartStatusEffect> _pool;
         private List<BodyPartStatusEffect> _statusEffects;
 
         private int _maxHealth = 50;
@@ -61,8 +60,6 @@ namespace DefaultNamespace.UI
             _slider.maxValue = _maxHealth;
             _widthMaxHealthRatio = _rectTransform.sizeDelta.x / _maxHealth;
             SetHealth(_maxHealth);
-            _pool ??= new Pool<BodyPartStatusEffect>(Instantiate(_statusEffectPrefab,
-                _statusEffectParent)); //if null assign
             _statusEffects = new List<BodyPartStatusEffect>();
         }
 
@@ -187,58 +184,65 @@ namespace DefaultNamespace.UI
          * adds a status effect
          * if already exists, adds amt to the existing one
          * if the sum with amt is 0, removes the status effect
+         * @return true iff successful
          */
-        public void AddStatusEffect(BodyPartStatusEffect.StatusType statusType, int amt,
+        public bool AddStatusEffect(Type TStatus, int amt,
             bool affectsDeadBodyParts = false)
         {
-            if (!affectsDeadBodyParts && !IsAlive()) return;
-            BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == statusType);
+            if (!IsStatusEffect(TStatus) || (!affectsDeadBodyParts && !IsAlive())) return false;
+            BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == TStatus);
+            int num = 0;
             if (status != null)
             {
-                SetStatusEffect(statusType, status.Number + amt, affectsDeadBodyParts);
-                return;
+                num = status.Number;
             }
 
-            SetStatusEffect(statusType, amt, affectsDeadBodyParts);
+            SetStatusEffect(TStatus, num + amt, affectsDeadBodyParts);
+            return true;
         }
 
         /**
          * sets a status effect's amt
          * if type doesn't exist, creates it
          * if 0, removes it
+         * @return true iff successful
          */
-        public void SetStatusEffect(BodyPartStatusEffect.StatusType statusType, int amt,
+        public bool SetStatusEffect(Type TStatus, int amt,
             bool affectsDeadBodyParts = false)
         {
-            if (!affectsDeadBodyParts && !IsAlive()) return;
-            BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == statusType);
+            if (!IsStatusEffect(TStatus) || (!affectsDeadBodyParts && !IsAlive())) return false;
+            BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == TStatus);
             if (status != null)
             {
                 status.Number = amt; //if amt == 0, removes self
-                return;
+                return true;
             }
 
-            status = _pool.GetFromPool();
-            status.SetType(statusType);
+            status = BodyPartStatusEffect.GetPool(TStatus).GetFromPool();
             status.BodyPart = this;
             SetNewStatusPosition(status);
             _statusEffects.Add(status);
             status.Number = amt;
+            return true;
         }
 
+        /**
+         * also sets parent
+         */
         private void SetNewStatusPosition(BodyPartStatusEffect status)
         {
-            status.transform.localPosition = new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
-            status.transform.SetParent(_statusEffectParent, false);
-            status.transform.localScale = Vector3.one;
+            Transform statusTransform = status.transform;
+            statusTransform.localPosition = new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
+            statusTransform.SetParent(_statusEffectParent, false);
+            statusTransform.localScale = Vector3.one;
         }
 
         /**
          * @return true iff status effect existed
          */
-        public bool RemoveStatusEffect(BodyPartStatusEffect.StatusType statusType)
+        public bool RemoveStatusEffect<TStatus>() where TStatus : BodyPartStatusEffect
         {
-            BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == statusType);
+            BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == typeof(TStatus));
             if (status == null) return false;
             RemoveStatusEffect(status);
 
@@ -251,8 +255,7 @@ namespace DefaultNamespace.UI
          */
         public void RemoveStatusEffect(BodyPartStatusEffect status)
         {
-            status.Disable();
-            _pool.ReturnToPool(status);
+            BodyPartStatusEffect.GetPool(status).ReturnToPool(status);
             _statusEffects.Remove(status);
             for (int i = 0; i < _statusEffects.Count; i++)
             {
@@ -265,11 +268,19 @@ namespace DefaultNamespace.UI
         {
             _statusEffects.ForEach(x =>
             {
-                x.Disable();
                 x.transform.SetParent(EventManager.Instance._TextParent, true); //might as well be parent
-                _pool.ReturnToPool(x);
+                BodyPartStatusEffect.GetPool(x).ReturnToPool(x);
             });
             _statusEffects.Clear();
+        }
+
+
+        /**
+         * returns true iff 'type' strictly inherirts from BodyPartStatusEffect 
+         */
+        private bool IsStatusEffect(Type type)
+        {
+            return type.IsSubclassOf(typeof(BodyPartStatusEffect));
         }
     }
 }
