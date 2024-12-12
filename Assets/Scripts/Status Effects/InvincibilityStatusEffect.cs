@@ -11,7 +11,6 @@ namespace DefaultNamespace.StatusEffects
         protected new void Awake()
         {
             base.Awake();
-            _sprite = Resources.Load<Sprite>("Status Effects/Invincibility");
             _eventActionDict = new Dictionary<string, UnityAction<object>>
             {
                 {EventManager.EVENT__HIT, LoseStackOnAttack},

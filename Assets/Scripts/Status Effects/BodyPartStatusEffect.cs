@@ -14,14 +14,12 @@ namespace DefaultNamespace.StatusEffects
 {
     public class BodyPartStatusEffect : MonoBehaviour
     {
-        [SerializeField] private Image _image;
         [SerializeField] private TMP_Text _stacks;
 
         [FormerlySerializedAs("_description")] [SerializeField] private DescriptionViewer _descriptionViewer;
 
         protected static Dictionary<Type, Pool<BodyPartStatusEffect>> _pools;
 
-        protected Sprite _sprite;
         protected Dictionary<string, UnityAction<object>> _eventActionDict;
         protected string _description;
 
@@ -86,7 +84,6 @@ namespace DefaultNamespace.StatusEffects
         {
             StartListening();
             
-            _image.sprite = _sprite;
             _descriptionViewer.Text = _description;
         }
 

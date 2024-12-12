@@ -13,7 +13,6 @@ namespace DefaultNamespace.StatusEffects
         protected new void Awake()
         {
             base.Awake();
-            _sprite = Resources.Load<Sprite>("Status Effects/Spike");
             _eventActionDict = new Dictionary<string, UnityAction<object>> { { EventManager.EVENT__HIT, inflictSpikeDamage } };
             _description = "When attacked, deal X damage to attacking body part";
         }
