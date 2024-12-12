@@ -15,7 +15,7 @@ namespace DefaultNamespace.StatusEffects
         protected new void Awake()
         {
             base.Awake();
-            _sprite = Resources.Load<Sprite>("BloodyKnife");
+            _sprite = Resources.Load<Sprite>("Status Effects/BloodyKnife");
             _eventActionDict = new Dictionary<string, UnityAction<object>> { { EventManager.EVENT__HIT, InflictBleed } };
             _description = "When attacking, adds X bleed to the attacked body part";
         }

@@ -159,8 +159,11 @@ public class Person : MonoBehaviour
     {
         if (_curProtections.Values.Contains(bodyPart))
         {
-            bodyPart = _curProtections.Where(pair => pair.Value == bodyPart).
-                OrderByDescending(pair => GetHealthBar(pair.Key).Defense).First().Key;
+            var protectingParts = _curProtections.Where(pair => pair.Value == bodyPart).Select(pair => pair.Key).ToList();
+            var maxInvincibility = protectingParts.Max(bodypart => GetHealthBar(bodypart).Invincibility);
+            bodyPart = protectingParts.
+                Where(bodypart => GetHealthBar(bodypart).Invincibility == maxInvincibility).
+                OrderByDescending(bodypart => GetHealthBar(bodypart).Defense).First();
         }
 
         //RemoveHealth returns true if health > 0

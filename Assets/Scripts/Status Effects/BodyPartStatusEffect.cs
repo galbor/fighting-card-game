@@ -32,7 +32,8 @@ namespace DefaultNamespace.StatusEffects
         public enum StatusType
         {
             KNIFE,
-            SPIKE
+            SPIKE,
+            INVINCIBLE
         }
 
         /**
@@ -44,6 +45,8 @@ namespace DefaultNamespace.StatusEffects
                 typeof(KnifeStatusEffect),
             StatusType.SPIKE =>
                 typeof(SpikeStatusEffect),
+            StatusType.INVINCIBLE =>
+                typeof(InvincibilityStatusEffect),
             _ => //default
                 throw new Exception("StatusType doesn't appear in this switch-case")
         };
