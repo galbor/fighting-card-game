@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bite
   m_EditorClassIdentifier: 
   _name: Bite
+  _description: 
   _image: {fileID: 0}
   _cost: 1
   _draw: 0
@@ -20,6 +21,8 @@ MonoBehaviour:
   _targetType: 3
   _preSelectedTarget: 0
   _attackerType: 06000000
+  _exhaust: 0
+  _ethereal: 0
   _cardsToPlay: []
   _damage: 5
-  _bleed: 10
+  _bleed: 2
