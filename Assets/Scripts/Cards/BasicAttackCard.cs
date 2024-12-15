@@ -76,6 +76,12 @@ namespace cards
                 _playerAttacker = playerAttacker;
             }
 
+            /**
+             * factory method
+             * returns attackStruct that is equivalent to null
+             */
+            public static AttackStruct None => new AttackStruct(null, Person.BodyPartEnum.NONE, Person.BodyPartEnum.NONE, -1, true);
+
             public Person _enemy;
             public Person.BodyPartEnum _playerPart;
             public Person.BodyPartEnum _enemyPart;
@@ -98,6 +104,14 @@ namespace cards
             public Person GetPerson(bool attacker)
             {
                 return _playerAttacker ^ attacker ? _enemy : Player.Instance.Person;
+            }
+
+            /**
+             * returns true iff the AttackStruct is fake
+             */
+            public bool IsNone()
+            {
+                return _damage < 0 || _enemyPart == Person.BodyPartEnum.NONE;
             }
         }
 
@@ -132,11 +146,17 @@ namespace cards
             Person.BodyPartEnum affected_part)
         {
             base.Play(user, attacking_parts, target, affected_part);
-            Attack(user, attacking_parts, target, affected_part);
+         
+            affected_part = CorrectAffectedPart(affected_part);
+
+            attacking_parts.ForEach(attacking_part =>
+            {
+                AttackStruct hit = Attack(user, attacking_part, target, affected_part);
+                if (!hit.IsNone()) EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, hit);
+            });
         }
 
-        protected virtual AttackStruct[] Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-            Person.BodyPartEnum affected_part)
+        private Person.BodyPartEnum CorrectAffectedPart(Person.BodyPartEnum affected_part)
         {
             if (TargetType == TargetTypeEnum.SIDE && (PreSelectedTarget == Person.BodyPartEnum.LEFT_LEG ||
                                                       PreSelectedTarget == Person.BodyPartEnum.RIGHT_LEG))
@@ -147,30 +167,28 @@ namespace cards
             else if (TargetType == TargetTypeEnum.PRE_SELECTED)
                 affected_part = PreSelectedTarget;
 
-            var res = new List<AttackStruct>();
+            return affected_part;
+        }
 
+        protected virtual AttackStruct Attack(Person user, Person.BodyPartEnum attacking_part, Person target,
+            Person.BodyPartEnum affected_part)
+        {
             var userIsPlayer = user == Player.Instance.Person;
-            attacking_parts.ForEach(attacking_part =>
-            {
-                if (user.GetHealthBar(attacking_part).Health == 0) return; //return is like continue in this case
+            if (user.GetHealthBar(attacking_part).Health == 0) return AttackStruct.None; //return is like continue in this case
 
-                user.RemoveProtection(attacking_part);
+            user.RemoveProtection(attacking_part);
 
-                int hitDamage = user.GetAttackDamage(attacking_part, Damage);
+            int hitDamage = user.GetAttackDamage(attacking_part, Damage);
 
-                var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
-                target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, Bleed));
+            var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
+            target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, Bleed));
 
-                res.Add(new AttackStruct(
-                    userIsPlayer ? target : user,
-                    userIsPlayer ? attacking_part : cur_affected_part,
-                    userIsPlayer ? cur_affected_part : attacking_part,
-                    hitDamage,
-                    userIsPlayer));
-
-                EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, res.Last());
-            });
-            return res.ToArray();
+            return new AttackStruct(
+                userIsPlayer ? target : user,
+                userIsPlayer ? attacking_part : cur_affected_part,
+                userIsPlayer ? cur_affected_part : attacking_part,
+                hitDamage,
+                userIsPlayer);
         }
 
 

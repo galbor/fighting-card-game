@@ -35,7 +35,7 @@ namespace Managers
 
         private void Start()
         {
-            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => LastHit = new BasicAttackCard.AttackStruct());
+            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => LastHit = BasicAttackCard.AttackStruct.None);
             EventManager.Instance.StartListening(EventManager.EVENT__HIT, obj =>
             {
                 var hit = (BasicAttackCard.AttackStruct)obj;

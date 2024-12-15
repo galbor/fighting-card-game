@@ -15,32 +15,27 @@ namespace cards
         private AttackStruct _lastHit;
 
 
-        protected override AttackStruct[] Attack(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
+        protected override AttackStruct Attack(Person user, Person.BodyPartEnum attacking_part, Person target,
             Person.BodyPartEnum affected_part)
         {
             var lastHit = Player.Instance.LastHit;
-            var hits = base.Attack(user, attacking_parts, target, affected_part); //lastSide should change 
+            var hit = base.Attack(user, attacking_part, target, affected_part);
 
-            for (int i = 0; i < hits.Length; i++)
+            var lastSide = Person.GetSide(lastHit._playerPart);
+            var attackingSide = Person.GetSide(hit._playerPart);
+
+            if (attackingSide == lastSide)
             {
-                var lastSide = Person.GetSide(lastHit._playerPart);
-                var attackingSide = Person.GetSide(hits[i]._playerPart);
-
-                if (attackingSide == lastSide)
-                {
-                    PlayerTurn.Instance.Energy++;
-                }
-                else if ((attackingSide == Person.SideEnum.RIGHT && lastSide == Person.SideEnum.LEFT) ||
-                         (attackingSide == Person.SideEnum.LEFT && lastSide == Person.SideEnum.RIGHT))
-                {
-                    target.TakeDamage(hits[i]._enemyPart, hits[i]._damage);
-                    hits[i]._damage *= 2;
-                }
-
-                lastHit = hits[i];
+                PlayerTurn.Instance.Energy++;
+            }
+            else if ((attackingSide == Person.SideEnum.RIGHT && lastSide == Person.SideEnum.LEFT) ||
+                     (attackingSide == Person.SideEnum.LEFT && lastSide == Person.SideEnum.RIGHT))
+            {
+                target.TakeDamage(hit._enemyPart, hit._damage);
+                hit._damage *= 2;
             }
 
-            return hits;
+            return hit;
         }
 
 
