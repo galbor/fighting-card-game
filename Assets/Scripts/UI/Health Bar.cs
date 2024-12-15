@@ -231,8 +231,13 @@ namespace DefaultNamespace.UI
          */
         private void SetNewStatusPosition(BodyPartStatusEffect status)
         {
+            SetStatusPosition(status, _statusEffects.Count);
+        }
+
+        private void SetStatusPosition(BodyPartStatusEffect status, int pos)
+        {
             Transform statusTransform = status.transform;
-            statusTransform.localPosition = new Vector3(_statusEffectSpacing * _statusEffects.Count, 0, 0);
+            statusTransform.localPosition = new Vector3(_statusEffectSpacing * pos, 0, 0);
             statusTransform.SetParent(_statusEffectParent, false);
             statusTransform.localScale = Vector3.one;
         }
@@ -259,8 +264,7 @@ namespace DefaultNamespace.UI
             _statusEffects.Remove(status);
             for (int i = 0; i < _statusEffects.Count; i++)
             {
-                _statusEffects[i].transform.position =
-                    new Vector2(_statusEffectParent.position.x + i * _statusEffectSpacing, 0);
+                SetStatusPosition(_statusEffects[i], i);
             }
         }
 
