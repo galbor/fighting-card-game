@@ -56,5 +56,15 @@ namespace DefaultNamespace.Utility
             find = "{" + find + "}";
             return source.Replace(find, replace);
         }
+
+
+        /**
+         * @return true iff one side is LEFT and the other is RIGHT
+         */
+        public static bool OppositeSides(Person.SideEnum side1, Person.SideEnum side2)
+        {
+            return (side1 == Person.SideEnum.RIGHT && side2 == Person.SideEnum.LEFT) ||
+                     (side1 == Person.SideEnum.LEFT && side2 == Person.SideEnum.RIGHT);
+        }
     }
 }

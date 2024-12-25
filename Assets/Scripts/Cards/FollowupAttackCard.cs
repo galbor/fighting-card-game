@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DefaultNamespace.Utility;
 using Managers;
 using UnityEngine;
 
@@ -28,8 +29,7 @@ namespace cards
             {
                 PlayerTurn.Instance.Energy++;
             }
-            else if ((attackingSide == Person.SideEnum.RIGHT && lastSide == Person.SideEnum.LEFT) ||
-                     (attackingSide == Person.SideEnum.LEFT && lastSide == Person.SideEnum.RIGHT))
+            else if (MyUtils.OppositeSides(attackingSide, lastSide))
             {
                 target.TakeDamage(hit._enemyPart, hit._damage);
                 hit._damage *= 2;
