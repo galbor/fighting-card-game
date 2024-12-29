@@ -33,6 +33,15 @@ namespace DefaultNamespace.UI
             set => SetDefense(value);
         }
 
+        /**
+         * multiply by this when taking hit damage
+         * damage rounded using Math.Round()
+         */
+        public float HitDamageMultiplier
+        {
+            get; set;
+        } = 1f;
+
         private float _widthMaxHealthRatio;
         [SerializeField] private float _minimumWidth;
         [SerializeField] private float _maximumWidth;
@@ -173,6 +182,15 @@ namespace DefaultNamespace.UI
 
             damage = ReduceDefense(damage);
             return SetHealth(_currentHealth - damage);
+        }
+
+        /**
+         * Same as RemoveHealth(int) but times HitDamageMultiplier
+         * @return true iff the object is still alive
+         */
+        public bool TakeHitDamage(int damage)
+        {
+            return RemoveHealth((int)Math.Round(damage * HitDamageMultiplier));
         }
 
         public bool IsAlive()

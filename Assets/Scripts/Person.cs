@@ -166,8 +166,8 @@ public class Person : MonoBehaviour
                 OrderByDescending(bodypart => GetHealthBar(bodypart).Defense).First();
         }
 
-        //RemoveHealth returns true if health > 0
-        if (!_bodyParts[(int)bodyPart]._HealthBar.RemoveHealth(damage))
+        //TakeHitDamage() returns true if health > 0
+        if (!GetHealthBar(bodyPart).TakeHitDamage(damage))
         {
             RemoveProtection(bodyPart);
         }
