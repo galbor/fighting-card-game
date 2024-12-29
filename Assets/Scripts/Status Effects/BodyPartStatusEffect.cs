@@ -31,7 +31,8 @@ namespace DefaultNamespace.StatusEffects
         {
             KNIFE,
             SPIKE,
-            INVINCIBLE
+            INVINCIBLE,
+            VULNERABLE
         }
 
         /**
@@ -45,6 +46,8 @@ namespace DefaultNamespace.StatusEffects
                 typeof(SpikeStatusEffect),
             StatusType.INVINCIBLE =>
                 typeof(InvincibilityStatusEffect),
+            StatusType.VULNERABLE =>
+                typeof(VulnerableStatusEffect),
             _ => //default
                 throw new Exception("StatusType doesn't appear in this switch-case")
         };
@@ -121,6 +124,14 @@ namespace DefaultNamespace.StatusEffects
         public Type GetStatusType()
         {
             return GetType();
+        }
+
+        /**
+         * called when added first to the body part (when number goes up from 0)
+         */
+        public virtual void OnFirstAdded()
+        {
+            return;
         }
     }
 }

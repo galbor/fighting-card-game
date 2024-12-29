@@ -241,6 +241,7 @@ namespace DefaultNamespace.UI
             SetNewStatusPosition(status);
             _statusEffects.Add(status);
             status.Number = amt;
+            status.OnFirstAdded();
             return true;
         }
 
