@@ -3312,6 +3312,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7e441772b32d2f8408c021070f09a322, type: 2}
   - {fileID: 11400000, guid: 6b1b6f7d05a50c3448695530d3f1cd0f, type: 2}
   - {fileID: 11400000, guid: 97ef2b62137ff3047ac640754dc6a982, type: 2}
+  - {fileID: 11400000, guid: a2e6a3bb69914de4c96912327b6eefea, type: 2}
   _darkBackground: {fileID: 597712086}
   _skipText: {fileID: 1348303358}
   _selectCard1: 49
