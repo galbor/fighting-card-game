@@ -8,9 +8,9 @@ namespace DefaultNamespace.StatusEffects
 {
     public class VulnerableStatusEffect : BodyPartStatusEffect
     {
-        private float _damageMultiplier = 1.4f;
+        private int _percentageBonus = 40;
 
-        public float DamageMultiplier {  get => _damageMultiplier; set => ChangeDamageMultiplier(value); }
+        public int PercentageBonus {  get => _percentageBonus; set => ChangeDamageMultiplier(value); }
 
         protected VulnerableStatusEffect() : base() { }
 
@@ -19,7 +19,7 @@ namespace DefaultNamespace.StatusEffects
             base.Awake();
             _eventActionDict = new Dictionary<string, UnityAction<object>>
             { { EventManager.EVENT__START_TURN, obj => Number--}};//enemies attack after start turn
-            _description = string.Format("This body part takes {0}% extra damage for X turns", (int)(DamageMultiplier*100-100));
+            FormatDescription();
         }
 
         public override int Number
@@ -31,28 +31,35 @@ namespace DefaultNamespace.StatusEffects
                 base.Number = value;
                 if (BodyPart == null) return;
                 if (value <= 0 && prevValue > 0) //if becomes 0
-                    ChangeDamageMultiplierFromValue(1f, DamageMultiplier);
+                    ChangePercentageBonusFromValue(0, PercentageBonus);
             }
         }
 
 
-        private void ChangeDamageMultiplier(float value)
+        private void ChangeDamageMultiplier(int value)
         {
-            float prevMultiplier = _damageMultiplier;
-            _damageMultiplier = value;
-            ChangeDamageMultiplierFromValue(_damageMultiplier, prevMultiplier);
+            int prevMultiplier = _percentageBonus;
+            _percentageBonus = value;
+            ChangePercentageBonusFromValue(_percentageBonus, prevMultiplier);
+            FormatDescription();
         }
 
-        private void ChangeDamageMultiplierFromValue(float newValue, float prevValue)
+        private void ChangePercentageBonusFromValue(int newValue, int prevValue)
         {
             if (BodyPart == null) return;
-            BodyPart.HitDamageMultiplier *= (newValue / prevValue);
+            BodyPart.HitDamageMultiplier *= ((float)(100+newValue) / (100+prevValue));
         }
 
         public override void OnFirstAdded()
         {
             base.OnFirstAdded();
-            ChangeDamageMultiplierFromValue(DamageMultiplier, 1f);
+            ChangePercentageBonusFromValue(PercentageBonus, 0);
+        }
+
+        //sets the description to display the correct percentage bonus
+        private void FormatDescription()
+        {
+            _description = string.Format("This body part takes {0}% extra damage for X turns", PercentageBonus);
         }
     }
 }
