@@ -190,7 +190,15 @@ namespace DefaultNamespace.UI
          */
         public bool TakeHitDamage(int damage)
         {
-            return RemoveHealth((int)Math.Round(damage * HitDamageMultiplier));
+            return RemoveHealth(GetHitDamage(damage));
+        }
+
+        /**
+         * @return how much damage a hit would do
+         */
+        public int GetHitDamage(int attackDamage)
+        {
+            return (int)Math.Round(attackDamage * HitDamageMultiplier);
         }
 
         public bool IsAlive()
