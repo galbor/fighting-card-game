@@ -37,7 +37,12 @@ namespace DefaultNamespace.UI
          * multiply by this when taking hit damage
          * damage rounded using Math.Round()
          */
-        public float HitDamageMultiplier
+        public float HitDamageTakenMultiplier
+        {
+            get; set;
+        } = 1f;
+
+        public float HitDamageDealtMultiplier
         {
             get; set;
         } = 1f;
@@ -198,7 +203,7 @@ namespace DefaultNamespace.UI
          */
         public int GetHitDamage(int attackDamage)
         {
-            return (int)Math.Round(attackDamage * HitDamageMultiplier);
+            return (int)Math.Round(attackDamage * HitDamageTakenMultiplier);
         }
 
         public bool IsAlive()

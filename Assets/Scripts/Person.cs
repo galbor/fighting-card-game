@@ -67,7 +67,7 @@ public class Person : MonoBehaviour
     
     private class BodyPart
     {
-        public HealthBar _HealthBar;
+        public HealthBar _healthBar;
         public TMP_Text _letterDisplay;
         public BodyPartEnum _BodyPartEnum;
         public Sprite _sprite;
@@ -75,8 +75,8 @@ public class Person : MonoBehaviour
         public BodyPart(BodyPartEnum part, HealthBar healthBar, int health, TMP_Text letterDisplay)
         {
             _BodyPartEnum = part;
-            _HealthBar = healthBar;
-            _HealthBar.MaxHealth = health;
+            _healthBar = healthBar;
+            _healthBar.MaxHealth = health;
             _letterDisplay = letterDisplay;
             _sprite = _letterDisplay.transform.parent.parent //a bodypart's grandchildren are the letterdisplay and the healthbar 
                 .gameObject.GetComponent<Image>().sprite;
@@ -121,7 +121,7 @@ public class Person : MonoBehaviour
         if (_bodyParts == null) return;
         ForEachBodyPart(bodyPart =>
         {
-            _bodyParts[(int)bodyPart]._HealthBar.MaxHealth = (int)(HealthValues[bodyPart] * _maxHealth);
+            _bodyParts[(int)bodyPart]._healthBar.MaxHealth = (int)(HealthValues[bodyPart] * _maxHealth);
         });
     }
     
@@ -179,23 +179,28 @@ public class Person : MonoBehaviour
     public void Bleed(BodyPartEnum bodyPart, int amt)
     {
         if (amt == 0) return;
-        _bodyParts[(int)bodyPart]._HealthBar.AddStatusEffect(typeof(BleedStatusEffect), amt);
+        _bodyParts[(int)bodyPart]._healthBar.AddStatusEffect(typeof(BleedStatusEffect), amt);
     }
     
     public void Heal(BodyPartEnum bodyPart, int heal)
     {
-        _bodyParts[(int)bodyPart]._HealthBar.AddHealth(heal);
+        _bodyParts[(int)bodyPart]._healthBar.AddHealth(heal);
     }
     
     public void Defend(BodyPartEnum bodyPart, int defense)
     {
-        _bodyParts[(int)bodyPart]._HealthBar.AddDefense(defense);
+        _bodyParts[(int)bodyPart]._healthBar.AddDefense(defense);
     }
 
-
+    /**
+     * calculates how much damage an attack from the given body part with the given base_damage would deal
+     * rounds up
+     * @return the damage
+     */
     public int GetAttackDamage(BodyPartEnum bodyPart, int base_damage)
     {
-        return (int)Math.Ceiling((float)base_damage * _bodyParts[(int)bodyPart]._HealthBar.Health / _bodyParts[(int)bodyPart]._HealthBar.MaxHealth);
+        var healthBar = _bodyParts[(int)bodyPart]._healthBar;
+        return (int)Math.Ceiling((float)base_damage * healthBar.HitDamageDealtMultiplier * healthBar.Health / healthBar.MaxHealth);
     }
     public int GetAttackBleed(BodyPartEnum bodyPart, int base_bleed)
     {
@@ -204,7 +209,7 @@ public class Person : MonoBehaviour
 
     public bool IsAlive()
     {
-        return _bodyParts[(int)BodyPartEnum.HEAD]._HealthBar.IsAlive() && _bodyParts[(int)BodyPartEnum.TORSO]._HealthBar.IsAlive();
+        return _bodyParts[(int)BodyPartEnum.HEAD]._healthBar.IsAlive() && _bodyParts[(int)BodyPartEnum.TORSO]._healthBar.IsAlive();
     }
 
     /**
@@ -248,7 +253,7 @@ public class Person : MonoBehaviour
             BodyPartEnum protectedPart;
             if (_curProtections.TryGetValue(bodyPart, out protectedPart))
             {
-                if (_bodyParts[(int)bodyPart]._HealthBar.Health <= 0)
+                if (_bodyParts[(int)bodyPart]._healthBar.Health <= 0)
                 {
                     RemoveProtection(bodyPart);
                     protectedPart = BodyPartEnum.NONE;
@@ -261,14 +266,14 @@ public class Person : MonoBehaviour
 
     public void RemoveAllDefense()
     {
-        ForEachBodyPart(bodyPart => _bodyParts[(int)bodyPart]._HealthBar.Defense = 0);
+        ForEachBodyPart(bodyPart => _bodyParts[(int)bodyPart]._healthBar.Defense = 0);
     }
 
     public void RemoveAllStatusEffects()
     {
         ForEachBodyPart(x =>
         {
-            _bodyParts[(int)x]._HealthBar.RemoveAllStatusEffects();
+            _bodyParts[(int)x]._healthBar.RemoveAllStatusEffects();
         });
     } 
 
@@ -278,7 +283,7 @@ public class Person : MonoBehaviour
         
         Sprite image = protectedPart == BodyPartEnum.NONE ? null : _bodyParts[(int)protectedPart]._sprite;
         
-        _bodyParts[(int)guard]._HealthBar.SetBlockImage(image);
+        _bodyParts[(int)guard]._healthBar.SetBlockImage(image);
     }
     
     public int MaxHealth => _maxHealth;
@@ -313,7 +318,7 @@ public class Person : MonoBehaviour
 
     public HealthBar GetHealthBar(BodyPartEnum bodyPart)
     {
-        return _bodyParts[(int)bodyPart]._HealthBar;
+        return _bodyParts[(int)bodyPart]._healthBar;
     }
 
     /**
@@ -324,7 +329,10 @@ public class Person : MonoBehaviour
         _body._plannedAttackDisplay.gameObject.SetActive(true);
         _body._plannedAttackDisplay.SetAttackingPart(GetBodyPartSprite(attackingPart));
         _body._plannedAttackDisplay.SetAffectedPart(Player.Instance.Person.GetBodyPartSprite(affectedPart));
-        _body._plannedAttackDisplay.SetDamage(GetAttackDamage(attackingPart, damage));
+
+        var plannedAttackDamage = GetAttackDamage(attackingPart, damage);
+        var hitDamage = Player.Instance.Person.GetHealthBar(affectedPart).GetHitDamage(plannedAttackDamage);
+        _body._plannedAttackDisplay.SetDamage(hitDamage);
     }
 
     public void HidePlannedAttack()

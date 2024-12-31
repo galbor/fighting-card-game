@@ -47,7 +47,7 @@ namespace DefaultNamespace.StatusEffects
         private void ChangePercentageBonusFromValue(int newValue, int prevValue)
         {
             if (BodyPart == null) return;
-            BodyPart.HitDamageMultiplier *= ((float)(100+newValue) / (100+prevValue));
+            BodyPart.HitDamageTakenMultiplier *= ((float)(100+newValue) / (100+prevValue));
         }
 
         public override void OnFirstAdded()
