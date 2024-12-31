@@ -42,10 +42,21 @@ namespace DefaultNamespace.UI
             get; set;
         } = 1f;
 
+        /**
+         * multiply by this when dealing damage
+         */
         public float HitDamageDealtMultiplier
         {
             get; set;
         } = 1f;
+
+        /**
+         * added to hit this health bar deals, before multiplying
+         */
+        public int HitDamageDealtAddition
+        {
+            get; set;
+        } = 0;
 
         private float _widthMaxHealthRatio;
         [SerializeField] private float _minimumWidth;

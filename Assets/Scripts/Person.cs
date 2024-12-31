@@ -200,6 +200,7 @@ public class Person : MonoBehaviour
     public int GetAttackDamage(BodyPartEnum bodyPart, int base_damage)
     {
         var healthBar = _bodyParts[(int)bodyPart]._healthBar;
+        base_damage += healthBar.HitDamageDealtAddition;
         return (int)Math.Ceiling((float)base_damage * healthBar.HitDamageDealtMultiplier * healthBar.Health / healthBar.MaxHealth);
     }
     public int GetAttackBleed(BodyPartEnum bodyPart, int base_bleed)
