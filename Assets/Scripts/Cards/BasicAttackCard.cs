@@ -178,7 +178,7 @@ namespace cards
 
             user.RemoveProtection(attacking_part);
 
-            int hitDamage = user.GetAttackDamage(attacking_part, Damage);
+            int hitDamage = AttackDamage(user, attacking_part);
 
             var cur_affected_part = target.TakeDamage(affected_part, hitDamage);
             target.Bleed(cur_affected_part, user.GetAttackBleed(attacking_part, Bleed));
@@ -189,6 +189,14 @@ namespace cards
                 userIsPlayer ? cur_affected_part : attacking_part,
                 hitDamage,
                 userIsPlayer);
+        }
+
+        /**
+         * @returns would-be attack damage
+         */
+        protected virtual int AttackDamage(Person user, Person.BodyPartEnum attacking_part)
+        {
+            return user.GetAttackDamage(attacking_part, Damage);
         }
 
 

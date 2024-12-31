@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DefaultNamespace.Utility;
 using Managers;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 namespace cards
@@ -23,19 +24,27 @@ namespace cards
             var hit = base.Attack(user, attacking_part, target, affected_part);
 
             var lastSide = Person.GetSide(lastHit._playerPart);
-            var attackingSide = Person.GetSide(hit._playerPart);
+            var attackingSide = Person.GetSide(attacking_part);
 
             if (attackingSide == lastSide)
             {
                 PlayerTurn.Instance.Energy++;
             }
-            else if (MyUtils.OppositeSides(attackingSide, lastSide))
-            {
-                target.TakeDamage(hit._enemyPart, hit._damage);
-                hit._damage *= 2;
-            }
 
             return hit;
+        }
+
+        protected override int AttackDamage(Person user, Person.BodyPartEnum attacking_part)
+        {
+            var lastHit = Player.Instance.LastHit;
+            var lastSide = Person.GetSide(lastHit._playerPart);
+            var attackingSide = Person.GetSide(attacking_part);
+
+            int mult = 1;
+
+            if (MyUtils.OppositeSides(attackingSide, lastSide)) mult = 2;
+
+            return base.AttackDamage(user, attacking_part) * mult;
         }
 
 
