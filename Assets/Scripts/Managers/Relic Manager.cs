@@ -10,7 +10,9 @@ namespace Managers
     {
         [SerializeField] private Transform _relicParent;
         [SerializeField] private float _spacing; //relic distance in relics
-        [SerializeField] private AbstractRelic[] _possibleRelics;
+        [SerializeField] private RelicListScriptableObject _commonRelics;
+
+        private AbstractRelic[] _possibleRelics;
 
         private Queue<AbstractRelic> _shuffledRelicsList;
 
@@ -23,6 +25,8 @@ namespace Managers
         private void Awake()
         {
             _relics = new List<AbstractRelic>();
+
+            _possibleRelics = _commonRelics.Relics;
 
             _shuffledRelicsList = new Queue<AbstractRelic>();
             GenerateShuffledRelicsList();

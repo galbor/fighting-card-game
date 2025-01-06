@@ -8,7 +8,7 @@ namespace Managers
 {
     public class CardDraftManager : Singleton<CardDraftManager>
     {
-        [SerializeField] private BasicCard[] _possibleCards;
+        [SerializeField] private CardDraftScriptableObject _possibleCards;
 
         [SerializeField] private GameObject _darkBackground;
 
@@ -31,7 +31,7 @@ namespace Managers
             StateManager.Instance.AddState(this);
             
             _chosenCards = new List<BasicCard>();
-            MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Length, 3).ForEach(x => _chosenCards.Add(_possibleCards[x]));
+            MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Cards.Length, 3).ForEach(x => _chosenCards.Add(_possibleCards.Cards[x]));
             SetDraftActive(true);
         }
 

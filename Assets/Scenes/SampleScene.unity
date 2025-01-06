@@ -3298,21 +3298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b003c08361404c14848aef67783c84d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _possibleCards:
-  - {fileID: 11400000, guid: 3946f5165aab6e24293ab268314d816c, type: 2}
-  - {fileID: 11400000, guid: ec2dfc525ff18554fa2fcac3fe09c438, type: 2}
-  - {fileID: 11400000, guid: 057f1bed61de49b4695ffd1e352646aa, type: 2}
-  - {fileID: 11400000, guid: fc240933df98d554cbb01467597c1794, type: 2}
-  - {fileID: 11400000, guid: bab537fce546113469f677b60e1a1492, type: 2}
-  - {fileID: 11400000, guid: 81c4786ae25e40346921039997e30636, type: 2}
-  - {fileID: 11400000, guid: 0263e2a05f235d3448e452d4a4f3cbcf, type: 2}
-  - {fileID: 11400000, guid: c6f45fbcd7d675443b8c9eacbcaa23b2, type: 2}
-  - {fileID: 11400000, guid: 5336be44bfe005c44a95a0fa3ccb9302, type: 2}
-  - {fileID: 11400000, guid: 8cd9498c0a5b9934a869e648e1217a70, type: 2}
-  - {fileID: 11400000, guid: 7e441772b32d2f8408c021070f09a322, type: 2}
-  - {fileID: 11400000, guid: 6b1b6f7d05a50c3448695530d3f1cd0f, type: 2}
-  - {fileID: 11400000, guid: 97ef2b62137ff3047ac640754dc6a982, type: 2}
-  - {fileID: 11400000, guid: a2e6a3bb69914de4c96912327b6eefea, type: 2}
+  _possibleCards: {fileID: 11400000, guid: c4156014a1f51a0408ef5d4002ff0587, type: 2}
   _darkBackground: {fileID: 597712086}
   _skipText: {fileID: 1348303358}
   _selectCard1: 49
@@ -3333,13 +3319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _relicParent: {fileID: 120528238}
   _spacing: 1.5
-  _possibleRelics:
-  - {fileID: 3719476968167422165, guid: 36d395fce0454ba4faffc4c61547a5dc, type: 3}
-  - {fileID: 6812717983294136450, guid: 7e553b788e578b442bb99c80e5b1b547, type: 3}
-  - {fileID: 3412955329375704865, guid: 72dcd439652a34140805d8aa52ab92d6, type: 3}
-  - {fileID: 4133761639971809206, guid: 9d87371ca6bc3614f96924b6c12cf073, type: 3}
-  - {fileID: 5699968615900664713, guid: 9868e27c48df73d41ad47f4348c302be, type: 3}
-  - {fileID: 4439693373471244973, guid: d5ce7720d99e5be4ebbb79d59cdb8c07, type: 3}
+  _commonRelics: {fileID: 11400000, guid: 2912eeb32a7b21e4cb109f6e9cfe1c6d, type: 2}
 --- !u!114 &1611676124
 MonoBehaviour:
   m_ObjectHideFlags: 0
