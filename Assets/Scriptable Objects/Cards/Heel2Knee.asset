@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Heel2Knee
   m_EditorClassIdentifier: 
   _name: Heel to the Knee
+  _description: 
   _image: {fileID: 0}
   _cost: 2
   _draw: 0
   _singleEnemyTarget: 1
-  _targetType: 2
-  _preSelectedTarget: 4
-  _attackerType: 04000000
+  _choiceArr: 03000000
+  _preSelectedArr: 04000000
+  _exhaust: 0
+  _ethereal: 0
   _cardsToPlay: []
   _damage: 30
   _bleed: 0

@@ -11,9 +11,9 @@ namespace cards
     public class Side2SideAttackCard : BasicAttackCard
     {
         public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-            Person.BodyPartEnum affected_part)
+            List<Person.BodyPartEnum> affected_parts)
         {
-            Person.SideEnum side = Person.GetSide(affected_part);
+            Person.SideEnum side = Person.GetSide(affected_parts[0]);
             for (int i = 0; i < attacking_parts.Count; i++)
             {
                 Person.BodyPartEnum attackingPart = attacking_parts[i];
@@ -33,7 +33,7 @@ namespace cards
                 }
             }
 
-            base.Play(user, attacking_parts, target, affected_part);
+            base.Play(user, attacking_parts, target, affected_parts);
             // Attack(user, attacking_parts, target, affected_part);
             // PlayAbility(user, attacking_parts, target, affected_part);
         }

@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Block Face
   m_EditorClassIdentifier: 
   _name: Block Face
+  _description: 
   _image: {fileID: 0}
   _cost: 1
   _draw: 0
   _singleEnemyTarget: 0
-  _targetType: 0
-  _preSelectedTarget: 0
-  _attackerType: 00000000
+  _choiceArr: 00000000
+  _preSelectedArr: 00000000
+  _exhaust: 0
+  _ethereal: 0
   _cardsToPlay: []
   _block: 11
-  _invincibility: 0

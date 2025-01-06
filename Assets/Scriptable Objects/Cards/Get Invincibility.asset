@@ -18,9 +18,8 @@ MonoBehaviour:
   _cost: 1
   _draw: 0
   _singleEnemyTarget: 0
-  _targetType: 0
-  _preSelectedTarget: 0
-  _attackerType: 00000000
+  _choiceArr: 00000000
+  _preSelectedArr: 00000000
   _exhaust: 1
   _ethereal: 0
   _cardsToPlay: []

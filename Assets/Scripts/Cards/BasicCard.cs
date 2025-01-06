@@ -16,9 +16,9 @@ namespace cards
         [SerializeField] int _draw = 0;
 
         [SerializeField] protected bool _singleEnemyTarget = true;
-        [SerializeField] protected TargetTypeEnum _targetType = TargetTypeEnum.BODY_PART;
-        [SerializeField] protected Person.BodyPartEnum _preSelectedTarget;
-        [SerializeField] AttackerTypeEnum[] _attackerType = Array.Empty<AttackerTypeEnum>();
+        [SerializeField] protected CardChoiceEnum[] _choiceArr = Array.Empty<CardChoiceEnum>();
+        [SerializeField] protected Person.BodyPartEnum[] _preSelectedArr = Array.Empty<Person.BodyPartEnum>();
+        protected bool _choiceOnEnemy = true;
 
         [SerializeField] private bool _exhaust = false;
         [SerializeField] private bool _ethereal = false;
@@ -28,27 +28,23 @@ namespace cards
         public bool Exhaust { get => _exhaust; }
         public bool Ethereal { get => _ethereal; }
 
-        public TargetTypeEnum TargetType { get => _targetType; }
-
-        public Person.BodyPartEnum PreSelectedTarget { get => _preSelectedTarget; }
-
-        public AttackerTypeEnum[] AttackerType
+        public CardChoiceEnum[] CardChoices
         {
-            get => _attackerType;
-            protected set => _attackerType = value;
+            get => _choiceArr;
+            protected set => _choiceArr = value;
+        }
+
+        public Person.BodyPartEnum[] PreSelectedChoices
+        {
+            get => _preSelectedArr;
+            protected set => _preSelectedArr = value;
         }
 
         public bool SingleEnemyTarget { get => _singleEnemyTarget; }
+        public bool ChoiceOnEnemy { get => _choiceOnEnemy; }
 
-        public enum TargetTypeEnum
-        {
-            PRE_SELECTED,
-            BODY_PART,
-            SIDE,
-            UPPER_BODY
-        }
-
-        public enum AttackerTypeEnum
+        //choice made with the card
+        public enum CardChoiceEnum
         {
             ARM,
             RIGHT_ARM,
@@ -57,28 +53,32 @@ namespace cards
             RIGHT_LEG,
             LEFT_LEG,
             HEAD,
-            TORSO
+            TORSO,
+            UPPER_BODY,
+            BODY_PART
         }
 
-        public static Person.BodyPartEnum GetBodyPart(AttackerTypeEnum attackerType)
+        public static Person.BodyPartEnum GetBodyPart(CardChoiceEnum attackerType)
         {
             switch (attackerType)
             {
-                case AttackerTypeEnum.RIGHT_ARM:
+                case CardChoiceEnum.RIGHT_ARM:
                     return Person.BodyPartEnum.RIGHT_ARM;
-                case AttackerTypeEnum.LEFT_ARM:
+                case CardChoiceEnum.LEFT_ARM:
                     return Person.BodyPartEnum.LEFT_ARM;
-                case AttackerTypeEnum.RIGHT_LEG:
+                case CardChoiceEnum.RIGHT_LEG:
                     return Person.BodyPartEnum.RIGHT_LEG;
-                case AttackerTypeEnum.LEFT_LEG:
+                case CardChoiceEnum.LEFT_LEG:
                     return Person.BodyPartEnum.LEFT_LEG;
-                case AttackerTypeEnum.HEAD:
+                case CardChoiceEnum.HEAD:
                     return Person.BodyPartEnum.HEAD;
-                case AttackerTypeEnum.TORSO:
+                case CardChoiceEnum.TORSO:
                     return Person.BodyPartEnum.TORSO;
-                case AttackerTypeEnum.LEG:
+                case CardChoiceEnum.LEG:
                     return Person.BodyPartEnum.NONE;
-                case AttackerTypeEnum.ARM:
+                case CardChoiceEnum.ARM:
+                    return Person.BodyPartEnum.NONE;
+                case CardChoiceEnum.UPPER_BODY:
                     return Person.BodyPartEnum.NONE;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -117,22 +117,23 @@ namespace cards
         }
 
         public virtual void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-            Person.BodyPartEnum affected_part)
+            List<Person.BodyPartEnum> affected_parts)
         {
             PlayerTurn playerTurn = PlayerTurn.Instance;
             for (int i = 0; i < _draw; i++)
             {
                 if (!playerTurn.DrawCard()) break;
             }
+            PlayExtraCards(user, attacking_parts, target, affected_parts);
         }
 
         /**
          * plays all cards in the _cardsToPlay list
          */
-        public void PlayExtraCards(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-            Person.BodyPartEnum affected_part)
+        private void PlayExtraCards(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
+            List<Person.BodyPartEnum> affected_parts)
         {
-            _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_part));
+            _cardsToPlay.ForEach(card => card.Play(user, attacking_parts, target, affected_parts));
         }
 
         /**
@@ -175,26 +176,6 @@ namespace cards
             }
 
             return res.ToString();
-        }
-
-        protected string TargetTypeName(TargetTypeEnum targetType)
-        {
-            switch (targetType)
-            {
-                case TargetTypeEnum.UPPER_BODY:
-                    return "Upper body";
-                case TargetTypeEnum.BODY_PART:
-                    return "Any body part";
-                case TargetTypeEnum.PRE_SELECTED:
-                    return PreSelectedTarget.ToString();
-                case TargetTypeEnum.SIDE:
-                    if (PreSelectedTarget == Person.BodyPartEnum.LEFT_LEG ||
-                        PreSelectedTarget == Person.BodyPartEnum.RIGHT_LEG)
-                        return "Leg";
-                    return "Arm";
-            }
-
-            throw new ArgumentException("target type has no name");
         }
     }
 }

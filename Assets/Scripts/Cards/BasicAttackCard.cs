@@ -6,6 +6,7 @@ using DefaultNamespace.UI;
 using Managers;
 using DefaultNamespace.Utility;
 using UnityEngine;
+using UnityEditor;
 
 namespace cards
 {
@@ -15,8 +16,11 @@ namespace cards
         [SerializeField] int _damage = 0;
         [SerializeField] int _bleed = 0;
 
-        private int _damageAdder = 0;
-        private int _bleedAdder = 0;
+        protected BasicAttackCard()
+        {
+            _choiceOnEnemy = true;
+        }
+
 
         public int Damage
         {
@@ -38,31 +42,6 @@ namespace cards
             }
         }
 
-        public int DamageAdder
-        {
-            get => _damageAdder;
-            set
-            {
-                _damageAdder = value;
-                UpdateDescription();
-            }
-        }
-
-        public int BleedAdder
-        {
-            get => _bleedAdder;
-            set
-            {
-                _bleedAdder = value;
-                UpdateDescription();
-            }
-        }
-
-        public class AttackModifier
-        {
-            public float DamageMultiplier;
-
-        }
 
         public struct AttackStruct
         {
@@ -126,14 +105,19 @@ namespace cards
         protected override string GenerateThisDescription()
         {
             StringBuilder res = new StringBuilder(base.GenerateThisDescription());
-            for (int i = 0; i < AttackerType.Length; i++)
+            for (int i = 0; i < PreSelectedChoices.Length; i++)
             {
                 if (i > 0) res.Append(", ");
-                res.AppendFormat("{0}", AttackerTypeName(AttackerType[i]));
+                res.AppendFormat("{0}", AttackerTypeName(PreSelectedChoices[i]));
             }
 
             res.AppendFormat(" the enemy's "); //_singleEnemyTarget
-            res.AppendFormat("{0}.\n", TargetTypeName(TargetType));
+            for (int i = 0; i < CardChoices.Length; i++)
+            {
+                if (i > 0) res.Append(", ");
+                res.AppendFormat("{0}", CardChoices[i]);
+            }
+            res.Append(".\n");
 
             if (Damage > 0) res.AppendFormat("Deal {0} damage. ", Damage);
             if (Bleed > 0) res.AppendFormat("Apply {0} bleed.", Bleed);
@@ -143,31 +127,18 @@ namespace cards
         }
 
         public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-            Person.BodyPartEnum affected_part)
+            List<Person.BodyPartEnum> affected_parts)
         {
-            base.Play(user, attacking_parts, target, affected_part);
-         
-            affected_part = CorrectAffectedPart(affected_part);
+            base.Play(user, attacking_parts, target, affected_parts);
 
             attacking_parts.ForEach(attacking_part =>
             {
-                AttackStruct hit = Attack(user, attacking_part, target, affected_part);
-                if (!hit.IsNone()) EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, hit);
+                affected_parts.ForEach(affected_part =>
+                {
+                    AttackStruct hit = Attack(user, attacking_part, target, affected_part);
+                    if (!hit.IsNone()) EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, hit);
+                }); 
             });
-        }
-
-        private Person.BodyPartEnum CorrectAffectedPart(Person.BodyPartEnum affected_part)
-        {
-            if (TargetType == TargetTypeEnum.SIDE && (PreSelectedTarget == Person.BodyPartEnum.LEFT_LEG ||
-                                                      PreSelectedTarget == Person.BodyPartEnum.RIGHT_LEG))
-            {
-                if (affected_part == Person.BodyPartEnum.LEFT_ARM) affected_part = Person.BodyPartEnum.LEFT_LEG;
-                else affected_part = Person.BodyPartEnum.RIGHT_LEG;
-            }
-            else if (TargetType == TargetTypeEnum.PRE_SELECTED)
-                affected_part = PreSelectedTarget;
-
-            return affected_part;
         }
 
         protected virtual AttackStruct Attack(Person user, Person.BodyPartEnum attacking_part, Person target,
@@ -200,25 +171,21 @@ namespace cards
         }
 
 
-        private string AttackerTypeName(AttackerTypeEnum attackerType)
+        private string AttackerTypeName(Person.BodyPartEnum bodyPart)
         {
-            switch (attackerType)
+            switch (bodyPart)
             {
-                case AttackerTypeEnum.ARM:
-                    return "Punch";
-                case AttackerTypeEnum.LEG:
-                    return "Kick";
-                case AttackerTypeEnum.HEAD:
+                case Person.BodyPartEnum.HEAD:
                     return "Headbutt";
-                case AttackerTypeEnum.TORSO:
+                case Person.BodyPartEnum.TORSO:
                     return "Chestbump";
-                case AttackerTypeEnum.LEFT_ARM:
+                case Person.BodyPartEnum.LEFT_ARM:
                     return "Left punch";
-                case AttackerTypeEnum.RIGHT_ARM:
+                case Person.BodyPartEnum.RIGHT_ARM:
                     return "Right punch";
-                case AttackerTypeEnum.LEFT_LEG:
+                case Person.BodyPartEnum.LEFT_LEG:
                     return "Left kick";
-                case AttackerTypeEnum.RIGHT_LEG:
+                case Person.BodyPartEnum.RIGHT_LEG:
                     return "Right kick";
             }
 

@@ -17,12 +17,19 @@ namespace cards
 
         protected string _defaultDescriptionFormat = "Apply {0} stacks of {1} on the enemy's {2}.\n";
 
-        public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-            Person.BodyPartEnum affected_part)
+        protected ApplyStatusEffect()
         {
-            base.Play(user, attacking_parts, target, affected_part);
+            _choiceOnEnemy = true;
+        }
 
-            attacking_parts.ForEach(x => AddStatusEffect(user, user.GetHealthBar(x), target, affected_part));
+        public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
+            List<Person.BodyPartEnum> affected_parts)
+        {
+            base.Play(user, attacking_parts, target, affected_parts);
+
+            attacking_parts.ForEach(attacking_part => {
+                affected_parts.ForEach(affected_part => AddStatusEffect(user, user.GetHealthBar(attacking_part), target, affected_part));
+            });
         }
 
         protected virtual void AddStatusEffect(Person user, HealthBar attacking_part, Person target,
@@ -40,9 +47,9 @@ namespace cards
         protected override string GenerateThisDescription()
         {
             var res = new StringBuilder(base.GenerateThisDescription());
-            foreach (var attackerType in AttackerType)
+            foreach (var targetType in CardChoices)
             {
-                res.Append(FormattedSingleAttackerTypeDescription(attackerType));
+                res.Append(FormattedSingleTargetTypeDescription(targetType));
             }
 
             return res.ToString();
@@ -51,10 +58,10 @@ namespace cards
         /**
          * formats a single AttackerType's description
          */
-        protected virtual string FormattedSingleAttackerTypeDescription(AttackerTypeEnum attackerType)
+        protected virtual string FormattedSingleTargetTypeDescription(CardChoiceEnum targetType)
         {
             return string.Format(_defaultDescriptionFormat,
-                    _amt, GetStatusName(), TargetType.ToString());
+                    _amt, GetStatusName(), targetType.ToString());
         }
 
         protected override void UpdateDescription()

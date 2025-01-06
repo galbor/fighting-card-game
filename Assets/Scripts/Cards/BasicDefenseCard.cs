@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using DefaultNamespace.Utility;
 using UnityEngine;
@@ -11,11 +12,17 @@ namespace cards
 
         [SerializeField] private int _block;
 
-        public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
-            Person.BodyPartEnum affected_part)
+        protected BasicDefenseCard()
         {
-            base.Play(user, attacking_parts, target, affected_part);
-            Block(user, attacking_parts, affected_part);
+            _choiceOnEnemy = false;
+            PreSelectedChoices = PreSelectedChoices.Take(1).ToArray();
+        }
+
+        public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
+            List<Person.BodyPartEnum> affected_parts)
+        {
+            base.Play(user, attacking_parts, target, affected_parts);
+            Block(user, attacking_parts, affected_parts[0]);
         }
 
         private void Block(Person user, List<Person.BodyPartEnum> attacking_parts, Person.BodyPartEnum affected_part)
@@ -34,10 +41,10 @@ namespace cards
         protected override string GenerateThisDescription()
         {
             var res = new StringBuilder(base.GenerateThisDescription());
-            foreach (var attackerType in AttackerType)
+            foreach (var protector in CardChoices)
             {
-                res.AppendFormat("Defend your {0} ", TargetTypeName(TargetType));
-                res.AppendFormat("with your {0}. ", attackerType.ToString());
+                res.AppendFormat("Defend your {0} ", PreSelectedChoices[0].ToString());
+                res.AppendFormat("with your {0}. ", protector.ToString());
                 res.AppendFormat("Gain {0} block.\n", _block);
             }
 

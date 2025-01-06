@@ -125,7 +125,7 @@ public class Person : MonoBehaviour
         });
     }
     
-    public void HighlightBodyParts(BasicCard.TargetTypeEnum targetType)
+    public void HighlightBodyParts(BasicCard.CardChoiceEnum targetType)
     {
         var partsLst = Enum.GetValues(typeof(BodyPartEnum)).OfType<BodyPartEnum>()
                                     .Where(part => part != BodyPartEnum.NONE);
@@ -134,17 +134,18 @@ public class Person : MonoBehaviour
 
         switch (targetType)
         {
-            case BasicCard.TargetTypeEnum.PRE_SELECTED:
-                func = (x => "");
+            case BasicCard.CardChoiceEnum.BODY_PART:
                 break;
-            case BasicCard.TargetTypeEnum.SIDE:
+            case BasicCard.CardChoiceEnum.LEG:
+            case BasicCard.CardChoiceEnum.ARM:
                 partsLst = new List<BodyPartEnum> { BodyPartEnum.RIGHT_ARM, BodyPartEnum.LEFT_ARM };
                 break;
-            case BasicCard.TargetTypeEnum.UPPER_BODY:
+            case BasicCard.CardChoiceEnum.UPPER_BODY:
                 partsLst = partsLst.Where(part =>
                     part != BodyPartEnum.LEFT_LEG && part != BodyPartEnum.RIGHT_LEG);
                 break;
-            default: //case BODY_PART
+            default: //case pre selected
+                func = (x => "");
                 break;
         }
 

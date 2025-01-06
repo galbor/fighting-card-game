@@ -49,7 +49,7 @@ namespace Managers
         private int _selectedCard;
         private int _selectedEnemy;
         private Person.BodyPartEnum _selectedAffectedBodyPart;
-        private List<Person.BodyPartEnum> _selectedAttackerBodyParts;
+        private List<Person.BodyPartEnum> _selectedBodyParts;
         
         private int _defaultEnergy;
         private int _energy = 10; // assuming there aren't cards with >10 energy
@@ -192,89 +192,61 @@ namespace Managers
                 ForEachEnemy(x => x.Person.SetEnemyNumberActive(false));
             }
 
-            StartCoroutine(SelectAttackerTypes());
+            StartCoroutine(SelectBodyParts());
         }
 
-        IEnumerator SelectAttackerTypes()
+
+        IEnumerator SelectBodyParts()
         {
-            BasicCard.AttackerTypeEnum[] attackerTypes = _hand[_selectedCard].AttackerType;
-            _selectedAttackerBodyParts = new List<Person.BodyPartEnum>();
+            BasicCard.CardChoiceEnum[] cardChoices = _hand[_selectedCard].CardChoices;
+            _selectedBodyParts = new List<Person.BodyPartEnum>();
 
-            int i = 0;
-            while (_selectedAttackerBodyParts.Count < attackerTypes.Length)
+            Person targetPerson = _hand[_selectedCard].ChoiceOnEnemy ? _enemies[_selectedEnemy].Person : _playerPerson;
+
+            for (int i = 0; i < cardChoices.Length; i++)
             {
-                if (BasicCard.GetBodyPart(attackerTypes[i]) == Person.BodyPartEnum.NONE)
-                {
-                    _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.SIDE);
-                    while (true)
-                    {
-                        var pressedSide = Person.GetSide(GetPressedBodyPart());
-                        if (pressedSide == Person.SideEnum.RIGHT)
-                        {
-                            if (attackerTypes[i] == BasicCard.AttackerTypeEnum.ARM) _selectedAttackerBodyParts.Add(Person.BodyPartEnum.RIGHT_ARM);
-                            else _selectedAttackerBodyParts.Add(Person.BodyPartEnum.RIGHT_LEG);
-                            break;
-                        }
-                        if (pressedSide == Person.SideEnum.LEFT)
-                        {
-                            if (attackerTypes[i] == BasicCard.AttackerTypeEnum.ARM)
-                                _selectedAttackerBodyParts.Add(Person.BodyPartEnum.LEFT_ARM);
-                            else _selectedAttackerBodyParts.Add(Person.BodyPartEnum.LEFT_LEG);
-                            break;
-                        }
-                        yield return null;
-                    }
-                }
-                else
-                {
-                    _selectedAttackerBodyParts.Add(BasicCard.GetBodyPart(attackerTypes[i]));
-                }
-                
-                i++;
-            }
+                Person.BodyPartEnum selectedBodyPart = BasicCard.GetBodyPart(cardChoices[i]);
 
-            
-            _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
-            StartCoroutine(SelectAffectedPart());
-        }
+                if (selectedBodyPart != Person.BodyPartEnum.NONE)
+                {
+                    _selectedBodyParts.Add(selectedBodyPart);
+                    continue;
+                }
 
-        IEnumerator SelectAffectedPart()
-        {
-            BasicCard.TargetTypeEnum targetType = _hand[_selectedCard].TargetType;
-            Person.BodyPartEnum selectedBodyPart = Person.BodyPartEnum.NONE;
-            _enemies[_selectedEnemy].Person.HighlightBodyParts(targetType);
-            if (targetType != BasicCard.TargetTypeEnum.PRE_SELECTED)
-            {
+                targetPerson.HighlightBodyParts(cardChoices[i]);
                 while (true)
                 {
                     yield return null;
                     selectedBodyPart = GetPressedBodyPart();
                     if (selectedBodyPart == Person.BodyPartEnum.NONE) continue;
-                    if (targetType == BasicCard.TargetTypeEnum.SIDE)
+                    if (cardChoices[i] == BasicCard.CardChoiceEnum.ARM)
                     {
                         if (Person.GetSide(selectedBodyPart) == Person.SideEnum.LEFT)
-                        {
-                            _selectedAffectedBodyPart = Person.BodyPartEnum.LEFT_ARM;
-                        }
+                            selectedBodyPart = Person.BodyPartEnum.LEFT_ARM;
                         else if (Person.GetSide(selectedBodyPart) == Person.SideEnum.RIGHT)
-                        {
-                            _selectedAffectedBodyPart = Person.BodyPartEnum.RIGHT_ARM;
-                        }
+                            selectedBodyPart = Person.BodyPartEnum.RIGHT_ARM;
                     }
-                    else if (targetType == BasicCard.TargetTypeEnum.UPPER_BODY)
+                    else if (cardChoices[i] == BasicCard.CardChoiceEnum.LEG)
+                    {
+                        if (Person.GetSide(selectedBodyPart) == Person.SideEnum.LEFT)
+                            selectedBodyPart = Person.BodyPartEnum.LEFT_LEG;
+                        else if (Person.GetSide(selectedBodyPart) == Person.SideEnum.RIGHT)
+                            selectedBodyPart = Person.BodyPartEnum.RIGHT_LEG;
+                    }
+                    else if (cardChoices[i] == BasicCard.CardChoiceEnum.UPPER_BODY)
                     {
                         if (selectedBodyPart == Person.BodyPartEnum.RIGHT_LEG)
                             selectedBodyPart = Person.BodyPartEnum.RIGHT_ARM;
                         else if (selectedBodyPart == Person.BodyPartEnum.LEFT_LEG)
                             selectedBodyPart = Person.BodyPartEnum.LEFT_ARM;
-                        _selectedAffectedBodyPart = selectedBodyPart;
                     }
-                    else _selectedAffectedBodyPart = selectedBodyPart;
 
                     break;
                 }
+                _selectedBodyParts.Add(selectedBodyPart);
+
             }
-            else _selectedAffectedBodyPart = _hand[_selectedCard].PreSelectedTarget;
+
             PlayCard(_selectedCard);
             ResetAction();
             
@@ -290,8 +262,11 @@ namespace Managers
 
             var enemy = _enemies[_selectedEnemy].Person;
             
-            _hand[index].Play(_playerPerson, _selectedAttackerBodyParts, enemy, _selectedAffectedBodyPart);
-            _hand[index].PlayExtraCards(_playerPerson, _selectedAttackerBodyParts, enemy, _selectedAffectedBodyPart);
+            if (_hand[index].ChoiceOnEnemy)
+                _hand[index].Play(_playerPerson, _hand[index].PreSelectedChoices.ToList(), enemy, _selectedBodyParts);
+            else
+                _hand[index].Play(_playerPerson, _selectedBodyParts, enemy, _hand[index].PreSelectedChoices.ToList());
+
             EventManager.Instance.TriggerEvent(EventManager.EVENT__PLAY_CARD, this);
             
             if (_hand[index].Exhaust)
@@ -347,9 +322,9 @@ namespace Managers
             ForEachEnemy(enemy =>
             {
                 enemy.Person.SetEnemyNumberActive(false);
-                enemy.Person.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+                enemy.Person.HighlightBodyParts(BasicCard.CardChoiceEnum.LEFT_ARM); //LEFT_ARM means no selection
             });
-            _playerPerson.HighlightBodyParts(BasicCard.TargetTypeEnum.PRE_SELECTED);
+            _playerPerson.HighlightBodyParts(BasicCard.CardChoiceEnum.LEFT_ARM);
         }
         
         public void ResetAction()

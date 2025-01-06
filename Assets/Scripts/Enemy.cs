@@ -77,7 +77,7 @@ public class Enemy : ScriptableObject
         
         _attack.Damage = _possibleActions[_nextAttack].Damage;
         _attack.Bleed = _possibleActions[_nextAttack].Bleed;
-        _attack.Play(_person, _possibleActions[_nextAttack].AttackingParts.ToList(), Player.Instance.Person, _possibleActions[_nextAttack].AffectedPart);
+        _attack.Play(_person, _possibleActions[_nextAttack].AttackingParts.ToList(), Player.Instance.Person, _possibleActions[_nextAttack].AffectedParts.ToList());
         _lastAttack = _nextAttack;
 
         ChooseAndDisplayNextAction();
@@ -96,7 +96,7 @@ public class Enemy : ScriptableObject
     {
         var attack = _possibleActions[_nextAttack];
         _person.DisplayPlannedAttack(attack.AttackingParts[0],
-            attack.AffectedPart
+            attack.AffectedParts[0]
             , attack.Damage);
     }
 
@@ -146,7 +146,7 @@ public class Enemy : ScriptableObject
     private struct Action
     {
         public Person.BodyPartEnum[] AttackingParts;
-        public Person.BodyPartEnum AffectedPart;
+        public Person.BodyPartEnum[] AffectedParts;
         public int Damage;
         public int Bleed;
     }

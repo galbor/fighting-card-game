@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: Right_Uppercut
   m_EditorClassIdentifier: 
   _name: Right Uppercut
+  _description: 
   _image: {fileID: 0}
   _cost: 1
+  _draw: 0
+  _singleEnemyTarget: 1
+  _choiceArr: 06000000
+  _preSelectedArr: 03000000
+  _exhaust: 0
+  _ethereal: 0
+  _cardsToPlay: []
   _damage: 15
   _bleed: 0
-  _defense: 0
-  _heal: 0
-  _singleEnemyTarget: 1
-  _targetType: 0
-  _attackerType: 01000000

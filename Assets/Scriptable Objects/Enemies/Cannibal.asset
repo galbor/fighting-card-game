@@ -18,18 +18,18 @@ MonoBehaviour:
   _attackPattern: 0
   _possibleActions:
   - AttackingParts: 00000000
-    AffectedPart: 3
+    AffectedParts: 03000000
     Damage: 5
     Bleed: 0
   - AttackingParts: 00000000
-    AffectedPart: 2
+    AffectedParts: 00000000
     Damage: 5
     Bleed: 0
   - AttackingParts: 00000000
-    AffectedPart: 1
+    AffectedParts: 02000000
     Damage: 5
     Bleed: 0
   _startingStatusEffects:
   - _bodyPart: 0
-    _statusEffect: 2
+    _statusType: 0
     _amt: 5

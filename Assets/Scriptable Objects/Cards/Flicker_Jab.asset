@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: Flicker_Jab
   m_EditorClassIdentifier: 
   _name: Flicker Jab
+  _description: 
   _image: {fileID: 0}
   _cost: 1
-  _damage: 3
-  _bleed: 0
-  _defense: 0
-  _heal: 0
   _draw: 0
   _singleEnemyTarget: 1
-  _targetType: 3
-  _preSelectedTarget: 0
-  _attackerType: 020000000200000002000000
+  _choiceArr: 08000000
+  _preSelectedArr: 020000000200000002000000
+  _exhaust: 0
+  _ethereal: 0
+  _cardsToPlay: []
+  _damage: 3
+  _bleed: 0
