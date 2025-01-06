@@ -12,7 +12,7 @@ namespace DefaultNamespace.StatusEffects
         protected new void Awake()
         {
             base.Awake();
-            _eventActionDict = new Dictionary<string, UnityAction<object>> { { EventManager.EVENT__END_TURN, TakeBleedDamage } };
+            _eventActionDict.Add(EventManager.EVENT__END_TURN, TakeBleedDamage);
             _description = "At the end of the turn, deals X damage and removes 1 stack";
         }
         

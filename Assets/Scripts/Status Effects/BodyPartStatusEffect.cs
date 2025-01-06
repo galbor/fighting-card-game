@@ -73,6 +73,8 @@ namespace DefaultNamespace.StatusEffects
             {
                 _pools.Add(GetType(), new Pool<BodyPartStatusEffect>(this));
             }
+
+            _eventActionDict = new Dictionary<string, UnityAction<object>>();
         }
 
         /**

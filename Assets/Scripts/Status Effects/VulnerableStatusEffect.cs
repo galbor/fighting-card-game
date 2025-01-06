@@ -17,8 +17,8 @@ namespace DefaultNamespace.StatusEffects
         protected new void Awake()
         {
             base.Awake();
-            _eventActionDict = new Dictionary<string, UnityAction<object>>
-            { { EventManager.EVENT__START_TURN, obj => Number--}};//enemies attack after start turn
+            _eventActionDict.Add(
+                EventManager.EVENT__START_TURN, obj => Number--);//enemies attack after start turn
             FormatDescription();
         }
 
@@ -59,7 +59,7 @@ namespace DefaultNamespace.StatusEffects
         //sets the description to display the correct percentage bonus
         private void FormatDescription()
         {
-            _description = string.Format("This body part takes {0}% extra damage for X turns", PercentageBonus);
+            _description = string.Format("Take {0}% extra damage for X turns", PercentageBonus);
         }
     }
 }

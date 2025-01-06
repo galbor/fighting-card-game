@@ -11,12 +11,11 @@ namespace DefaultNamespace.StatusEffects
         protected new void Awake()
         {
             base.Awake();
-            _eventActionDict = new Dictionary<string, UnityAction<object>>
-            {
-                {EventManager.EVENT__HIT, LoseStackOnAttack},
-                {EventManager.EVENT__START_TURN, obj => Number--} //enemies attack after start turn
+            _eventActionDict.Add(
+                EventManager.EVENT__HIT, LoseStackOnAttack);
+            _eventActionDict.Add(
+                EventManager.EVENT__START_TURN, obj => Number--); //enemies attack after EVENT__END_TURN
                 //if I want a relic that gives invincibility, give 1 extra
-            };
             _description = "When attacked, lose 1 stack instead of HP.\nLose one stack each turn.";
         }
 
