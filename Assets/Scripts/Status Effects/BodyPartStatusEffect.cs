@@ -6,9 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
-using cards;
 using DefaultNamespace.Utility;
+using Assets.Scripts.Status_Effects;
 
 namespace DefaultNamespace.StatusEffects
 {
@@ -32,7 +31,8 @@ namespace DefaultNamespace.StatusEffects
             KNIFE,
             SPIKE,
             INVINCIBLE,
-            VULNERABLE
+            VULNERABLE,
+            STRENGTH
         }
 
         /**
@@ -48,6 +48,8 @@ namespace DefaultNamespace.StatusEffects
                 typeof(InvincibilityStatusEffect),
             StatusType.VULNERABLE =>
                 typeof(VulnerableStatusEffect),
+            StatusType.STRENGTH =>
+                typeof(StrengthStatusEffect),
             _ => //default
                 throw new Exception("StatusType doesn't appear in this switch-case")
         };
