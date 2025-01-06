@@ -51,7 +51,8 @@ namespace DefaultNamespace.UI
         } = 1f;
 
         /**
-         * added to hit this health bar deals, before multiplying
+         * added to hit this health bar deals
+         * goes before multiplying
          */
         public int HitDamageDealtAddition
         {
@@ -299,25 +300,39 @@ namespace DefaultNamespace.UI
 
         /**
          * removes status effect
-         * ASSUMES STATUS IS IN LIST
          */
         public void RemoveStatusEffect(BodyPartStatusEffect status)
         {
-            BodyPartStatusEffect.GetPool(status).ReturnToPool(status);
-            _statusEffects.Remove(status);
-            for (int i = 0; i < _statusEffects.Count; i++)
+            if (status.Number != 0)
+            {
+                //[Number = 0] calls this function
+                //It's vital for the number to become 0 before being removed (because of effects like Invincible, vulnerable)
+                status.Number = 0;
+                return;
+            }
+
+            RemoveStatusEffect(_statusEffects.IndexOf(status));
+            
+        }
+
+        private void RemoveStatusEffect(int index)
+        {
+            BodyPartStatusEffect status = _statusEffects[index];
+            _statusEffects.RemoveAt(index);
+            for (int i = index; i < _statusEffects.Count; i++)
             {
                 SetStatusPosition(_statusEffects[i], i);
             }
+            status.transform.SetParent(EventManager.Instance._TextParent, true); //might as well be parent
+            BodyPartStatusEffect.GetPool(status).ReturnToPool(status);
         }
 
         public void RemoveAllStatusEffects()
         {
-            _statusEffects.ForEach(x =>
+            while (_statusEffects.Count > 0)
             {
-                x.transform.SetParent(EventManager.Instance._TextParent, true); //might as well be parent
-                BodyPartStatusEffect.GetPool(x).ReturnToPool(x);
-            });
+                _statusEffects[^1].Number = 0; //[Number = 0] removes self
+            }
             _statusEffects.Clear();
         }
 
