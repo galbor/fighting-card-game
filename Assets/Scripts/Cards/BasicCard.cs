@@ -75,11 +75,10 @@ namespace cards
                 case CardChoiceEnum.TORSO:
                     return Person.BodyPartEnum.TORSO;
                 case CardChoiceEnum.LEG:
-                    return Person.BodyPartEnum.NONE;
                 case CardChoiceEnum.ARM:
-                    return Person.BodyPartEnum.NONE;
                 case CardChoiceEnum.UPPER_BODY:
-                    return Person.BodyPartEnum.NONE;
+                case CardChoiceEnum.BODY_PART:
+                        return Person.BodyPartEnum.NONE;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
