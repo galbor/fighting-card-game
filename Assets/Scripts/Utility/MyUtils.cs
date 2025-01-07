@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Random = UnityEngine.Random;
 
 namespace DefaultNamespace.Utility
@@ -55,6 +56,17 @@ namespace DefaultNamespace.Utility
         {
             find = "{" + find + "}";
             return source.Replace(find, replace);
+        }
+
+        /**
+         * @param source - string that contains substring {find}
+         * @param replace - a string to replace {find} in source
+         * @return source with first {find} replaced with replace
+         */
+        public static string ReplaceFirstBracket(string source, string find, string replace)
+        {
+            var regex = new Regex(Regex.Escape("{" + find + "}"));
+            return regex.Replace(source, replace, 1);
         }
 
 

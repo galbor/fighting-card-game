@@ -97,7 +97,10 @@ namespace cards
         protected override string FormatDescription(string unformattedStr)
         {
             string res = base.FormatDescription(unformattedStr);
-            res = MyUtils.ReplaceAllBrackets(res, "damage", Damage.ToString());
+            for (int i = 0; i < PreSelectedChoices.Length; i++) {
+                var damage = Player.Instance.Person.GetAttackDamage(PreSelectedChoices[i], Damage);
+                res = MyUtils.ReplaceFirstBracket(res, "damage", damage.ToString());
+            }
             res = MyUtils.ReplaceAllBrackets(res, "bleed", Bleed.ToString());
             return res;
         }
@@ -119,7 +122,13 @@ namespace cards
             }
             res.Append(".\n");
 
-            if (Damage > 0) res.Append("Deal {damage} damage. ");
+            if (Damage > 0)
+            {
+                for (int i = 0; i < PreSelectedChoices.Length; i++)
+                {
+                    res.Append("Deal {damage} damage. ");
+                }
+            }
             if (Bleed > 0) res.Append("Apply {bleed} bleed.");
             res.Append("\n");
 
