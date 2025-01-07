@@ -94,17 +94,17 @@ namespace cards
             }
         }
 
-
-        protected override void UpdateDescription()
+        protected override string FormatDescription(string unformattedStr)
         {
-            base.UpdateDescription();
-            _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "damage", Damage.ToString());
-            _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "bleed", Bleed.ToString());
+            string res = base.FormatDescription(unformattedStr);
+            res = MyUtils.ReplaceAllBrackets(res, "damage", Damage.ToString());
+            res = MyUtils.ReplaceAllBrackets(res, "bleed", Bleed.ToString());
+            return res;
         }
 
-        protected override string GenerateThisDescription()
+        protected override string GenerateThisDefaultUnformattedDescription()
         {
-            StringBuilder res = new StringBuilder(base.GenerateThisDescription());
+            StringBuilder res = new StringBuilder(base.GenerateThisDefaultUnformattedDescription());
             for (int i = 0; i < PreSelectedChoices.Length; i++)
             {
                 if (i > 0) res.Append(", ");
@@ -119,8 +119,8 @@ namespace cards
             }
             res.Append(".\n");
 
-            if (Damage > 0) res.AppendFormat("Deal {0} damage. ", Damage);
-            if (Bleed > 0) res.AppendFormat("Apply {0} bleed.", Bleed);
+            if (Damage > 0) res.Append("Deal {damage} damage. ");
+            if (Bleed > 0) res.Append("Apply {bleed} bleed.");
             res.Append("\n");
 
             return res.ToString();

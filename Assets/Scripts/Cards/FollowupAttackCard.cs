@@ -48,9 +48,9 @@ namespace cards
         }
 
 
-        protected override string GenerateThisDescription()
+        protected override string GenerateThisDefaultUnformattedDescription()
         {
-            string res = base.GenerateThisDescription();
+            string res = base.GenerateThisDefaultUnformattedDescription();
             res += "If the last attack this combat was this side, gain 1 energy. Otherwise deal double damage.\n";
 
             return res;

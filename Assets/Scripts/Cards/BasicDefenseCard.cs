@@ -32,20 +32,21 @@ namespace cards
                 attacking_parts.ForEach(x => user.SetProtection(x, affected_part));
         }
 
-        protected override void UpdateDescription()
+        protected override string FormatDescription(string unformattedStr)
         {
-            base.UpdateDescription();
-            _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "block", _block.ToString());
+            string res = base.FormatDescription(unformattedStr);
+            res = MyUtils.ReplaceAllBrackets(res, "block", _block.ToString());
+            return res;
         }
 
-        protected override string GenerateThisDescription()
+        protected override string GenerateThisDefaultUnformattedDescription()
         {
-            var res = new StringBuilder(base.GenerateThisDescription());
+            var res = new StringBuilder(base.GenerateThisDefaultUnformattedDescription());
             foreach (var protector in CardChoices)
             {
                 res.AppendFormat("Defend your {0} ", PreSelectedChoices[0].ToString());
                 res.AppendFormat("with your {0}. ", protector.ToString());
-                res.AppendFormat("Gain {0} block.\n", _block);
+                res.Append("Gain {block} block.\n");
             }
 
             return res.ToString();

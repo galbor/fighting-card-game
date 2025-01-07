@@ -10,8 +10,8 @@ namespace cards
 
         protected GainStatusEffectCard()
         {
-            _defaultDescriptionFormat = "Gain {0} stacks of {1} on your {2}.\n";
             _choiceOnEnemy = false;
+            _defaultUnformattedDescription = "Gain {amt} stacks of {effect} on your {part}.\n"; ;
         }
 
         protected override void AddStatusEffect(Person user, HealthBar attacking_part, Person target,
@@ -19,13 +19,5 @@ namespace cards
         {
             attacking_part.AddStatusEffect(BodyPartStatusEffect.GetTypeOfStatusType(_statusEffect), _amt);
         }
-
-        protected override string FormattedSingleTargetTypeDescription(CardChoiceEnum attackerType)
-        {
-            return string.Format(_defaultDescriptionFormat,
-                    _amt, GetStatusName(), attackerType.ToString());
-        }
-
-
     }
 }

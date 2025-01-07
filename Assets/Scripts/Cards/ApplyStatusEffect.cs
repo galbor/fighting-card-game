@@ -15,7 +15,7 @@ namespace cards
         [SerializeField] protected BodyPartStatusEffect.StatusType _statusEffect;
         [SerializeField] protected int _amt;
 
-        protected string _defaultDescriptionFormat = "Apply {0} stacks of {1} on the enemy's {2}.\n";
+        protected string _defaultUnformattedDescription = "Apply {amt} stacks of {effect} on the enemy's {part}.\n";
 
         protected ApplyStatusEffect()
         {
@@ -44,31 +44,28 @@ namespace cards
             return _statusEffect.ToString();
         }
 
-        protected override string GenerateThisDescription()
+        protected override string GenerateThisDefaultUnformattedDescription()
         {
-            var res = new StringBuilder(base.GenerateThisDescription());
+            var res = new StringBuilder(base.GenerateThisDefaultUnformattedDescription());
             foreach (var targetType in CardChoices)
             {
-                res.Append(FormattedSingleTargetTypeDescription(targetType));
+                res.Append(MyUtils.ReplaceAllBrackets(_defaultUnformattedDescription, "part", targetType.ToString()));
             }
 
             return res.ToString();
-        }
-        
-        /**
-         * formats a single AttackerType's description
-         */
-        protected virtual string FormattedSingleTargetTypeDescription(CardChoiceEnum targetType)
-        {
-            return string.Format(_defaultDescriptionFormat,
-                    _amt, GetStatusName(), targetType.ToString());
         }
 
         protected override void UpdateDescription()
         {
             base.UpdateDescription();
-            _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "status", GetStatusName());
-            _displayDescription = MyUtils.ReplaceAllBrackets(_displayDescription, "amount", _amt.ToString());
+        }
+
+        protected override string FormatDescription(string unformattedStr)
+        {
+            string res = base.FormatDescription(unformattedStr);
+            res = res = MyUtils.ReplaceAllBrackets(res, "effect", GetStatusName());
+            res = MyUtils.ReplaceAllBrackets(res, "amt", _amt.ToString());
+            return res;
         }
     }
 }

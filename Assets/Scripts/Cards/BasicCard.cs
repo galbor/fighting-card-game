@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Managers;
 using System.Text;
 using UnityEngine;
+using DefaultNamespace.Utility;
 
 namespace cards
 {
@@ -11,6 +12,7 @@ namespace cards
     {
         [SerializeField] private string _name = "";
         [SerializeField] private string _description = "";
+        protected string _unformattedDescription;
         [SerializeField] Sprite _image;
         [SerializeField] int _cost = 1;
         [SerializeField] int _draw = 0;
@@ -87,6 +89,7 @@ namespace cards
         protected void Awake()
         {
             _cardsToPlay ??= new List<BasicCard>();
+            _unformattedDescription = _description;
         }
 
         protected string _displayDescription;
@@ -138,43 +141,51 @@ namespace cards
         /**
          * either generates description or takes the description from the _description field if it's filled
          */
-        protected virtual string GetThisDescription()
+        private string GetThisUnformattedDescription()
         {
-            if (_description == "") return GenerateThisDescription();
-            return _description.Replace("\\n", "\n");
+            if (_unformattedDescription == "") return GenerateThisDefaultUnformattedDescription();
+            return _unformattedDescription.Replace("\\n", "\n");
         }
 
         /**
          * creates a description from known parameters of the card and its class
          */
-        protected virtual string GenerateThisDescription()
+        protected virtual string GenerateThisDefaultUnformattedDescription()
         {
             StringBuilder res = new StringBuilder();
             if (Exhaust) res.Append("Exhaust.\n");
             if (Ethereal) res.Append("Ethereal.\n");
-            if (_draw > 0) res.AppendFormat("Draw {0} cards.\n", _draw);
+            if (_draw > 0) res.Append("Draw {draw} cards.\n");
 
             return res.ToString();
         }
 
         protected virtual void UpdateDescription()
         {
-            // _displayDescription = _description.Replace("\\n", "\n");
-            _displayDescription = GenerateDescription();
+            _displayDescription = FormatDescription(GenerateFullDescription());
         }
 
         /**
-         * generates description from this card's description and the cards it plays' descriptions2
+         * generates description from this card's description and the cards it plays' descriptions
          */
-        private String GenerateDescription()
+        private string GenerateFullDescription()
         {
-            var res = new StringBuilder(GetThisDescription());
+            _unformattedDescription = GetThisUnformattedDescription();
+            var res = new StringBuilder(_unformattedDescription);
             foreach (var card in _cardsToPlay)
             {
-                res.Append(card.GetThisDescription());
+                res.Append(card.GetThisUnformattedDescription());
             }
 
             return res.ToString();
+        }
+
+        /**
+         * returns a formatted string, with formatting fitting the description
+         */
+        protected virtual string FormatDescription(string unformattedStr)
+        {
+            return MyUtils.ReplaceAllBrackets(unformattedStr, "draw", _draw.ToString());
         }
     }
 }
