@@ -55,11 +55,6 @@ namespace cards
             return res.ToString();
         }
 
-        protected override void UpdateDescription()
-        {
-            base.UpdateDescription();
-        }
-
         protected override string FormatDescription(string unformattedStr)
         {
             string res = base.FormatDescription(unformattedStr);

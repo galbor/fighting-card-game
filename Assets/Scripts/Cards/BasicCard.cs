@@ -89,7 +89,6 @@ namespace cards
         protected void Awake()
         {
             _cardsToPlay ??= new List<BasicCard>();
-            _unformattedDescription = _description;
         }
 
         protected string _displayDescription;
@@ -143,6 +142,7 @@ namespace cards
          */
         private string GetThisUnformattedDescription()
         {
+            _unformattedDescription = _description;
             if (_unformattedDescription == "") return GenerateThisDefaultUnformattedDescription();
             return _unformattedDescription.Replace("\\n", "\n");
         }
