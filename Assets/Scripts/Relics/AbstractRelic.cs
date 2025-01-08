@@ -74,6 +74,11 @@ namespace Relics
 
         protected virtual void Activate()
         {
+            Activate(null);
+        }
+
+        protected virtual void Activate(object obj)
+        {
             if (_shrinkingCoroutine != null) 
                 StopCoroutine(_shrinkingCoroutine);
             transform.localScale *= _activateScaleMultiplier;

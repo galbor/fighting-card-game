@@ -16,7 +16,7 @@ namespace Relics
         {
             base.Awake();
             string eventTrigger = _resetEveryTurn ? EventManager.EVENT__START_TURN : EventManager.EVENT__START_COMBAT;
-            EventManager.Instance.StartListening(eventTrigger, obj => Activate());
+            EventManager.Instance.StartListening(eventTrigger, Activate);
             
             Description = MyUtils.ReplaceAllBrackets(Description, "block", _amt.ToString());
         }
