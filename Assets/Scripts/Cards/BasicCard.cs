@@ -162,7 +162,7 @@ namespace cards
 
         protected virtual void UpdateDescription()
         {
-            _displayDescription = FormatDescription(GenerateFullDescription());
+            _displayDescription = GenerateFullDescription();
         }
 
         /**
@@ -171,7 +171,7 @@ namespace cards
         private string GenerateFullDescription()
         {
             _unformattedDescription = GetThisUnformattedDescription();
-            var res = new StringBuilder(_unformattedDescription);
+            var res = new StringBuilder(FormatDescription(_unformattedDescription));
             foreach (var card in _cardsToPlay)
             {
                 res.Append(card.GetThisFormattedDescription());
