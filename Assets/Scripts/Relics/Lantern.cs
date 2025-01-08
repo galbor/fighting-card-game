@@ -16,7 +16,7 @@ namespace Relics
             EventManager.Instance.StartListening(EventManager.EVENT__START_TURN, obj => { if (_started) Activate(); });
         }
         
-        protected override void Activate(object obj)
+        protected override void Activate(object obj = null)
         {
             base.Activate();
             PlayerTurn.Instance.Energy++;
