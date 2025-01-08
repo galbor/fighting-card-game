@@ -21,7 +21,7 @@ namespace Relics
             Description = MyUtils.ReplaceAllBrackets(Description, "block", _amt.ToString());
         }
 
-        protected override void Activate()
+        protected override void Activate(object obj)
         {
             base.Activate();
             Player.Instance.Person.GetHealthBar(_bodyPart).AddDefense(_amt);

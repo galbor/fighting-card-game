@@ -21,7 +21,7 @@ namespace Relics
             Description = MyUtils.ReplaceAllBrackets(Description, "health", _amt.ToString());
         }
 
-        protected override void Activate()
+        protected override void Activate(object obj)
         {
             base.Activate();
             Player.Instance.Person.GetHealthBar(_bodyPart).AddHealth(_amt);

@@ -17,6 +17,7 @@ namespace Relics
         private void GetRelic(object obj)
         {
             RelicManager.Instance.AddRandomUnseenRelic();
+            Activate();
         }
     }
 }

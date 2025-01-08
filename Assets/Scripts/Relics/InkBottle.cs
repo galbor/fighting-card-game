@@ -36,7 +36,7 @@ namespace Relics
         }
 
 
-        protected override void Activate()
+        protected override void Activate(object obj = null)
         {
             base.Activate();
             PlayerTurn.Instance.DrawCard();

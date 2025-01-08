@@ -72,12 +72,7 @@ namespace Relics
             return res;
         }
 
-        protected virtual void Activate()
-        {
-            Activate(null);
-        }
-
-        protected virtual void Activate(object obj)
+        protected virtual void Activate(object obj = null)
         {
             if (_shrinkingCoroutine != null) 
                 StopCoroutine(_shrinkingCoroutine);
