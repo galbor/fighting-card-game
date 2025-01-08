@@ -31,7 +31,7 @@ namespace Managers
             StateManager.Instance.AddState(this);
             
             _chosenCards = new List<BasicCard>();
-            MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Cards.Length, 3).ForEach(x => _chosenCards.Add(_possibleCards.Cards[x]));
+            MyUtils.ChooseKRandomNumbersOrdered(_possibleCards.Cards.Length, 3).ForEach(x => _chosenCards.Add(Instantiate(_possibleCards.Cards[x])));
             SetDraftActive(true);
         }
 

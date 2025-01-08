@@ -53,7 +53,7 @@ namespace Managers
             _deck = new List<BasicCard>();
             foreach (var card in _startingDeck.Cards)
             {
-                _deck.Add(card);
+                _deck.Add(Instantiate(card));
             }
         }
 
