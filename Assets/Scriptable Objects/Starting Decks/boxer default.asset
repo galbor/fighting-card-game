@@ -19,7 +19,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3946f5165aab6e24293ab268314d816c, type: 2}
   - {fileID: 11400000, guid: ec2dfc525ff18554fa2fcac3fe09c438, type: 2}
   - {fileID: 11400000, guid: ec2dfc525ff18554fa2fcac3fe09c438, type: 2}
-  - {fileID: 11400000, guid: c6f45fbcd7d675443b8c9eacbcaa23b2, type: 2}
   - {fileID: 11400000, guid: 126949b76121b8c41abf9651e6a01f02, type: 2}
-  - {fileID: 11400000, guid: 53f794b47269d0148b4dba388efb1203, type: 2}
   StartingRelic: {fileID: 9141656360400987295, guid: 5f386b9358beff643af0be0a48d01dc5, type: 3}
