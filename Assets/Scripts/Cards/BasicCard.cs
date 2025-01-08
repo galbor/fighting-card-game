@@ -174,10 +174,15 @@ namespace cards
             var res = new StringBuilder(_unformattedDescription);
             foreach (var card in _cardsToPlay)
             {
-                res.Append(card.GetThisUnformattedDescription());
+                res.Append(card.GetThisFormattedDescription());
             }
 
             return res.ToString();
+        }
+
+        private string GetThisFormattedDescription()
+        {
+            return FormatDescription(GetThisUnformattedDescription());
         }
 
         /**
