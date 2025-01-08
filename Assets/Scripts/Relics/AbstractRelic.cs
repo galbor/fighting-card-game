@@ -80,6 +80,11 @@ namespace Relics
             _shrinkingCoroutine = StartCoroutine(ReduceSize());
         }
 
+        public virtual void OnAddRelic()
+        {
+            return;
+        }
+
         IEnumerator ReduceSize()
         {
             while (transform.localScale.x > 1f)

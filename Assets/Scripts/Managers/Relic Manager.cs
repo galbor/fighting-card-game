@@ -38,7 +38,8 @@ namespace Managers
         {
             AbstractRelic abstractRelic = Instantiate(relicPrefab, _relicParent);
             abstractRelic.transform.localPosition += new Vector3(_spacing * _relics.Count, 0, 0);
-            _relics.Add(relicPrefab);
+            _relics.Add(abstractRelic);
+            abstractRelic.OnAddRelic();
         }
 
         /**
@@ -67,7 +68,7 @@ namespace Managers
          */
         private void GenerateShuffledRelicsList()
         {
-            AbstractRelic[] shuffledArray = ((AbstractRelic[])MyUtils.ShuffledArray(_possibleRelics));
+            AbstractRelic[] shuffledArray = (AbstractRelic[])MyUtils.ShuffledArray(_possibleRelics);
             _shuffledRelicsList.Clear();
             shuffledArray.ToList().ForEach(x => _shuffledRelicsList.Enqueue(x));
         }
