@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using cards;
+﻿using DefaultNamespace;
 using Managers;
-using UnityEngine;
-using UnityEngine.Events;
 
 namespace DefaultNamespace.StatusEffects
 {
@@ -20,7 +17,7 @@ namespace DefaultNamespace.StatusEffects
         
         private void inflictSpikeDamage(object obj)
         {
-            var attack = (BasicAttackCard.AttackStruct)obj;
+            var attack = (AttackStruct)obj;
             if (attack.GetHealthBar(false) == BodyPart)
                 attack.GetHealthBar(true).RemoveHealth(Number);
         }

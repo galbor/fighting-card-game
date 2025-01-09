@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using DefaultNamespace.StatusEffects;
+using DefaultNamespace;
 using cards;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -65,7 +66,7 @@ public class Enemy : ScriptableObject
                 
         EventManager.Instance.StartListening(EventManager.EVENT__HIT, objHit =>
         {
-            var attack = (BasicAttackCard.AttackStruct)objHit;
+            var attack = (AttackStruct)objHit;
             if (attack.GetPerson(false) == Person)
                 DisplayNextAction();
         });

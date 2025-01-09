@@ -1,5 +1,6 @@
 using cards;
 using DefaultNamespace.Utility;
+using DefaultNamespace;
 using Managers;
 using UnityEngine;
 
@@ -32,7 +33,7 @@ namespace Relics
 
         private void OnHit(object obj)
         {
-            BasicAttackCard.AttackStruct attack = (BasicAttackCard.AttackStruct)obj;
+            AttackStruct attack = (AttackStruct)obj;
             if (!attack._playerAttacker) return;
             Person.SideEnum prevSide = _lastSide;
             _lastSide = Person.GetSide(attack._playerPart);

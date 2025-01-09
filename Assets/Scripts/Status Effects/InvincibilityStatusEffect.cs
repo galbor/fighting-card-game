@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using cards;
-using Managers;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using Managers;
+using DefaultNamespace;
 
 namespace DefaultNamespace.StatusEffects
 {
@@ -33,7 +30,7 @@ namespace DefaultNamespace.StatusEffects
 
         private void LoseStackOnAttack(object obj)
         {
-            var attack = (BasicAttackCard.AttackStruct)obj;
+            var attack = (AttackStruct)obj;
             if (attack.GetHealthBar(false) == BodyPart) Number--;
         }
     }

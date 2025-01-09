@@ -1,10 +1,5 @@
-﻿
-using System.Collections.Generic;
-using cards;
-using DefaultNamespace.Utility;
+﻿using DefaultNamespace;
 using Managers;
-using UnityEngine;
-using UnityEngine.Events;
 
 namespace DefaultNamespace.StatusEffects
 {
@@ -21,7 +16,7 @@ namespace DefaultNamespace.StatusEffects
 
         private void InflictBleed(object obj)
         {
-            var attack = (BasicAttackCard.AttackStruct)obj;
+            var attack = (AttackStruct)obj;
             if (attack.GetHealthBar(true) == BodyPart)
                 attack.GetHealthBar(false).AddStatusEffect(typeof(BleedStatusEffect), Number);
         }

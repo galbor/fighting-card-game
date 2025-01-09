@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using cards;
+using DefaultNamespace;
 
 namespace Managers
 {
@@ -17,7 +18,7 @@ namespace Managers
         private List<BasicCard> _deck;
         
         //last hit this combat
-        public BasicAttackCard.AttackStruct LastHit { get; private set; }
+        public AttackStruct LastHit { get; private set; }
 
         public List<BasicCard> Deck
         {
@@ -35,10 +36,10 @@ namespace Managers
 
         private void Start()
         {
-            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => LastHit = BasicAttackCard.AttackStruct.None);
+            EventManager.Instance.StartListening(EventManager.EVENT__START_COMBAT, obj => LastHit = AttackStruct.None);
             EventManager.Instance.StartListening(EventManager.EVENT__HIT, obj =>
             {
-                var hit = (BasicAttackCard.AttackStruct)obj;
+                var hit = (AttackStruct)obj;
                 if (!hit._playerAttacker) return;
                 LastHit = hit;
             });
