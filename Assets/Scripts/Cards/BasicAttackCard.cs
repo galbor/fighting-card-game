@@ -47,6 +47,7 @@ namespace cards
             for (int i = 0; i < PreSelectedChoices.Length; i++) {
                 var damage = Player.Instance.Person.GetAttackDamage(PreSelectedChoices[i], Damage);
                 res = MyUtils.ReplaceFirstBracket(res, "damage", damage.ToString());
+                res = MyUtils.ReplaceFirstBracket(res, "base_damage", Damage.ToString());
             }
             res = MyUtils.ReplaceAllBrackets(res, "bleed", Bleed.ToString());
             return res;
@@ -73,7 +74,7 @@ namespace cards
             {
                 for (int i = 0; i < PreSelectedChoices.Length; i++)
                 {
-                    res.Append("Deal {damage} damage. ");
+                    res.Append("Deal ({base_damage}) {damage} damage. ");
                 }
             }
             if (Bleed > 0) res.Append("Apply {bleed} bleed.");
