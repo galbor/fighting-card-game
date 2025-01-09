@@ -85,6 +85,8 @@ namespace Managers
         {
             EventManager.Instance.TriggerEvent(EventManager.EVENT__END_COMBAT, null);
 
+            Player.Instance.Person.RemoveAllStatusEffects();
+
             CardDraftManager.Instance.StartCardDraft();
         }
 
