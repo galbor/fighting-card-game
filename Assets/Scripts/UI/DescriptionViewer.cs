@@ -22,5 +22,10 @@ namespace DefaultNamespace.UI
         {
             Description.RemoveDescription(gameObject);
         }
+
+        public void OnDisable()
+        {
+            OnPointerExit(null);
+        }
     }
 }
