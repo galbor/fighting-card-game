@@ -8,6 +8,8 @@ namespace Map
     {
         [SerializeField] private AbstractRelic _relic;
 
+        public bool Taken { get; private set; } = false;
+
         public void Awake()
         {
             if (_relic != null) return;
@@ -17,8 +19,9 @@ namespace Map
         
         public void ObtainRelic()
         {
-            RelicManager.Instance.AddRelic(_relic);
             gameObject.SetActive(false);
+            Taken = true;
+            RelicManager.Instance.AddRelic(_relic);
         }
     }
 }

@@ -2,8 +2,9 @@
 2000 - Body Part healthbar/number
 2050 - map background
 2053 - map walls
-2060 - map characters
 2059 - map encounter collider
+2060 - map characters
+2065 - map relic choice chain
 2100 - Dark Background
 2500 - Card Canvas
 3000 - Front Canvas (description)
