@@ -19,28 +19,30 @@ namespace Managers
 
 		private const string event_prefix = "event_";
 
-		public const string EVENT__DRAW_CARD = "event_drawCard";
-		public const string EVENT__PLAY_CARD = "event_playCard";
-		public const string EVENT__DISCARD_CARD = "event_dicardCard";
-		public const string EVENT__EXHAUST_CARD = "event_exhaustCard";
+		public const string EVENT__DRAW_CARD = event_prefix + "drawCard";
+		public const string EVENT__PLAY_CARD = event_prefix + "playCard";
+		public const string EVENT__DISCARD_CARD = event_prefix + "dicardCard";
+		public const string EVENT__EXHAUST_CARD = event_prefix + "exhaustCard";
 
-		public const string EVENT__HIT = "event_hit";
+		public const string EVENT__HIT = event_prefix + "hit";
 
-		// public const string EVENT__TAKE_DAMAGE = "event_takeDamage";
-		// public const string EVENT__DEAL_DAMAGE = "event_dealDamage";
-		public const string EVENT__KILL_ENEMY = "event_killEnemy";
+		// public const string EVENT__TAKE_DAMAGE = event_prefix + "takeDamage";
+		// public const string EVENT__DEAL_DAMAGE = event_prefix + "dealDamage";
+		public const string EVENT__KILL_ENEMY = event_prefix + "killEnemy";
 
-		public const string EVENT__REMOVE_HEALTH = "event_removeHealth";
+		public const string EVENT__REMOVE_HEALTH = event_prefix + "removeHealth";
 
-		// public const string EVENT__BREAK_ENEMY_BLOCK = "event_breakEnemyBlock";
-		// public const string EVENT__BLOCK_BROKEN = "event_breakEnemyBlock";
-		public const string EVENT__PLAYER_DEATH = "event_die";
-		public const string EVENT__START_TURN = "event_startTurn";
-		public const string EVENT__END_TURN = "event_endTurn";
-		public const string EVENT__START_COMBAT = "event_startCombat";
-		public const string EVENT__END_COMBAT = "event_endCombat";
+		// public const string EVENT__BREAK_ENEMY_BLOCK = event_prefix + "breakEnemyBlock";
+		// public const string EVENT__BLOCK_BROKEN = event_prefix + "breakEnemyBlock";
+		public const string EVENT__PLAYER_DEATH = event_prefix + "die";
+		public const string EVENT__START_TURN = event_prefix + "startTurn";
+		public const string EVENT__END_TURN = event_prefix + "endTurn";
+		public const string EVENT__START_COMBAT = event_prefix + "startCombat";
+		public const string EVENT__END_COMBAT = event_prefix + "endCombat";
 
-		private Dictionary<string, FloatEvent> eventDictionary;
+        public const string EVENT__ADD_RELIC = event_prefix + "addRelic";
+
+        private Dictionary<string, FloatEvent> eventDictionary;
 
 		[SerializeField] public Transform _TextParent;
 

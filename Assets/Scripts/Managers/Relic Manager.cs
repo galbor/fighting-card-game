@@ -40,6 +40,7 @@ namespace Managers
             abstractRelic.transform.localPosition += new Vector3(_spacing * _relics.Count, 0, 0);
             _relics.Add(abstractRelic);
             abstractRelic.OnAddRelic();
+            EventManager.Instance.TriggerEvent(EventManager.EVENT__ADD_RELIC, abstractRelic);
         }
 
         /**
