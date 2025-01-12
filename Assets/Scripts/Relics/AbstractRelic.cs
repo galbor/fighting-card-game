@@ -36,10 +36,10 @@ namespace Relics
             }
         }
 
-        protected string Description
+        public string Description
         {
             get => _description;
-            set
+            protected set
             {
                 _description = value;
                 _descriptionScript.Text = value;
