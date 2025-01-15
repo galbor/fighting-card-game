@@ -227,12 +227,12 @@ namespace DefaultNamespace.UI
          * adds a status effect
          * if already exists, adds amt to the existing one
          * if the sum with amt is 0, removes the status effect
-         * @return true iff successful
+         * @return amount at the end (and 0 if unsuccessful)
          */
-        public bool AddStatusEffect(Type TStatus, int amt,
+        public int AddStatusEffect(Type TStatus, int amt,
             bool affectsDeadBodyParts = false)
         {
-            if (!IsStatusEffect(TStatus) || (!affectsDeadBodyParts && !IsAlive())) return false;
+            if (!IsStatusEffect(TStatus) || (!affectsDeadBodyParts && !IsAlive())) return 0;
             BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == TStatus);
             int num = 0;
             if (status != null)
@@ -240,25 +240,24 @@ namespace DefaultNamespace.UI
                 num = status.Number;
             }
 
-            SetStatusEffect(TStatus, num + amt, affectsDeadBodyParts);
-            return true;
+            return SetStatusEffect(TStatus, num + amt, affectsDeadBodyParts);
         }
 
         /**
          * sets a status effect's amt
          * if type doesn't exist, creates it
          * if 0, removes it
-         * @return true iff successful
+         * @return amount at the end (and 0 if unsuccessful)
          */
-        public bool SetStatusEffect(Type TStatus, int amt,
+        public int SetStatusEffect(Type TStatus, int amt,
             bool affectsDeadBodyParts = false)
         {
-            if (!IsStatusEffect(TStatus) || (!affectsDeadBodyParts && !IsAlive())) return false;
+            if (!IsStatusEffect(TStatus) || (!affectsDeadBodyParts && !IsAlive())) return 0;
             BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == TStatus);
             if (status != null)
             {
                 status.Number = amt; //if amt == 0, removes self
-                return true;
+                return amt;
             }
 
             status = BodyPartStatusEffect.GetPool(TStatus).GetFromPool();
@@ -267,7 +266,7 @@ namespace DefaultNamespace.UI
             _statusEffects.Add(status);
             status.Number = amt;
             status.OnFirstAdded();
-            return true;
+            return amt;
         }
 
         /**
@@ -287,31 +286,31 @@ namespace DefaultNamespace.UI
         }
 
         /**
-         * @return true iff status effect existed
+         * @return amount status had before
          */
-        public bool RemoveStatusEffect<TStatus>() where TStatus : BodyPartStatusEffect
+        public int RemoveStatusEffect<TStatus>() where TStatus : BodyPartStatusEffect
         {
             BodyPartStatusEffect status = _statusEffects.Find(x => x.GetStatusType() == typeof(TStatus));
-            if (status == null) return false;
-            RemoveStatusEffect(status);
-
-            return true;
+            if (status == null) return 0;
+            return RemoveStatusEffect(status);
         }
 
         /**
          * removes status effect
          */
-        public void RemoveStatusEffect(BodyPartStatusEffect status)
+        public int RemoveStatusEffect(BodyPartStatusEffect status)
         {
+            int prevNum = status.Number;
             if (status.Number != 0)
             {
                 //[Number = 0] calls this function
                 //It's vital for the number to become 0 before being removed (because of effects like Invincible, vulnerable)
                 status.Number = 0;
-                return;
+                return prevNum;
             }
 
             RemoveStatusEffect(_statusEffects.IndexOf(status));
+            return 0;
             
         }
 
@@ -327,13 +326,16 @@ namespace DefaultNamespace.UI
             BodyPartStatusEffect.GetPool(status).ReturnToPool(status);
         }
 
-        public void RemoveAllStatusEffects()
+        public int RemoveAllStatusEffects()
         {
+            int sum = 0;
             while (_statusEffects.Count > 0)
             {
+                sum += _statusEffects[^1].Number;
                 _statusEffects[^1].Number = 0; //[Number = 0] removes self
             }
             _statusEffects.Clear();
+            return sum;
         }
 
 
