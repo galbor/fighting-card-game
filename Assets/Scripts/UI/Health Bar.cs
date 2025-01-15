@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using DefaultNamespace.StatusEffects;
 using Managers;
 using UnityEngine;
@@ -8,17 +9,10 @@ using UnityEngine.UI;
 
 namespace DefaultNamespace.UI
 {
+    [RequireComponent(typeof(HealthBarUI))]
     public class HealthBar : MonoBehaviour
     {
-        [SerializeField] private Slider _slider;
-        [SerializeField] private RectTransform _rectTransform;
-        [SerializeField] private Text _healthText;
-        [SerializeField] private Text _blockText;
-        [SerializeField] private Image _image;
-
-        [SerializeField] private float _statusEffectSpacing;
-        [SerializeField] private BodyPartStatusEffect _statusEffectPrefab;
-        [SerializeField] private Transform _statusEffectParent;
+        [SerializeField] private HealthBarUI _UIComponent;
 
         private List<BodyPartStatusEffect> _statusEffects;
 
@@ -37,31 +31,18 @@ namespace DefaultNamespace.UI
          * multiply by this when taking hit damage
          * damage rounded using Math.Round()
          */
-        public float HitDamageTakenMultiplier
-        {
-            get; set;
-        } = 1f;
+        public float HitDamageTakenMultiplier {get; set;} = 1f;
 
         /**
          * multiply by this when dealing damage
          */
-        public float HitDamageDealtMultiplier
-        {
-            get; set;
-        } = 1f;
+        public float HitDamageDealtMultiplier {get; set;} = 1f;
 
         /**
          * added to hit this health bar deals
          * goes before multiplying
          */
-        public int HitDamageDealtAddition
-        {
-            get; set;
-        } = 0;
-
-        private float _widthMaxHealthRatio;
-        [SerializeField] private float _minimumWidth;
-        [SerializeField] private float _maximumWidth;
+        public int HitDamageDealtAddition {get; set;} = 0;
 
         public int Health
         {
@@ -83,10 +64,11 @@ namespace DefaultNamespace.UI
 
         void Awake()
         {
-            _slider.maxValue = _maxHealth;
-            _widthMaxHealthRatio = _rectTransform.sizeDelta.x / _maxHealth;
-            SetHealth(_maxHealth);
             _statusEffects = new List<BodyPartStatusEffect>();
+
+            _UIComponent.Init(MaxHealth, _statusEffects);
+            SetHealth(_maxHealth);
+            _UIComponent.Health = Health;
         }
 
         private void OnDestroy()
@@ -96,8 +78,7 @@ namespace DefaultNamespace.UI
 
         public void SetBlockImage(Sprite sprite)
         {
-            _image.sprite = sprite;
-            _image.gameObject.SetActive(sprite != null);
+            _UIComponent.SetBlockImage(sprite);
         }
 
         /**
@@ -111,22 +92,13 @@ namespace DefaultNamespace.UI
             int change = maxHealth - _maxHealth;
             _maxHealth = maxHealth;
 
-            SetWidth(_maxHealth);
+            _UIComponent.MaxHealth = maxHealth;
 
-            _slider.maxValue = _maxHealth;
             if (!AddHealth(change)) //if dead
                 SetHealth(1);
         }
 
-        /**
-         * Sets the width of the UI health bar
-         */
-        private void SetWidth(int newMaxHealth)
-        {
-            float newWidth = newMaxHealth * _widthMaxHealthRatio;
-            newWidth = Mathf.Clamp(newWidth, _minimumWidth, _maximumWidth);
-            _rectTransform.sizeDelta = new Vector2(newWidth, _rectTransform.sizeDelta.y);
-        }
+        
 
         /**
             * Set the health
@@ -138,8 +110,8 @@ namespace DefaultNamespace.UI
             health = Mathf.Clamp(health, 0, _maxHealth);
             int healthChange = health - _currentHealth;
             _currentHealth = health;
-            _slider.value = _currentHealth;
-            _healthText.text = _currentHealth + "/" + _maxHealth;
+
+            _UIComponent.Health = health;
 
             if (healthChange < 0) EventManager.Instance.TriggerEvent(EventManager.EVENT__REMOVE_HEALTH, -healthChange);
             if (!IsAlive()) RemoveAllStatusEffects();
@@ -150,8 +122,7 @@ namespace DefaultNamespace.UI
         private void SetDefense(int defense)
         {
             _defense = defense;
-            _blockText.text = _defense.ToString();
-            _blockText.transform.parent.gameObject.SetActive(defense != 0);
+            _UIComponent.SetDefense(defense);
         }
 
         /**
@@ -262,28 +233,14 @@ namespace DefaultNamespace.UI
 
             status = BodyPartStatusEffect.GetPool(TStatus).GetFromPool();
             status.BodyPart = this;
-            SetNewStatusPosition(status);
+            _UIComponent.SetNewStatusPosition(status);
             _statusEffects.Add(status);
             status.Number = amt;
             status.OnFirstAdded();
             return amt;
         }
 
-        /**
-         * also sets parent
-         */
-        private void SetNewStatusPosition(BodyPartStatusEffect status)
-        {
-            SetStatusPosition(status, _statusEffects.Count);
-        }
 
-        private void SetStatusPosition(BodyPartStatusEffect status, int pos)
-        {
-            Transform statusTransform = status.transform;
-            statusTransform.localPosition = new Vector3(_statusEffectSpacing * pos, 0, 0);
-            statusTransform.SetParent(_statusEffectParent, false);
-            statusTransform.localScale = Vector3.one;
-        }
 
         /**
          * @return amount status had before
@@ -309,22 +266,15 @@ namespace DefaultNamespace.UI
                 return prevNum;
             }
 
-            RemoveStatusEffect(_statusEffects.IndexOf(status));
+            int index = _statusEffects.IndexOf(status);
+            _statusEffects.RemoveAt(index);
+            BodyPartStatusEffect.GetPool(status).ReturnToPool(status);
+            _UIComponent.RemoveStatusEffect(index, status);
             return 0;
             
         }
 
-        private void RemoveStatusEffect(int index)
-        {
-            BodyPartStatusEffect status = _statusEffects[index];
-            _statusEffects.RemoveAt(index);
-            for (int i = index; i < _statusEffects.Count; i++)
-            {
-                SetStatusPosition(_statusEffects[i], i);
-            }
-            status.transform.SetParent(EventManager.Instance._TextParent, true); //might as well be parent
-            BodyPartStatusEffect.GetPool(status).ReturnToPool(status);
-        }
+        
 
         /*
          * return amount removed
