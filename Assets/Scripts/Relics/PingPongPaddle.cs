@@ -40,6 +40,7 @@ namespace Relics
 
             if (!MyUtils.OppositeSides(prevSide, _lastSide)) return;
             attack._enemy.GetHealthBar(attack._enemyPart).RemoveHealth(_damage);
+            Activate();
         }
 
 

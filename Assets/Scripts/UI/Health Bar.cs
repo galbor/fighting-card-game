@@ -326,6 +326,9 @@ namespace DefaultNamespace.UI
             BodyPartStatusEffect.GetPool(status).ReturnToPool(status);
         }
 
+        /*
+         * return amount removed
+         */
         public int RemoveAllStatusEffects()
         {
             int sum = 0;
