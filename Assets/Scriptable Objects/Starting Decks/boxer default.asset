@@ -20,4 +20,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ec2dfc525ff18554fa2fcac3fe09c438, type: 2}
   - {fileID: 11400000, guid: ec2dfc525ff18554fa2fcac3fe09c438, type: 2}
   - {fileID: 11400000, guid: 126949b76121b8c41abf9651e6a01f02, type: 2}
-  StartingRelic: {fileID: 9141656360400987295, guid: 5f386b9358beff643af0be0a48d01dc5, type: 3}
+  StartingRelic: {fileID: 8537740529036227340, guid: 61c033b1b8da3884681162c030350dea, type: 3}
