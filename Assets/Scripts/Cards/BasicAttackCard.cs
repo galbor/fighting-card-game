@@ -86,8 +86,6 @@ namespace cards
         public override void Play(Person user, List<Person.BodyPartEnum> attacking_parts, Person target,
             List<Person.BodyPartEnum> affected_parts)
         {
-            base.Play(user, attacking_parts, target, affected_parts);
-
             attacking_parts.ForEach(attacking_part =>
             {
                 affected_parts.ForEach(affected_part =>
@@ -96,6 +94,7 @@ namespace cards
                     if (!hit.IsNone()) EventManager.Instance.TriggerEvent(EventManager.EVENT__HIT, hit);
                 }); 
             });
+            base.Play(user, attacking_parts, target, affected_parts);
         }
 
         protected virtual AttackStruct Attack(Person user, Person.BodyPartEnum attacking_part, Person target,
