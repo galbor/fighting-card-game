@@ -8,6 +8,7 @@ using cards;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class Person : MonoBehaviour
 {
@@ -186,6 +187,34 @@ public class Person : MonoBehaviour
     public void Heal(BodyPartEnum bodyPart, int heal)
     {
         _bodyParts[(int)bodyPart]._healthBar.AddHealth(heal);
+    }
+
+    /**
+     * heals person and spreads it between body parts
+     * algorithm: first come first serve
+     */
+    public void Heal(int heal)
+    {
+        ForEachBodyPart(bodyPartEnum =>
+        {
+            var bodyPart = _bodyParts[(int)bodyPartEnum];
+            int amt = Math.Min(bodyPart._healthBar.MaxHealth - bodyPart._healthBar.Health, heal);
+            heal -= amt;
+            bodyPart._healthBar.AddHealth(amt);
+            if (heal <= 0) return;
+        });
+    }
+
+    /**
+     * heals person and gives each body part 'heal' amount
+     */
+    public void HealAll(int heal)
+    {
+        ForEachBodyPart(bodyPartEnum =>
+        {
+            var bodyPart = _bodyParts[(int)bodyPartEnum];
+            bodyPart._healthBar.AddHealth(heal);
+        });
     }
     
     public void Defend(BodyPartEnum bodyPart, int defense)
