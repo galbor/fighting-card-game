@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e5aaf3b0f126984b99c1ed02bab40e0, type: 3}
+  m_Name: Vampire
+  m_EditorClassIdentifier: 
+  _name: Vampire
+  _description: 
+  _image: {fileID: 0}
+  _cost: 1
+  _draw: 0
+  _singleEnemyTarget: 1
+  _choiceArr: 09000000
+  _preSelectedArr: 000000000100000002000000030000000400000005000000
+  _exhaust: 0
+  _ethereal: 0
+  _cardsToPlay: []
